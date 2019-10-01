@@ -1,0 +1,15 @@
+[submodule "lib/cudasift"]
+	path = lib/cudasift
+	url = https://github.com/Celebrandil/CudaSift.git
+[submodule "lib/eigen"]
+	path = lib/eigen
+	url = https://github.com/eigenteam/eigen-git-mirror.git
+[submodule "lib/falconn"]
+	path = lib/falconn
+	url = https://github.com/FALCONN-LIB/FALCONN.git
+[submodule "lib/vlfeat"]
+	path = lib/vlfeat
+	url = https://github.com/vlfeat/vlfeat.git
+[submodule "lib/libpca"]
+	path = lib/libpca
+	url = https://github.com/spinlockirqsave/libpca-1.2.11.git
