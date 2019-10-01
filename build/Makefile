@@ -20,8 +20,8 @@ LIB += -lcudart -lcufft
 LIB += `pkg-config --cflags --libs opencv`
 LIB += -fopenmp -lcublas
 
-#NVCC	= /usr/bin/nvcc -arch=sm_35 -m 64 $(INC) 
-NVCC    = /usr/local/cuda-10.0/bin/nvcc -arch=sm_35 -m 64 $(INC)
+#NVCC	= /usr/bin/nvcc -arch=sm_75 -m 64 $(INC) 
+NVCC    = /usr/local/cuda-10.0/bin/nvcc -arch=sm_75 -m 64 $(INC)
 
 CXX = g++ -pipe
 CC = gcc -pipe

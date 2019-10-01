@@ -513,7 +513,7 @@ int main(int argc, char *argv[])
 {
     int querysizefactor, nn_num, port, mode;
     if(argc < 5) {
-        cout << "Usage: " << argv[0] << "mode[s/c] size[s/m/l] NN#[1/2/3/4/5] port" << endl;
+        cout << "Usage: " << argv[0] << " mode[s/c] size[s/m/l] NN#[1/2/3/4/5] port" << endl;
         return 1;
     } else {
         if (argv[1][0] == 's') mode = 1;

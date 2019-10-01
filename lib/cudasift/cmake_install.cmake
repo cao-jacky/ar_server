@@ -1,4 +1,4 @@
-# Install script for directory: /home/jacky/Desktop/gpuimagereco/lib/cudasift
+# Install script for directory: /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,26 +39,26 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaImage.cu"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaImage.h"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaSiftH.cu"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaSiftH.h"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/matching.cu"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaSiftD.h"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaSift.h"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudautils.h"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/geomFuncs.cpp"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/mainSift.cpp"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/cudaSiftD.cu"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeLists.txt"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/Copyright.txt"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaImage.cu"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaImage.h"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaSiftH.cu"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaSiftH.h"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/matching.cu"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaSiftD.h"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaSift.h"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudautils.h"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/geomFuncs.cpp"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/mainSift.cpp"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/cudaSiftD.cu"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeLists.txt"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/Copyright.txt"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/data" TYPE FILE FILES
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/data/left.pgm"
-    "/home/jacky/Desktop/gpuimagereco/lib/cudasift/data/righ.pgm"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/data/left.pgm"
+    "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/data/righ.pgm"
     )
 endif()
 
@@ -70,5 +70,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/jacky/Desktop/gpuimagereco/lib/cudasift/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

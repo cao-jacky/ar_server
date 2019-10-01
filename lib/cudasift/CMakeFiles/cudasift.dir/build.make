@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jacky/Desktop/gpuimagereco/lib/cudasift
+CMAKE_SOURCE_DIR = /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jacky/Desktop/gpuimagereco/lib/cudasift
+CMAKE_BINARY_DIR = /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift
 
 # Include any dependencies generated for this target.
 include CMakeFiles/cudasift.dir/depend.make
@@ -60,42 +60,42 @@ include CMakeFiles/cudasift.dir/flags.make
 CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.depend
 CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.Release.cmake
 CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: cudaImage.cu
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building NVCC (Device) object CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o"
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -E make_directory /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//.
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o -D generated_cubin_file:STRING=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o.cubin.txt -P /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaImage.cu.o.Release.cmake
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building NVCC (Device) object CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o"
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -E make_directory /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o -D generated_cubin_file:STRING=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o.cubin.txt -P /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaImage.cu.o.Release.cmake
 
 CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.depend
 CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.Release.cmake
 CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSiftH.cu
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building NVCC (Device) object CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o"
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -E make_directory /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//.
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o -D generated_cubin_file:STRING=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o.cubin.txt -P /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.Release.cmake
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building NVCC (Device) object CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o"
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -E make_directory /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o -D generated_cubin_file:STRING=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o.cubin.txt -P /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.Release.cmake
 
 CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.depend
 CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.Release.cmake
 CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: matching.cu
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building NVCC (Device) object CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o"
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -E make_directory /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//.
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_matching.cu.o -D generated_cubin_file:STRING=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_matching.cu.o.cubin.txt -P /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_matching.cu.o.Release.cmake
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building NVCC (Device) object CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o"
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -E make_directory /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /usr/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_matching.cu.o -D generated_cubin_file:STRING=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_matching.cu.o.cubin.txt -P /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_matching.cu.o.Release.cmake
 
 CMakeFiles/cudasift.dir/cudasift_intermediate_link.o: CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o
 CMakeFiles/cudasift.dir/cudasift_intermediate_link.o: CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o
 CMakeFiles/cudasift.dir/cudasift_intermediate_link.o: CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building NVCC intermediate link file CMakeFiles/cudasift.dir/cudasift_intermediate_link.o"
-	/usr/local/cuda/bin/nvcc -lineinfo --compiler-options -O2 -DVERBOSE -arch=sm_35 -m64 -ccbin /usr/bin/cc -dlink /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_matching.cu.o -o /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir/./cudasift_intermediate_link.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building NVCC intermediate link file CMakeFiles/cudasift.dir/cudasift_intermediate_link.o"
+	/usr/local/cuda-10.0/bin/nvcc -lineinfo --compiler-options -O2 -DVERBOSE -arch=sm_75 -m64 -ccbin /usr/bin/cc -dlink /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_matching.cu.o -o /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/./cudasift_intermediate_link.o
 
 CMakeFiles/cudasift.dir/geomFuncs.cpp.o: CMakeFiles/cudasift.dir/flags.make
 CMakeFiles/cudasift.dir/geomFuncs.cpp.o: geomFuncs.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/cudasift.dir/geomFuncs.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cudasift.dir/geomFuncs.cpp.o -c /home/jacky/Desktop/gpuimagereco/lib/cudasift/geomFuncs.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/cudasift.dir/geomFuncs.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cudasift.dir/geomFuncs.cpp.o -c /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/geomFuncs.cpp
 
 CMakeFiles/cudasift.dir/geomFuncs.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cudasift.dir/geomFuncs.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jacky/Desktop/gpuimagereco/lib/cudasift/geomFuncs.cpp > CMakeFiles/cudasift.dir/geomFuncs.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/geomFuncs.cpp > CMakeFiles/cudasift.dir/geomFuncs.cpp.i
 
 CMakeFiles/cudasift.dir/geomFuncs.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cudasift.dir/geomFuncs.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jacky/Desktop/gpuimagereco/lib/cudasift/geomFuncs.cpp -o CMakeFiles/cudasift.dir/geomFuncs.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/geomFuncs.cpp -o CMakeFiles/cudasift.dir/geomFuncs.cpp.s
 
 CMakeFiles/cudasift.dir/geomFuncs.cpp.o.requires:
 
@@ -110,16 +110,16 @@ CMakeFiles/cudasift.dir/geomFuncs.cpp.o.provides.build: CMakeFiles/cudasift.dir/
 
 CMakeFiles/cudasift.dir/mainSift.cpp.o: CMakeFiles/cudasift.dir/flags.make
 CMakeFiles/cudasift.dir/mainSift.cpp.o: mainSift.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/cudasift.dir/mainSift.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cudasift.dir/mainSift.cpp.o -c /home/jacky/Desktop/gpuimagereco/lib/cudasift/mainSift.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/cudasift.dir/mainSift.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cudasift.dir/mainSift.cpp.o -c /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/mainSift.cpp
 
 CMakeFiles/cudasift.dir/mainSift.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cudasift.dir/mainSift.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jacky/Desktop/gpuimagereco/lib/cudasift/mainSift.cpp > CMakeFiles/cudasift.dir/mainSift.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/mainSift.cpp > CMakeFiles/cudasift.dir/mainSift.cpp.i
 
 CMakeFiles/cudasift.dir/mainSift.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cudasift.dir/mainSift.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jacky/Desktop/gpuimagereco/lib/cudasift/mainSift.cpp -o CMakeFiles/cudasift.dir/mainSift.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/mainSift.cpp -o CMakeFiles/cudasift.dir/mainSift.cpp.s
 
 CMakeFiles/cudasift.dir/mainSift.cpp.o.requires:
 
@@ -139,10 +139,10 @@ cudasift_OBJECTS = \
 
 # External object files for target cudasift
 cudasift_EXTERNAL_OBJECTS = \
-"/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o" \
-"/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o" \
-"/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o" \
-"/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_intermediate_link.o"
+"/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o" \
+"/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o" \
+"/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o" \
+"/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_intermediate_link.o"
 
 libcudasift.a: CMakeFiles/cudasift.dir/geomFuncs.cpp.o
 libcudasift.a: CMakeFiles/cudasift.dir/mainSift.cpp.o
@@ -152,7 +152,7 @@ libcudasift.a: CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o
 libcudasift.a: CMakeFiles/cudasift.dir/cudasift_intermediate_link.o
 libcudasift.a: CMakeFiles/cudasift.dir/build.make
 libcudasift.a: CMakeFiles/cudasift.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libcudasift.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libcudasift.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/cudasift.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cudasift.dir/link.txt --verbose=$(VERBOSE)
 
@@ -174,6 +174,6 @@ CMakeFiles/cudasift.dir/depend: CMakeFiles/cudasift.dir/cudasift_generated_cudaI
 CMakeFiles/cudasift.dir/depend: CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o
 CMakeFiles/cudasift.dir/depend: CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o
 CMakeFiles/cudasift.dir/depend: CMakeFiles/cudasift.dir/cudasift_intermediate_link.o
-	cd /home/jacky/Desktop/gpuimagereco/lib/cudasift && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jacky/Desktop/gpuimagereco/lib/cudasift /home/jacky/Desktop/gpuimagereco/lib/cudasift /home/jacky/Desktop/gpuimagereco/lib/cudasift /home/jacky/Desktop/gpuimagereco/lib/cudasift /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/cudasift.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/cudasift.dir/depend
 

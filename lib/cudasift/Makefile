@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jacky/Desktop/gpuimagereco/lib/cudasift
+CMAKE_SOURCE_DIR = /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jacky/Desktop/gpuimagereco/lib/cudasift
+CMAKE_BINARY_DIR = /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -95,7 +95,7 @@ install/fast: preinstall/fast
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/jacky/Desktop/gpuimagereco/lib/cudasift/CPackSourceConfig.cmake
+	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -148,9 +148,9 @@ list_install_components/fast: list_install_components
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jacky/Desktop/gpuimagereco/lib/cudasift/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
