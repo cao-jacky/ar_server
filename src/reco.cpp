@@ -76,13 +76,9 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     h = img.rows;
     cout << "Image size = (" << w << "," << h << ")" << endl;
 
-    cout << "1" << endl;
-
     cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float*)img.data);
-    cout << "2" << endl;
     cimg.Download();
 
-    cout << "3" << endl;
     float initBlur = 1.0f;
     float thresh = 2.0f;
     InitSiftData(siftData, 1000, true, true);
@@ -178,12 +174,6 @@ void onlineCacheProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec
     float *siftframe;
     int height, width;
 
-    int dim;
-    int dimension;
-    int i_cl;
-
-    dimension = 128;
-
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
     float enc[SIZE] = {0};
@@ -191,17 +181,6 @@ void onlineCacheProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec
     cout << "onlineCacheProcesisng function begins" << endl;
 
     gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 128, siftResult, (128/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
-
-    // cout << "New variables" << endl;
-    // float *posteriors_g = (TYPE*)malloc(sizeof(TYPE)* NUM_CLUSTERS * siftResult);
-    // float *sqrtInvSigma = (TYPE*)malloc(sizeof(TYPE) * dimension * NUM_CLUSTERS);
-    // for (i_cl = 0 ; i_cl < (signed)NUM_CLUSTERS ; ++i_cl) {
-    //     for(dim = 0; dim < dimension; dim++) {
-    //     sqrtInvSigma[i_cl*dimension + dim] = sqrt(1.0 / covariances[i_cl*dimension + dim]);
-    //     }
-    // }
-
-    // gpu_gmm_1(covariances, priors, means, posteriors_g, NUM_CLUSTERS, dimension, siftResult, (128/2.0)*log(2.0*VL_PI), enc, sqrtInvSigma, siftresg);
 
     ///////////WARNING: add the other NOOP
     float sum = 0.0;

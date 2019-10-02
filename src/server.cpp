@@ -313,6 +313,7 @@ void *ThreadCacheSearchFunction(void *param) {
         char* frmdata = curFrame.buffer;
         
         if(frmDataType == IMAGE_DETECT) {
+            //cout << "Searching cache" << endl;
             vector<uchar> imgdata(frmdata, frmdata + frmSize);
             Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
             imwrite("query.jpg",img_scene);

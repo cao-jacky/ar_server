@@ -1,12 +1,7 @@
-## Image Recognition Pipeline with GPU
+## ar_server
 
-This project contains a Cuda version of a complete image recognition pipeline, with:
-  - GPU feature extraction, 
-  - GPU PCA, 
-  - GPU GMM & FV, 
-  - CPU LSH, 
-  - GPU Feature Matching, 
-  - and CPU Pose Calculation.
+The server component of the mobile\_ar\_system
+
 
 ### Dependencies
 
@@ -17,7 +12,7 @@ This project contains a Cuda version of a complete image recognition pipeline, w
   - `Eigen` , Dense data structure
   - `vlfeat` , cpu gmm training
 
-### Installation
+### Installation/Running
 
 Besides the libraries contained in this repo, you may first install `OpenCV` and `Cuda`. 
 To build and run:
@@ -27,18 +22,9 @@ $ cd lib/cudasift
 $ sed -i 's/executable/library/g' CMakeLists.txt
 $ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .
 $ make
-$ cd ../../build
+$ cd ../../build # rerun from this point if changes are made to server.cpp or reco.cpp
 $ make
 $ cd ..
-$ ./gpu_fv size[s/m/l] NN#[1/2/3/4/5]
+$ ./gpu_fv server[s/c] size[s/m/l] nearest\_neighbour\_number[1/2/3/4/5] port\_number[#XXXXX] 
 ```
 
-### Structure and Development
-
-  - `src` , source codes
-  - `lib` , dependencies
-  - `data` , data files
-  - `build` , build products
-  - `params` , PCA and GMM parameters
-
-Modify `main.cpp` for any tests and developments. The compiling and running logic is controlled with MACRO in `main.cpp`.
