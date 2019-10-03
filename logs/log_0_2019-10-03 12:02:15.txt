@@ -1,0 +1,93 @@
+
+========server connected==========
+
+========cache server started, waiting for clients==========
+Receiver Thread Created!
+Cache Search Thread Created!
+Sender Thread Created!
+Offloader Thread Created!
+frame 48 received, filesize: 18179 at 1570093340.09778
+frame 48 offloaded to server at 1570093340.09907
+frame 48 res received from server at 1570093340.1089
+frame 48 res sent, marker#: 0 at 1570093340.10996
+
+frame 92 received, filesize: 18720 at 1570093341.61229
+frame 92 offloaded to server at 1570093341.61777
+frame 92 res received from server at 1570093341.64534
+frame 92 res sent, marker#: 1 at 1570093341.64648
+
+frame 205 received, filesize: 18848 at 1570093345.53037
+frame 205 offloaded to server at 1570093345.53615
+frame 205 res received from server at 1570093345.56286
+frame 205 res sent, marker#: 1 at 1570093345.56392
+
+frame 305 received, filesize: 18057 at 1570093349.47743
+frame 305 offloaded to server at 1570093349.48256
+frame 305 res received from server at 1570093349.50773
+frame 305 res sent, marker#: 0 at 1570093349.50834
+
+frame 351 received, filesize: 18711 at 1570093351.08178
+frame 351 offloaded to server at 1570093351.08696
+frame 351 res received from server at 1570093351.11372
+frame 351 res sent, marker#: 1 at 1570093351.11438
+
+frame 456 received, filesize: 18373 at 1570093354.7745
+frame 456 offloaded to server at 1570093354.77988
+frame 456 res received from server at 1570093354.80659
+frame 456 res sent, marker#: 1 at 1570093354.80708
+
+frame 550 received, filesize: 18208 at 1570093358.12896
+frame 550 offloaded to server at 1570093358.13473
+frame 550 res received from server at 1570093358.16118
+frame 550 res sent, marker#: 1 at 1570093358.16193
+
+frame 647 received, filesize: 18161 at 1570093361.80243
+frame 647 offloaded to server at 1570093361.80803
+frame 647 res received from server at 1570093361.83481
+frame 647 res sent, marker#: 1 at 1570093361.83597
+
+frame 837 received, filesize: 18071 at 1570093368.48209
+frame 837 offloaded to server at 1570093368.48337
+frame 837 res received from server at 1570093368.49427
+frame 837 res sent, marker#: 0 at 1570093368.49506
+
+frame 860 received, filesize: 18442 at 1570093369.15679
+frame 860 offloaded to server at 1570093369.16228
+frame 860 res received from server at 1570093369.18886
+frame 860 res sent, marker#: 0 at 1570093369.18909
+
+frame 1021 received, filesize: 19232 at 1570093374.81624
+frame 1021 offloaded to server at 1570093374.82223
+frame 1021 res received from server at 1570093374.84954
+frame 1021 res sent, marker#: 1 at 1570093374.8506
+
+frame 1142 received, filesize: 16645 at 1570093379.02302
+frame 1142 offloaded to server at 1570093379.02778
+frame 1142 res received from server at 1570093379.04681
+frame 1142 res sent, marker#: 0 at 1570093379.04703
+
+frame 1160 received, filesize: 15956 at 1570093379.62435
+frame 1160 offloaded to server at 1570093379.62915
+frame 1160 res received from server at 1570093379.6646
+frame 1160 res sent, marker#: 1 at 1570093379.6658
+
+frame 1258 received, filesize: 18915 at 1570093383.20654
+frame 1258 offloaded to server at 1570093383.21217
+frame 1258 res received from server at 1570093383.2393
+frame 1258 res sent, marker#: 1 at 1570093383.24018
+
+frame 1373 received, filesize: 13870 at 1570093387.5525
+frame 1373 offloaded to server at 1570093387.55732
+frame 1373 res received from server at 1570093387.57686
+frame 1373 res sent, marker#: 0 at 1570093387.57755
+
+frame 1394 received, filesize: 14199 at 1570093388.15628
+frame 1394 offloaded to server at 1570093388.16129
+frame 1394 res received from server at 1570093388.18059
+frame 1394 res sent, marker#: 0 at 1570093388.18154
+
+frame 1457 received, filesize: 18874 at 1570093390.32484
+frame 1457 offloaded to server at 1570093390.3276
+frame 1457 res received from server at 1570093390.34368
+frame 1457 res sent, marker#: 1 at 1570093390.34404
+

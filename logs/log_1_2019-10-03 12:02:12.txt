@@ -1,0 +1,603 @@
+
+========server started, waiting for clients==========
+Process Thread Created!
+Sender Thread Created!
+Receiver Thread Created!
+frame 48 received, filesize: 18179 at 1570093340.09914
+
+Image size = (160,270)
+Download time =               0.04 ms
+GPU time : 0.02 ms + 0.05 ms + 0.06 ms = 0.13 ms
+           0.01 ms / DoG,  0.0584 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.16 ms
+
+GPU time : 0.02 ms + 0.05 ms + 0.06 ms = 0.13 ms
+           0.01 ms / DoG,  0.0140 ms / Sift,  #Sift = 4
+ExtractSift time total =      0.34 ms
+
+GPU time : 0.02 ms + 0.05 ms + 0.06 ms = 0.13 ms
+           0.01 ms / DoG,  0.0041 ms / Sift,  #Sift = 14
+ExtractSift time total =      0.51 ms
+
+GPU time : 0.02 ms + 0.06 ms + 0.06 ms = 0.14 ms
+           0.01 ms / DoG,  0.0011 ms / Sift,  #Sift = 51
+ExtractSift time total =      0.70 ms
+
+GPU time : 0.02 ms + 0.07 ms + 0.06 ms = 0.15 ms
+           0.01 ms / DoG,  0.0003 ms / Sift,  #Sift = 173
+ExtractSift time total =      0.90 ms
+
+sift res 243 with time: 0.00173306465148926
+pca encoding time: 0.00131082534790039
+fisher encoding time: 0.00205588340759277
+=====================time before matching: 1570093340.10634
+testing 18
+features num: 1000 243
+MatchSiftData time =          0.51 ms
+FindHomography time =         0.39 ms
+Matching features: 0 0 0% 
+frame 48 res sent, marker#: 0 at 1570093340.10887
+
+frame 92 received, filesize: 18720 at 1570093341.61793
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.07 ms + 0.12 ms + 0.09 ms = 0.28 ms
+           0.02 ms / DoG,  0.0905 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.34 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0273 ms / Sift,  #Sift = 3
+ExtractSift time total =      0.70 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0063 ms / Sift,  #Sift = 13
+ExtractSift time total =      1.05 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0013 ms / Sift,  #Sift = 63
+ExtractSift time total =      1.40 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 196
+ExtractSift time total =      1.84 ms
+
+sift res 276 with time: 0.00358891487121582
+pca encoding time: 0.00361299514770508
+fisher encoding time: 0.00339794158935547
+=====================time before matching: 1570093341.63399
+testing 1
+features num: 1000 276
+MatchSiftData time =          1.61 ms
+FindHomography time =         4.67 ms
+Matching features: 125 157 45.2898559570312% 
+after matching 1570093341.64458
+frame 92 res sent, marker#: 1 at 1570093341.64533
+
+frame 205 received, filesize: 18848 at 1570093345.53636
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.06 ms + 0.12 ms + 0.04 ms = 0.22 ms
+ExtractSift time total =      0.28 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0205 ms / Sift,  #Sift = 4
+ExtractSift time total =      0.63 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0045 ms / Sift,  #Sift = 18
+ExtractSift time total =      0.98 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0013 ms / Sift,  #Sift = 62
+ExtractSift time total =      1.34 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 215
+ExtractSift time total =      1.71 ms
+
+sift res 299 with time: 0.0034639835357666
+pca encoding time: 0.00358700752258301
+fisher encoding time: 0.00339102745056152
+=====================time before matching: 1570093345.55246
+testing 1
+features num: 1000 299
+MatchSiftData time =          1.25 ms
+FindHomography time =         4.83 ms
+Matching features: 102 134 34.113712310791% 
+after matching 1570093345.5625
+frame 205 res sent, marker#: 1 at 1570093345.56281
+
+frame 305 received, filesize: 18057 at 1570093349.48272
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.07 ms + 0.13 ms + 0.09 ms = 0.29 ms
+           0.03 ms / DoG,  0.0928 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.35 ms
+
+GPU time : 0.06 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0212 ms / Sift,  #Sift = 4
+ExtractSift time total =      0.72 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0042 ms / Sift,  #Sift = 20
+ExtractSift time total =      1.07 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.10 ms = 0.26 ms
+           0.02 ms / DoG,  0.0019 ms / Sift,  #Sift = 53
+ExtractSift time total =      1.44 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 200
+ExtractSift time total =      1.81 ms
+
+sift res 278 with time: 0.00352096557617188
+pca encoding time: 0.00350189208984375
+fisher encoding time: 0.00342988967895508
+=====================time before matching: 1570093349.49825
+testing 18
+features num: 1000 278
+MatchSiftData time =          1.24 ms
+FindHomography time =         1.21 ms
+Matching features: 0 0 0% 
+frame 305 res sent, marker#: 0 at 1570093349.50769
+
+frame 351 received, filesize: 18711 at 1570093351.08716
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.06 ms + 0.12 ms + 0.09 ms = 0.27 ms
+           0.02 ms / DoG,  0.0901 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.35 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0140 ms / Sift,  #Sift = 6
+ExtractSift time total =      0.72 ms
+
+GPU time : 0.05 ms + 0.13 ms + 0.08 ms = 0.26 ms
+           0.03 ms / DoG,  0.0048 ms / Sift,  #Sift = 17
+ExtractSift time total =      1.09 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0016 ms / Sift,  #Sift = 51
+ExtractSift time total =      1.44 ms
+
+GPU time : 0.06 ms + 0.13 ms + 0.08 ms = 0.28 ms
+           0.03 ms / DoG,  0.0004 ms / Sift,  #Sift = 213
+ExtractSift time total =      1.84 ms
+
+sift res 288 with time: 0.00356912612915039
+pca encoding time: 0.00395679473876953
+fisher encoding time: 0.00342488288879395
+=====================time before matching: 1570093351.10314
+testing 1
+features num: 1000 288
+MatchSiftData time =          1.32 ms
+FindHomography time =         4.65 ms
+Matching features: 83 127 28.8194446563721% 
+after matching 1570093351.11294
+frame 351 res sent, marker#: 1 at 1570093351.11372
+
+frame 456 received, filesize: 18373 at 1570093354.78009
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.14 ms + 0.12 ms + 0.05 ms = 0.31 ms
+ExtractSift time total =      0.37 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0422 ms / Sift,  #Sift = 2
+ExtractSift time total =      0.73 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0061 ms / Sift,  #Sift = 13
+ExtractSift time total =      1.08 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0021 ms / Sift,  #Sift = 40
+ExtractSift time total =      1.43 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.26 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 189
+ExtractSift time total =      1.80 ms
+
+sift res 244 with time: 0.00352311134338379
+pca encoding time: 0.00368499755859375
+fisher encoding time: 0.00340080261230469
+=====================time before matching: 1570093354.79542
+testing 1
+features num: 1000 244
+MatchSiftData time =          1.50 ms
+FindHomography time =         5.14 ms
+Matching features: 81 112 33.196720123291% 
+after matching 1570093354.80612
+frame 456 res sent, marker#: 1 at 1570093354.80658
+
+frame 550 received, filesize: 18208 at 1570093358.13489
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.06 ms + 0.12 ms + 0.04 ms = 0.22 ms
+ExtractSift time total =      0.28 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0135 ms / Sift,  #Sift = 6
+ExtractSift time total =      0.64 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0044 ms / Sift,  #Sift = 18
+ExtractSift time total =      0.99 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0015 ms / Sift,  #Sift = 54
+ExtractSift time total =      1.37 ms
+
+GPU time : 0.06 ms + 0.13 ms + 0.08 ms = 0.26 ms
+           0.03 ms / DoG,  0.0004 ms / Sift,  #Sift = 210
+ExtractSift time total =      1.76 ms
+
+sift res 288 with time: 0.00350689888000488
+pca encoding time: 0.00353097915649414
+fisher encoding time: 0.00340104103088379
+=====================time before matching: 1570093358.15027
+testing 1
+features num: 1000 288
+MatchSiftData time =          1.26 ms
+FindHomography time =         4.69 ms
+Matching features: 47 132 16.3194446563721% 
+after matching 1570093358.16012
+frame 550 res sent, marker#: 1 at 1570093358.16114
+
+frame 647 received, filesize: 18161 at 1570093361.80824
+
+Image size = (160,270)
+Download time =               0.10 ms
+GPU time : 0.07 ms + 0.12 ms + 0.09 ms = 0.28 ms
+           0.02 ms / DoG,  0.0922 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.34 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0168 ms / Sift,  #Sift = 5
+ExtractSift time total =      0.71 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.09 ms = 0.24 ms
+           0.02 ms / DoG,  0.0051 ms / Sift,  #Sift = 17
+ExtractSift time total =      1.06 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0018 ms / Sift,  #Sift = 44
+ExtractSift time total =      1.41 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 182
+ExtractSift time total =      1.78 ms
+
+sift res 249 with time: 0.0035400390625
+pca encoding time: 0.00360298156738281
+fisher encoding time: 0.00334000587463379
+=====================time before matching: 1570093361.82418
+testing 1
+features num: 1000 249
+MatchSiftData time =          1.24 ms
+FindHomography time =         4.65 ms
+Matching features: 126 173 50.602409362793% 
+after matching 1570093361.83408
+frame 647 res sent, marker#: 1 at 1570093361.83476
+
+frame 837 received, filesize: 18071 at 1570093368.48342
+
+Image size = (160,270)
+Download time =               0.04 ms
+GPU time : 0.03 ms + 0.06 ms + 0.06 ms = 0.15 ms
+           0.01 ms / DoG,  0.0307 ms / Sift,  #Sift = 2
+ExtractSift time total =      0.18 ms
+
+GPU time : 0.02 ms + 0.06 ms + 0.06 ms = 0.14 ms
+           0.01 ms / DoG,  0.0115 ms / Sift,  #Sift = 5
+ExtractSift time total =      0.37 ms
+
+GPU time : 0.02 ms + 0.06 ms + 0.06 ms = 0.14 ms
+           0.01 ms / DoG,  0.0039 ms / Sift,  #Sift = 15
+ExtractSift time total =      0.56 ms
+
+GPU time : 0.02 ms + 0.07 ms + 0.06 ms = 0.15 ms
+           0.01 ms / DoG,  0.0012 ms / Sift,  #Sift = 49
+ExtractSift time total =      0.76 ms
+
+GPU time : 0.02 ms + 0.08 ms + 0.06 ms = 0.16 ms
+           0.02 ms / DoG,  0.0003 ms / Sift,  #Sift = 206
+ExtractSift time total =      0.98 ms
+
+sift res 277 with time: 0.00179100036621094
+pca encoding time: 0.00136113166809082
+fisher encoding time: 0.00222086906433105
+=====================time before matching: 1570093368.49108
+testing 18
+features num: 1000 277
+MatchSiftData time =          0.59 ms
+FindHomography time =         0.70 ms
+Matching features: 0 0 0% 
+frame 837 res sent, marker#: 0 at 1570093368.49424
+
+frame 860 received, filesize: 18442 at 1570093369.16247
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.07 ms + 0.12 ms + 0.09 ms = 0.28 ms
+           0.02 ms / DoG,  0.0922 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.35 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0403 ms / Sift,  #Sift = 2
+ExtractSift time total =      0.71 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0055 ms / Sift,  #Sift = 15
+ExtractSift time total =      1.06 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.17 ms = 0.33 ms
+           0.02 ms / DoG,  0.0030 ms / Sift,  #Sift = 56
+ExtractSift time total =      1.51 ms
+
+GPU time : 0.06 ms + 0.12 ms + 0.08 ms = 0.26 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 217
+ExtractSift time total =      1.89 ms
+
+sift res 291 with time: 0.00362801551818848
+pca encoding time: 0.00349617004394531
+fisher encoding time: 0.00342202186584473
+=====================time before matching: 1570093369.17834
+testing 1
+features num: 1000 291
+MatchSiftData time =          1.26 ms
+FindHomography time =         4.66 ms
+Matching features: 10 121 3.43642616271973% 
+frame 860 res sent, marker#: 0 at 1570093369.18881
+
+frame 1021 received, filesize: 19232 at 1570093374.82245
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.06 ms + 0.12 ms + 0.09 ms = 0.27 ms
+           0.02 ms / DoG,  0.0302 ms / Sift,  #Sift = 3
+ExtractSift time total =      0.34 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0205 ms / Sift,  #Sift = 4
+ExtractSift time total =      0.70 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0052 ms / Sift,  #Sift = 16
+ExtractSift time total =      1.05 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0014 ms / Sift,  #Sift = 60
+ExtractSift time total =      1.39 ms
+
+GPU time : 0.05 ms + 0.16 ms + 0.08 ms = 0.30 ms
+           0.03 ms / DoG,  0.0005 ms / Sift,  #Sift = 186
+ExtractSift time total =      1.80 ms
+
+sift res 269 with time: 0.00352597236633301
+pca encoding time: 0.0035090446472168
+fisher encoding time: 0.00380086898803711
+=====================time before matching: 1570093374.8385
+testing 1
+features num: 1000 269
+MatchSiftData time =          1.29 ms
+FindHomography time =         4.66 ms
+Matching features: 110 190 40.8921928405762% 
+after matching 1570093374.84865
+frame 1021 res sent, marker#: 1 at 1570093374.8495
+
+frame 1142 received, filesize: 16645 at 1570093379.02799
+
+Image size = (160,270)
+Download time =               0.11 ms
+GPU time : 0.05 ms + 0.10 ms + 0.07 ms = 0.22 ms
+           0.02 ms / DoG,  0.0721 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.27 ms
+
+GPU time : 0.04 ms + 0.09 ms + 0.06 ms = 0.19 ms
+           0.02 ms / DoG,  0.0126 ms / Sift,  #Sift = 5
+ExtractSift time total =      0.55 ms
+
+GPU time : 0.04 ms + 0.09 ms + 0.07 ms = 0.19 ms
+           0.02 ms / DoG,  0.0052 ms / Sift,  #Sift = 13
+ExtractSift time total =      0.83 ms
+
+GPU time : 0.04 ms + 0.09 ms + 0.07 ms = 0.19 ms
+           0.02 ms / DoG,  0.0011 ms / Sift,  #Sift = 64
+ExtractSift time total =      1.11 ms
+
+GPU time : 0.04 ms + 0.10 ms + 0.07 ms = 0.21 ms
+           0.02 ms / DoG,  0.0003 ms / Sift,  #Sift = 244
+ExtractSift time total =      1.41 ms
+
+sift res 327 with time: 0.00419402122497559
+pca encoding time: 0.00222277641296387
+fisher encoding time: 0.00264501571655273
+=====================time before matching: 1570093379.04202
+testing 1
+features num: 1000 327
+MatchSiftData time =          0.74 ms
+FindHomography time =         2.07 ms
+Matching features: 8 202 2.44648313522339% 
+frame 1142 res sent, marker#: 0 at 1570093379.04678
+
+frame 1160 received, filesize: 15956 at 1570093379.62934
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.09 ms + 0.19 ms + 0.14 ms = 0.43 ms
+           0.04 ms / DoG,  0.1434 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.53 ms
+
+GPU time : 0.07 ms + 0.16 ms + 0.09 ms = 0.33 ms
+           0.03 ms / DoG,  0.0154 ms / Sift,  #Sift = 6
+ExtractSift time total =      1.04 ms
+
+GPU time : 0.08 ms + 0.18 ms + 0.12 ms = 0.38 ms
+           0.04 ms / DoG,  0.0068 ms / Sift,  #Sift = 18
+ExtractSift time total =      1.60 ms
+
+GPU time : 0.08 ms + 0.19 ms + 0.14 ms = 0.40 ms
+           0.04 ms / DoG,  0.0026 ms / Sift,  #Sift = 53
+ExtractSift time total =      2.23 ms
+
+GPU time : 0.09 ms + 0.22 ms + 0.14 ms = 0.45 ms
+           0.04 ms / DoG,  0.0006 ms / Sift,  #Sift = 227
+ExtractSift time total =      4.57 ms
+
+sift res 305 with time: 0.0075230598449707
+pca encoding time: 0.0061180591583252
+fisher encoding time: 0.00608015060424805
+=====================time before matching: 1570093379.65488
+testing 1
+features num: 1000 305
+MatchSiftData time =          1.48 ms
+FindHomography time =         3.53 ms
+Matching features: 160 210 52.4590148925781% 
+after matching 1570093379.66375
+frame 1160 res sent, marker#: 1 at 1570093379.66456
+
+frame 1258 received, filesize: 18915 at 1570093383.21235
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.06 ms + 0.12 ms + 0.10 ms = 0.28 ms
+           0.02 ms / DoG,  0.0481 ms / Sift,  #Sift = 2
+ExtractSift time total =      0.35 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0274 ms / Sift,  #Sift = 3
+ExtractSift time total =      0.71 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0051 ms / Sift,  #Sift = 16
+ExtractSift time total =      1.05 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0016 ms / Sift,  #Sift = 52
+ExtractSift time total =      1.40 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.26 ms
+           0.02 ms / DoG,  0.0004 ms / Sift,  #Sift = 194
+ExtractSift time total =      1.77 ms
+
+sift res 267 with time: 0.00353789329528809
+pca encoding time: 0.00359416007995605
+fisher encoding time: 0.00386977195739746
+=====================time before matching: 1570093383.22861
+testing 1
+features num: 1000 267
+MatchSiftData time =          1.24 ms
+FindHomography time =         4.67 ms
+Matching features: 133 166 49.8127326965332% 
+after matching 1570093383.23846
+frame 1258 res sent, marker#: 1 at 1570093383.23925
+
+frame 1373 received, filesize: 13870 at 1570093387.5575
+
+Image size = (160,270)
+Download time =               0.10 ms
+GPU time : 0.07 ms + 0.12 ms + 0.42 ms = 0.61 ms
+           0.02 ms / DoG,  0.1060 ms / Sift,  #Sift = 4
+ExtractSift time total =      0.68 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0265 ms / Sift,  #Sift = 3
+ExtractSift time total =      1.04 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0162 ms / Sift,  #Sift = 5
+ExtractSift time total =      1.38 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0018 ms / Sift,  #Sift = 47
+ExtractSift time total =      1.73 ms
+
+GPU time : 0.06 ms + 0.12 ms + 0.72 ms = 0.90 ms
+           0.02 ms / DoG,  0.0073 ms / Sift,  #Sift = 99
+ExtractSift time total =      2.77 ms
+
+sift res 158 with time: 0.00478911399841309
+pca encoding time: 0.00347900390625
+fisher encoding time: 0.00228095054626465
+=====================time before matching: 1570093387.57274
+testing 40
+features num: 17 158
+Matching features: 0 0 0% 
+frame 1373 res sent, marker#: 0 at 1570093387.57683
+
+frame 1394 received, filesize: 14199 at 1570093388.16148
+
+Image size = (160,270)
+Download time =               0.09 ms
+GPU time : 0.07 ms + 0.12 ms + 0.09 ms = 0.28 ms
+           0.02 ms / DoG,  0.0302 ms / Sift,  #Sift = 3
+ExtractSift time total =      0.34 ms
+
+GPU time : 0.06 ms + 0.11 ms + 0.09 ms = 0.26 ms
+           0.02 ms / DoG,  0.0299 ms / Sift,  #Sift = 3
+ExtractSift time total =      0.71 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.24 ms
+           0.02 ms / DoG,  0.0098 ms / Sift,  #Sift = 8
+ExtractSift time total =      1.05 ms
+
+GPU time : 0.05 ms + 0.11 ms + 0.08 ms = 0.23 ms
+           0.02 ms / DoG,  0.0019 ms / Sift,  #Sift = 41
+ExtractSift time total =      1.40 ms
+
+GPU time : 0.05 ms + 0.12 ms + 0.08 ms = 0.25 ms
+           0.02 ms / DoG,  0.0008 ms / Sift,  #Sift = 97
+ExtractSift time total =      1.77 ms
+
+sift res 152 with time: 0.00344109535217285
+pca encoding time: 0.00347805023193359
+fisher encoding time: 0.00226616859436035
+=====================time before matching: 1570093388.17596
+testing 40
+features num: 17 152
+Matching features: 0 0 0% 
+frame 1394 res sent, marker#: 0 at 1570093388.18056
+
+frame 1457 received, filesize: 18874 at 1570093390.32771
+
+Image size = (160,270)
+Download time =               0.05 ms
+GPU time : 0.03 ms + 0.07 ms + 0.06 ms = 0.16 ms
+           0.01 ms / DoG,  0.0611 ms / Sift,  #Sift = 1
+ExtractSift time total =      0.20 ms
+
+GPU time : 0.03 ms + 0.07 ms + 0.06 ms = 0.16 ms
+           0.01 ms / DoG,  0.0072 ms / Sift,  #Sift = 8
+ExtractSift time total =      0.42 ms
+
+GPU time : 0.03 ms + 0.06 ms + 0.06 ms = 0.15 ms
+           0.01 ms / DoG,  0.0044 ms / Sift,  #Sift = 13
+ExtractSift time total =      0.63 ms
+
+GPU time : 0.03 ms + 0.08 ms + 0.06 ms = 0.17 ms
+           0.02 ms / DoG,  0.0010 ms / Sift,  #Sift = 58
+ExtractSift time total =      0.87 ms
+
+GPU time : 0.03 ms + 0.08 ms + 0.06 ms = 0.17 ms
+           0.02 ms / DoG,  0.0003 ms / Sift,  #Sift = 234
+ExtractSift time total =      1.11 ms
+
+sift res 314 with time: 0.00211906433105469
+pca encoding time: 0.00200104713439941
+fisher encoding time: 0.00259900093078613
+=====================time before matching: 1570093390.33675
+testing 1
+features num: 1000 314
+MatchSiftData time =          0.97 ms
+FindHomography time =         2.87 ms
+Matching features: 69 114 21.9745216369629% 
+after matching 1570093390.34291
+frame 1457 res sent, marker#: 1 at 1570093390.34364
+

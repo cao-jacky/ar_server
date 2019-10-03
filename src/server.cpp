@@ -12,6 +12,10 @@
 #include <queue>
 #include <fstream>
 
+#include <iostream>
+#include <cstdio>
+#include <string>  
+
 #define MESSAGE_ECHO 0
 #define FEATURES 1
 #define IMAGE_DETECT 2
@@ -512,8 +516,22 @@ void loadOnline()
     file.close();
 }
 
+inline string getCurrentDateTime( string s ){
+        time_t now = time(0);
+        struct tm  tstruct;
+        char  buf[80];
+        tstruct = *localtime(&now);
+        if(s=="now")
+            strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+        else if(s=="date")
+            strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+        return string(buf);
+    };
+
 int main(int argc, char *argv[])
 {
+    
+
     int querysizefactor, nn_num, port, mode;
     if(argc < 5) {
         cout << "Usage: " << argv[0] << " mode[s/c] size[s/m/l] NN#[1/2/3/4/5] port" << endl;
@@ -544,6 +562,15 @@ int main(int argc, char *argv[])
         loadImages(onlineImages);
         trainCacheParams();
     }
+
+    // outputting terminal outputs into dated log files
+    using namespace std;
+    string log_file = "logs/log_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
+    string error_file = "logs/error_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
+
+    freopen( log_file.c_str(), "w", stdout );
+    freopen( error_file.c_str(), "w", stderr );
+
     runServer(port, mode);
 
     freeParams();

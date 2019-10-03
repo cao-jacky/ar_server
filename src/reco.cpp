@@ -131,7 +131,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     start = wallclock();
 
     float enc[SIZE] = {0};
-    cout << "onlineProcessing break point" << endl;
+    // cout << "onlineProcessing break point" << endl;
     gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
 
     ///////////WARNING: add the other NOOP

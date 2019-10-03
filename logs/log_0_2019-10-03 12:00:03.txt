@@ -1,0 +1,23 @@
+
+========server connected==========
+
+========cache server started, waiting for clients==========
+Receiver Thread Created!
+Sender Thread Created!
+Offloader Thread Created!
+Cache Search Thread Created!
+frame 141 received, filesize: 16729 at 1570093220.18655
+frame 141 offloaded to server at 1570093220.19205
+frame 141 res received from server at 1570093220.24078
+frame 141 res sent, marker#: 1 at 1570093220.24193
+
+frame 300 received, filesize: 17409 at 1570093225.57179
+frame 300 offloaded to server at 1570093225.5774
+frame 300 res received from server at 1570093225.60063
+frame 300 res sent, marker#: 0 at 1570093225.60152
+
+frame 322 received, filesize: 16702 at 1570093226.29092
+frame 322 offloaded to server at 1570093226.2964
+recognition server disconnects
+Offloader Thread finished!
+frame 369 received, filesize: 17689 at 1570093227.8638
