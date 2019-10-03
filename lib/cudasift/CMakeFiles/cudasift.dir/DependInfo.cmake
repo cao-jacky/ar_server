@@ -12,7 +12,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "."
-  "/usr/local/cuda-10.0/include"
+  "/usr/local/cuda/include"
   "/usr/include/opencv"
   )
 

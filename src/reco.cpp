@@ -100,7 +100,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
         p++;
     }
 
-    if(!online) FreeSiftData(siftData);
+    if(!online) FreeSiftData(siftData); //
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
@@ -174,13 +174,12 @@ void onlineCacheProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec
     float *siftframe;
     int height, width;
 
+    // potential problem (!) - look at online parameter
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
     float enc[SIZE] = {0};
-    // The following line is throwing an error on values not being initialised 
-    cout << "onlineCacheProcesisng function begins" << endl;
-
-    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 128, siftResult, (128/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
+    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 128, siftResult, 
+        (128/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
 
     ///////////WARNING: add the other NOOP
     float sum = 0.0;
@@ -208,7 +207,6 @@ void onlineCacheProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec
 
     free(siftresg);
     free(siftframe);
-    cout << "onlineCacheProcesisng function ends" << endl;
 }
 
 void encodeDatabase(int factor, int nn)

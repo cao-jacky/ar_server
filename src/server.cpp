@@ -286,8 +286,10 @@ void *ThreadTCPOffloaderFunction(void *socket) {
         free(resultbuffer);
 
         results.push(curRes);
-        if(curRes.markerNum.i > 0)
-            addCacheItem(curFrame, curRes);
+        
+        // disabling adding cache items
+        // if(curRes.markerNum.i > 0)
+        //     addCacheItem(curFrame, curRes);
     }    
 
     cout<<"Offloader Thread finished!"<<endl;

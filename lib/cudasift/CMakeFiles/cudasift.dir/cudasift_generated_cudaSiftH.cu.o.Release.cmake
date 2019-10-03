@@ -71,15 +71,15 @@ set(generated_file_path "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cuda
 set(generated_file_internal "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o") # path
 set(generated_cubin_file_internal "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o.cubin.txt") # path
 
-set(CUDA_NVCC_EXECUTABLE "/usr/local/cuda-10.0/bin/nvcc") # path
-set(CUDA_NVCC_FLAGS -lineinfo;--compiler-options;-O2;-DVERBOSE ;; -arch=sm_75) # list
+set(CUDA_NVCC_EXECUTABLE "/usr/local/cuda/bin/nvcc") # path
+set(CUDA_NVCC_FLAGS -lineinfo;--compiler-options;-O2;-DVERBOSE ;; -arch=sm_35) # list
 # Build specific configuration flags
 set(CUDA_NVCC_FLAGS_RELEASE  ; )
 set(CUDA_NVCC_FLAGS_DEBUG  ; )
 set(CUDA_NVCC_FLAGS_MINSIZEREL  ; )
 set(CUDA_NVCC_FLAGS_RELWITHDEBINFO  ; )
 set(nvcc_flags -m64) # list
-set(CUDA_NVCC_INCLUDE_DIRS "/usr/local/cuda-10.0/include;/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift;/usr/local/cuda-10.0/include;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv") # list (needs to be in quotes to handle spaces properly).
+set(CUDA_NVCC_INCLUDE_DIRS "/usr/local/cuda/include;/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift;/usr/local/cuda/include;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv;/usr/include;/usr/include/opencv") # list (needs to be in quotes to handle spaces properly).
 set(CUDA_NVCC_COMPILE_DEFINITIONS [==[]==]) # list (needs to be in lua quotes see #16510 ).
 set(format_flag "-dc") # string
 set(cuda_language_flag ) # list
@@ -187,7 +187,7 @@ cuda_execute_process(
 # For CUDA 2.3 and below, -G -M doesn't work, so remove the -G flag
 # for dependency generation and hope for the best.
 set(depends_CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}")
-set(CUDA_VERSION 10.0)
+set(CUDA_VERSION 9.2)
 if(CUDA_VERSION VERSION_LESS "3.0")
   # Note that this will remove all occurances of -G.
   list(REMOVE_ITEM depends_CUDA_NVCC_FLAGS "-G")
