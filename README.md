@@ -30,13 +30,15 @@ $ ./gpu_fv server[s/c] size[s/m/l] nearest\_neighbour\_number[1/2/3/4/5] port\_n
 
 ### Deployment specifications
 
-Server program(s) ran on machine with the following specs, and CUDA/GCC/G++ compilers:
+The servers were ran on a machine with the following specs:
 
 - CPU: Intel Core i7-8700 3.20GHz x 12
 - GPU: GeForce RTX 2080 Ti
 - Memory: 32GB
-
 - OS: Ubuntu 18.04.3 LTS
+
+Plus the program was compiled with the following CUDA/GCC/G++ compilers:
+
 - CUDA: 9.2
 - GCC: 7.4.0
 - G++: 7.4.0
