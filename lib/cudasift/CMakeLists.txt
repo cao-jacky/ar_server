@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(cudaSift)
-set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda")
-
 set(cudaSift_VERSION_MAJOR 2)
 set(cudaSift_VERSION_MINOR 0)
 set(cudaSift_VERSION_PATCH 0)
@@ -29,12 +27,11 @@ if (UNIX)
     list(APPEND CUDA_NVCC_FLAGS "-arch=sm_35;--compiler-options;-O2;-DVERBOSE") 
   else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -msse2 ")
-    list(APPEND CUDA_NVCC_FLAGS "-lineinfo;--compiler-options;-O2;-DVERBOSE") 
+    list(APPEND CUDA_NVCC_FLAGS "-lineinfo;-ccbin;/usr/bin/gcc-6;--compiler-options;-O2;-D_FORCE_INLINES;-DVERBOSE_NOT") 
   endif()
 endif()
 
 set(cuda_sources
-  # dynamic.cu
   cudaImage.cu  
   cudaImage.h  
   cudaSiftH.cu 
@@ -47,24 +44,26 @@ set(cuda_sources
 
 set(sources
   geomFuncs.cpp  
-  mainSift.cpp
+  mainSift.cpp  
 )
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR} 
 )
 
-SET(CUDA_SEPARABLE_COMPILATION ON)
+#SET(CUDA_SEPARABLE_COMPILATION ON)
 
-cuda_add_library(cudasift ${cuda_sources} ${sources} OPTIONS -arch=sm_35)
+cuda_add_library(cudasift ${cuda_sources} ${sources} OPTIONS -arch=sm_75)
+
+#cuda_add_library(l2net l2netD.cu OPTIONS -arch=sm_35)
 
 set_target_properties(cudasift PROPERTIES
   COMPILE_FLAGS "${EXTRA_CXX_FLAGS}"			   
 )
 
-target_link_libraries(cudasift
-  /usr/local/cuda/lib64/libcudadevrt.a ${OpenCV_LIBS} 
-)
+target_link_libraries(cudasift ${CUDA_cudadevrt_LIBRARY} ${OpenCV_LIBS})
+#  /usr/local/cuda/lib64/libcudadevrt.a ${OpenCV_LIBS} 
+#)
  
 install(FILES 
   ${cuda_sources} 

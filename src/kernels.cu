@@ -21,7 +21,8 @@ float *src_d, *tmp1_d, *tmp2_d, *image_d, *grads_d, *priors_d, *means_d, *poster
 TYPE *covariances_d, *logWeights_d, *logCovariances_d, *invCovariances_d, *enc_d, *sum_d;
 int *goout_d;
 
-__global__ void gmm_1(float* covariances, float* invCovariances, float* logCovariances, float* logWeights, float* priors, int dimension, int numClusters, float infinity, float* sqrtInvSigma) {
+__global__ void gmm_1(float* covariances, float* invCovariances, float* logCovariances, float* logWeights, 
+    float* priors, int dimension, int numClusters, float infinity, float* sqrtInvSigma) {
   //  int tid = get_local_id(0);
   int dim = 0;
   int i_cl = blockIdx.x*THREADS + threadIdx.x; //get_global_id(0);

@@ -40,7 +40,7 @@ using namespace cv;
 //#define SUB_DATASET 1000
 //#define FEATURE_CHECK
 #define MATCH_ONE_ONLY
-#define TEST
+//#define TEST
 
 int querysizefactor, nn_num;
 float *means, *covariances, *priors, *projectionCenter, *projection;
@@ -76,6 +76,8 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     h = img.rows;
     cout << "Image size = (" << w << "," << h << ")" << endl;
 
+    //imwrite("query.jpg",img_scene);
+    // this line breaks on the second query - but why? is there no data being saved?
     cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float*)img.data);
     cimg.Download();
 
@@ -85,14 +87,17 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     ExtractSift(siftData, cimg, 5, initBlur, thresh, 0.0f, false);
 
     numPts = siftData.numPts;
-    *siftres = (float *)malloc(sizeof(float)*128*numPts);
-    *siftframe = (float *)malloc(sizeof(float)*2*numPts);
+    // cout << "siftres and siftframe" << endl;
+    // *siftres = (float *)malloc(sizeof(float)*128*numPts);
+    // *siftframe = (float *)malloc(sizeof(float)*2*numPts);
+    *siftres = (float *)calloc(sizeof(float), sizeof(float)*128*numPts);
+    *siftframe = (float *)calloc(sizeof(char), sizeof(float)*2*numPts);
     float* curRes = *siftres;
     float* curframe = *siftframe;
     SiftPoint* p = siftData.h_data;
 
     for(int i = 0; i < numPts; i++) {
-        memcpy(curRes, p->data, 128*sizeof(float));
+        memcpy(curRes, p->data, (128+1)*sizeof(float));
         curRes+=128;
 
         *curframe++ = p->xpos/w - 0.5;
@@ -131,9 +136,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     start = wallclock();
 
     float enc[SIZE] = {0};
-    // cout << "onlineProcessing break point" << endl;
     gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
-
     ///////////WARNING: add the other NOOP
     float sum = 0.0;
     for (int i = 0; i < SIZE; i++)
@@ -174,12 +177,12 @@ void onlineCacheProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec
     float *siftframe;
     int height, width;
 
-    // potential problem (!) - look at online parameter
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
     float enc[SIZE] = {0};
-    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 128, siftResult, 
-        (128/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
+    // the problem is with the line below - but how can I solve this? 
+    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 128, siftResult, (128/2.0)*log(2.0*VL_PI), 
+        enc, NULL, siftresg);
 
     ///////////WARNING: add the other NOOP
     float sum = 0.0;
@@ -431,6 +434,7 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
 
     onlineCacheProcessing(queryImage, tData, test, true, false);
 
+    cout << "1" << endl;
     double minDistance = 999999999;
     int index = -1;
     for(int idx = 0; idx < cacheItems.size(); idx++) {
@@ -440,6 +444,7 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
             index = idx;
         }
     }
+    cout << "2" << endl;
     sData = cacheItems[index].data;
     cout << "=====================time before matching: " << wallclock() << endl;
     
@@ -488,7 +493,11 @@ void addCacheItem(frameBuffer curFrame, resBuffer curRes)
 
     vector<uchar> imagedata(curFrame.buffer, curFrame.buffer + curFrame.bufferSize);
     Mat queryImage = imdecode(imagedata, CV_LOAD_IMAGE_GRAYSCALE);
-    onlineCacheProcessing(queryImage, tData, test, true, false);
+    imwrite("cacheItem.jpg",queryImage);
+    Mat cacheQueryImage = queryImage(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
+
+    //onlineProcessing(cacheQueryImage, cache_tData, cache_fv, true, false);
+    onlineCacheProcessing(cacheQueryImage, tData, test, true, false);
 
     recognizedMarker marker;
     int pointer = 0;
@@ -767,8 +776,10 @@ void trainCacheParams() {
     float *sift_res;
     float *sift_frame;
 
-    float *final_res = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
-    float *final_frame = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
+    // float *final_res = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
+    // float *final_frame = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
+    float *final_res = (float *)calloc(sizeof(float), ROWS * whole_list.size() * 128 * sizeof(float));
+    float *final_frame = (float *)calloc(sizeof(float), ROWS * whole_list.size() * 128 * sizeof(float));
     Mat training_descriptors(0, 128, CV_32FC1);
     //////////////////train encoder ////////////////
     //////// STEP 1: obtain sample image descriptors
@@ -890,9 +901,10 @@ void trainCacheParams() {
     priors = (TYPE *)vl_gmm_get_priors(gmm);
     means = (TYPE *)vl_gmm_get_means(gmm);
     covariances = (TYPE *)vl_gmm_get_covariances(gmm);
+    cout << *covariances << endl;
     cout << "End of encoder " << endl;
     cout << "Training time " << wallclock() - start_time << endl;
-    ///////////////END train encoer//////////
+    ///////////////END train encoder//////////
 }
 
 void loadParams() 

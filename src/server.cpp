@@ -272,10 +272,10 @@ void *ThreadTCPOffloaderFunction(void *socket) {
         resultbuffer = (char *)malloc(RES_SIZE);
         memset(resultbuffer, 0, RES_SIZE);
         if(read(sock, resultbuffer, RES_SIZE) <= 0) {
-	    cout<<"recognition server disconnects"<<endl;
-	    isClientAlive = false;
-	    continue;
-	}
+            cout<<"recognition server disconnects"<<endl;
+            isClientAlive = false;
+            continue;
+        }
         cout<<"frame "<<curFrame.frmID<<" res received from server at "<<wallclock()<<endl;
 
         resBuffer curRes;    
@@ -285,15 +285,16 @@ void *ThreadTCPOffloaderFunction(void *socket) {
         curRes.resType.i = *(int*)tmp;
         memcpy(tmp, &(resultbuffer[8]), 4);
         curRes.markerNum.i = *(int*)tmp;
-        curRes.buffer = (char *)malloc(RES_SIZE-12);
+        //curRes.buffer = (char *)malloc(RES_SIZE-12);
+        curRes.buffer = (char *)calloc(sizeof(char), RES_SIZE-12);
         memcpy(curRes.buffer, &(resultbuffer[12]), RES_SIZE-12);
         free(resultbuffer);
 
         results.push(curRes);
         
         // disabling adding cache items
-        // if(curRes.markerNum.i > 0)
-        //     addCacheItem(curFrame, curRes);
+        if(curRes.markerNum.i > 0)
+            addCacheItem(curFrame, curRes);
     }    
 
     cout<<"Offloader Thread finished!"<<endl;
@@ -319,10 +320,10 @@ void *ThreadCacheSearchFunction(void *param) {
         char* frmdata = curFrame.buffer;
         
         if(frmDataType == IMAGE_DETECT) {
-            //cout << "Searching cache" << endl;
+            cout << "Searching cache" << endl;
             vector<uchar> imgdata(frmdata, frmdata + frmSize);
             Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
-            imwrite("query.jpg",img_scene);
+            imwrite("cacheQuery.jpg",img_scene);
             Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
             markerDetected = cacheQuery(detect, marker);
         }
@@ -530,8 +531,6 @@ inline string getCurrentDateTime( string s ){
 
 int main(int argc, char *argv[])
 {
-    
-
     int querysizefactor, nn_num, port, mode;
     if(argc < 5) {
         cout << "Usage: " << argv[0] << " mode[s/c] size[s/m/l] NN#[1/2/3/4/5] port" << endl;
@@ -556,20 +555,21 @@ int main(int argc, char *argv[])
         loadParams();
 #endif
         encodeDatabase(querysizefactor, nn_num); 
-        test();
+        //test();
     } else {
         loadOnline();
         loadImages(onlineImages);
+        //loadParams();
         trainCacheParams();
     }
 
     // outputting terminal outputs into dated log files
-    using namespace std;
-    string log_file = "logs/log_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
-    string error_file = "logs/error_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
+    // using namespace std;
+    // string log_file = "logs/log_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
+    // string error_file = "logs/error_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
 
-    freopen( log_file.c_str(), "w", stdout );
-    freopen( error_file.c_str(), "w", stderr );
+    // freopen( log_file.c_str(), "w", stdout );
+    // freopen( error_file.c_str(), "w", stderr );
 
     runServer(port, mode);
 
