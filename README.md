@@ -1,16 +1,15 @@
 ## ar_server
 
-The server component of the mobile\_ar\_system
-
+The server component of the mobile\_ar\_system - single\_process branch is the caching and recognition processes combined into one "server instance" 
 
 ### Dependencies
 
-  - `OpenCV` - tested with ver 4.1
-  - `CUDA` - tested with ver 10.1
+  - `OpenCV` - tested with version 4.1
+  - `CUDA` - tested with version 10.1
   - `FALCONN` - CPU LSH
   - `CudaSift` - CUDA version of SIFT with detection, extraction, matching
-  - `Eigen` , Dense data structure
-  - `VLFeat` , CPU GMM training
+  - `Eigen` - Dense data structure
+  - `VLFeat` - CPU GMM training
 
 ### Installation/Running
 
