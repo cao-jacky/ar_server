@@ -113,7 +113,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     return numPts;
 }
 
-void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage)
+void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage, bool cache)
 {
     double start, finish;
     double durationsift, durationgmm;
@@ -123,20 +123,26 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     float *siftframe;
     int height, width;
 
+    float *dest;
+
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
-    start = wallclock();
-
-    float *dest = (float *)malloc(siftResult*82*sizeof(float));
-    gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
-
-    finish = wallclock();
-    durationgmm = (double)(finish - start);
-    cout << "pca encoding time: " << durationgmm << endl;
-    start = wallclock();
-
     float enc[SIZE] = {0};
-    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
+    if (cache) {
+        gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
+    } else {
+        start = wallclock();
+        float *dest = (float *)malloc(siftResult*82*sizeof(float));
+        gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
+
+        finish = wallclock();
+        durationgmm = (double)(finish - start);
+        cout << "pca encoding time: " << durationgmm << endl;
+        start = wallclock();
+
+        gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
+    }
+
     ///////////WARNING: add the other NOOP
     float sum = 0.0;
     for (int i = 0; i < SIZE; i++)
@@ -225,11 +231,11 @@ void encodeDatabase(int factor, int nn)
         SiftData sData;
         Mat image = imread(whole_list[i], CV_LOAD_IMAGE_COLOR);
 #ifdef TEST
-        onlineProcessing(image, sData, train[i], true, true);
+        onlineProcessing(image, sData, train[i], true, true, false);
         if (i < 20) trainData.push_back(sData);
         else FreeSiftData(sData);
 #else 
-        onlineProcessing(image, sData, train[i], false, true);
+        onlineProcessing(image, sData, train[i], false, true, false);
 #endif         
     }
 
@@ -285,7 +291,7 @@ void test()
 
         cout << endl << test_list[i] << endl;
         Mat image = imread(test_list[i], CV_LOAD_IMAGE_COLOR);
-        onlineProcessing(image, tData[i], test, true, true);
+        onlineProcessing(image, tData[i], test, true, true, false);
         vector<int> result;
         DenseVector<float> t(SIZE);
         for(int j = 0; j < SIZE; j++) t[j] = test[j];
@@ -351,7 +357,7 @@ bool query(Mat queryImage, recognizedMarker &marker)
     float homography[9];
     int numMatches;
 
-    onlineProcessing(queryImage, tData, test, true, false);
+    onlineProcessing(queryImage, tData, test, true, false, false);
 
     for(int j = 0; j < SIZE; j++) t[j] = test[j];
     table->find_k_nearest_neighbors(t, nn_num, &result);
@@ -432,9 +438,9 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
 
     if(cacheItems.size() == 0) return false;
 
-    onlineCacheProcessing(queryImage, tData, test, true, false);
+    //onlineCacheProcessing(queryImage, tData, test, true, false);
+    onlineProcessing(queryImage, tData, test, true, false, true);
 
-    cout << "1" << endl;
     double minDistance = 999999999;
     int index = -1;
     for(int idx = 0; idx < cacheItems.size(); idx++) {
@@ -444,7 +450,6 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
             index = idx;
         }
     }
-    cout << "2" << endl;
     sData = cacheItems[index].data;
     cout << "=====================time before matching: " << wallclock() << endl;
     
@@ -493,11 +498,10 @@ void addCacheItem(frameBuffer curFrame, resBuffer curRes)
 
     vector<uchar> imagedata(curFrame.buffer, curFrame.buffer + curFrame.bufferSize);
     Mat queryImage = imdecode(imagedata, CV_LOAD_IMAGE_GRAYSCALE);
-    imwrite("cacheItem.jpg",queryImage);
     Mat cacheQueryImage = queryImage(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
-    //onlineProcessing(cacheQueryImage, cache_tData, cache_fv, true, false);
-    onlineCacheProcessing(cacheQueryImage, tData, test, true, false);
+    onlineProcessing(cacheQueryImage, tData, test, true, false, true);
+    //onlineCacheProcessing(cacheQueryImage, tData, test, true, false);
 
     recognizedMarker marker;
     int pointer = 0;
@@ -898,6 +902,7 @@ void trainCacheParams() {
     free(final_frame);
     cout << "GMM ending cluster." << endl;
 
+    // Rename to be cachePriors...etc 
     priors = (TYPE *)vl_gmm_get_priors(gmm);
     means = (TYPE *)vl_gmm_get_means(gmm);
     covariances = (TYPE *)vl_gmm_get_covariances(gmm);
