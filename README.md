@@ -23,7 +23,7 @@ $ make
 $ cd ../../build # rerun from this point if changes are made to server.cpp or reco.cpp
 $ make
 $ cd ..
-$ ./gpu_fv size[s/m/l] nearest\_neighbour\_number[1/2/3/4/5] port\_number[#XXXXX] 
+$ ./gpu_fv size[s/m/l] nearest_neighbour_number[1/2/3/4/5] port_number[#XXXXX] 
 ```
 
 ### Deployment specifications
