@@ -87,7 +87,6 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     ExtractSift(siftData, cimg, 5, initBlur, thresh, 0.0f, false);
 
     numPts = siftData.numPts;
-    // cout << "siftres and siftframe" << endl;
     // *siftres = (float *)malloc(sizeof(float)*128*numPts);
     // *siftframe = (float *)malloc(sizeof(float)*2*numPts);
     *siftres = (float *)calloc(sizeof(float), sizeof(float)*128*numPts);
@@ -109,7 +108,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    cout << "sift res " << numPts << " with time: " << durationgmm << endl;
+    cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
     return numPts;
 }
 
@@ -118,7 +117,6 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     double start, finish;
     double durationsift, durationgmm;
     int siftResult;
-    //cout << "Process " << image << endl;
     float *siftresg;
     float *siftframe;
     int height, width;
@@ -137,7 +135,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
         finish = wallclock();
         durationgmm = (double)(finish - start);
-        cout << "pca encoding time: " << durationgmm << endl;
+        cout << "PCA encoding time: " << durationgmm << endl;
         start = wallclock();
 
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
@@ -169,7 +167,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    cout << "fisher encoding time: " << durationgmm << endl;
+    cout << "Fisher Vector encoding time: " << durationgmm << endl;
 
     free(dest);
     free(siftresg);
@@ -251,101 +249,7 @@ void encodeDatabase(int factor, int nn)
 
     tablet = construct_table<DenseVector<float>>(lsh, params);
     table = tablet->construct_query_object(100);
-    cout << "lsh tables preparing done" << endl;
-}
-
-void test()
-{
-    double dist;
-    int correct = 0;
-    double start, finish, duration;
-    double t_s, t_f, t_d;
-    SiftData tData[103];
-    vector<float> test;
-    vector<char *> test_list;
-
-#if 1
-    test_list.push_back("data/demo/test/aquaman.jpg");
-    test_list.push_back("data/demo/test/fantastic.jpg");
-    test_list.push_back("data/demo/test/smallfoot.jpg");
-#endif
-
-    const char *test_path = "data/crop";
-    DIR *d = opendir(test_path);
-    struct dirent *cur_dir;
-    while ((cur_dir = readdir(d)) != NULL) {
-        if ((strcmp(cur_dir->d_name, ".") != 0) && (strcmp(cur_dir->d_name, "..") != 0)) {
-            char *file = new char[256];
-            sprintf(file, "%s/%s", test_path, cur_dir->d_name);
-            if (strstr(file, "jpg") != NULL)
-                test_list.push_back(file);
-        }
-    }
-    cout << endl << "-------------testing " << test_list.size() << " images---------------" <<endl << endl;
-    closedir(d);
-
-    t_s = wallclock();
-    //for (int i = 0; i < test_list.size(); i++) {
-    for (int i = 0; i < 20; i++) {
-        start = wallclock();
-
-        cout << endl << test_list[i] << endl;
-        Mat image = imread(test_list[i], CV_LOAD_IMAGE_COLOR);
-        onlineProcessing(image, tData[i], test, true, true, false);
-        vector<int> result;
-        DenseVector<float> t(SIZE);
-        for(int j = 0; j < SIZE; j++) t[j] = test[j];
-        table->find_k_nearest_neighbors(t, nn_num, &result);
-
-        int flag = 0;
-        for(int idx = 0; idx < result.size(); idx++) {
-            cout << result[idx] << " ";
-            if(result[idx] == i) {
-                correct++;
-                flag = 1;
-                cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!>>" << endl;
-                break;
-            }
-        } 
-
-#ifdef TEST 
-        if(flag) {
-            MatchSiftData(trainData[i], tData[i]);
-            float homography[9];
-            int numMatches;
-            FindHomography(trainData[i], homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
-            int numFit = ImproveHomography(trainData[i], homography, 5, 0.00f, 0.80f, 2.0);
-            //cout << "Matching features: " << numFit << " " << numMatches << endl;
-            double ratio = 100.0f*numFit/min(trainData[i].numPts, tData[i].numPts);
-            cout << "Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
-
-            if(ratio > 10) {
-                Mat H(3, 3, CV_32FC1, homography);
-    
-                vector<Point2f> obj_corners(4), scene_corners(4);
-                obj_corners[0] = cvPoint(0, 0);
-                obj_corners[1] = cvPoint(330, 0);
-                obj_corners[2] = cvPoint(330, 500);
-                obj_corners[3] = cvPoint(0, 500);
-
-                try {
-                    perspectiveTransform(obj_corners, scene_corners, H);
-                } catch (Exception) {
-                    cout << "cv exception" << endl;
-                    continue;
-                }
-            }
-        }
-#endif
-        FreeSiftData(tData[i]);
-
-        finish = wallclock();
-        duration = (double)(finish - start);
-        cout << "query time: " << duration << endl << endl;
-    }
-    t_f = wallclock();
-    t_d = (double)(t_f - t_s)/20.0;
-    cout << "correct: " <<correct << " in average time: " << t_d << endl;
+    cout << "LSH tables preparation done" << endl;
 }
 
 bool query(Mat queryImage, recognizedMarker &marker)
@@ -361,10 +265,10 @@ bool query(Mat queryImage, recognizedMarker &marker)
 
     for(int j = 0; j < SIZE; j++) t[j] = test[j];
     table->find_k_nearest_neighbors(t, nn_num, &result);
-    cout << "=====================time before matching: " << wallclock() << endl;
+    cout << "Query - time before matching: " << wallclock() << endl;
 
     for(int idx = 0; idx < result.size(); idx++) {
-        cout << "testing " << result[idx] << endl;
+        cout << "Testing " << result[idx] << endl;
 
 #ifdef TEST
         //Mat image(741, 500, CV_8UC1);
@@ -379,7 +283,7 @@ bool query(Mat queryImage, recognizedMarker &marker)
         sift_gpu(image, &a, &b, sData, w, h, true, true);
 #endif
     
-	cout << "features num: " << sData.numPts << " " << tData.numPts << endl;
+	cout << "Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
         MatchSiftData(sData, tData);
         FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
         int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
@@ -451,9 +355,9 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
         }
     }
     sData = cacheItems[index].data;
-    cout << "=====================time before matching: " << wallclock() << endl;
+    cout << "Cache query - time before matching: " << wallclock() << endl;
     
-    cout << "features num: " << sData.numPts << " " << tData.numPts << endl;
+    cout << "Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
     MatchSiftData(sData, tData);
     FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
     int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
@@ -532,7 +436,7 @@ void addCacheItem(frameBuffer curFrame, resBuffer curRes)
     newItem.curFrame = curFrame;
     newItem.curMarker = marker;
     cacheItems.push_back(newItem);
-    cout<<"cache item inserted at "<<wallclock()<<endl<<endl;
+    cout << "Cache item inserted at " << wallclock() <<endl <<endl;
 }
 
 bool mycompare(char* x, char* y) 
@@ -670,7 +574,7 @@ void trainParams() {
             projection[i * 128 + j] = pca.eigenvectors.at<float>(i,j);
         }
     }
-    cout<<"================pca training finished==================="<<endl;
+    cout<<"================ PCA training finished ==================="<<endl;
 
     ///////STEP 2  (optional): geometrically augment the features
     int pre_size = training_descriptors.rows;

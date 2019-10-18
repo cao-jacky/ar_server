@@ -30,7 +30,6 @@ using namespace cv;
 
 struct sockaddr_in localAddr;
 struct sockaddr_in remoteAddr;
-struct sockaddr_in offloadAddr;
 socklen_t addrlen = sizeof(remoteAddr);
 bool isClientAlive = false;
 
@@ -42,8 +41,7 @@ vector<char *> onlineImages;
 vector<char *> onlineAnnotations;
 
 void *ThreadUDPReceiverFunction(void *socket) {
-    // Keep function 
-    cout<<"Receiver Thread Created!"<<endl;
+    cout<<"UDP receiver thread created"<<endl;
     char tmp[4];
     char buffer[PACKET_SIZE];
     int sock = *((int*)socket);
@@ -71,7 +69,8 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
         memcpy(tmp, &(buffer[8]), 4);
         curFrame.bufferSize = *(int*)tmp;
-        cout<<"frame "<<curFrame.frmID<<" received, filesize: "<<curFrame.bufferSize;
+        cout<<"================================================"<<endl;
+        cout<<"Frame "<<curFrame.frmID<<" received, filesize: "<<curFrame.bufferSize;
         cout<<" at "<<setprecision(15)<<wallclock()<<endl;
         curFrame.buffer = new char[curFrame.bufferSize];
         memset(curFrame.buffer, 0, curFrame.bufferSize);
@@ -82,8 +81,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
 }
 
 void *ThreadUDPSenderFunction(void *socket) {
-    // Keep function
-    cout << "Sender Thread Created!" << endl;
+    cout << "UDP sender thread created" << endl;
     char buffer[RES_SIZE];
     int sock = *((int*)socket);
 
@@ -103,83 +101,13 @@ void *ThreadUDPSenderFunction(void *socket) {
         if(curRes.markerNum.i != 0)
             memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.markerNum.i);
         sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&remoteAddr, addrlen);
-        cout<<"frame "<<curRes.resID.i<<" res sent, "<<"marker#: "<<curRes.markerNum.i;
+        cout<<"Frame "<<curRes.resID.i<<" res sent, "<<"marker#: "<<curRes.markerNum.i;
         cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
     }    
-}
-
-void *ThreadTCPReceiverFunction(void *socket) {
-    // Don't need - join with UDP receiver - in factr, it is more or less the same as the UDP function
-    cout<<"Receiver Thread Created!"<<endl;
-    char tmp[4];
-    char header[12];
-    char buffer[PACKET_SIZE];
-    int sock = *((int*)socket);
-
-    while (isClientAlive) {
-        memset(buffer, 0, sizeof(buffer));
-        if(read(sock, header, 12) <= 0) {
-	    cout<<"client disconnects"<<endl;
-	    isClientAlive = false;
-	    continue;
-	}
-
-        frameBuffer curFrame;    
-        memcpy(tmp, header, 4);
-        curFrame.frmID = *(int*)tmp;        
-        memcpy(tmp, &(header[4]), 4);
-        curFrame.dataType = *(int*)tmp;
-        memcpy(tmp, &(header[8]), 4);
-        curFrame.bufferSize = *(int*)tmp;
-	
-	int size = 0;
-	while(size < curFrame.bufferSize) {
-	    size += read(sock, &(buffer[size]), curFrame.bufferSize-size);
-	}
-        cout<<"frame "<<curFrame.frmID<<" received, filesize: "<<curFrame.bufferSize;
-        cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
-        curFrame.buffer = new char[curFrame.bufferSize];
-        memset(curFrame.buffer, 0, curFrame.bufferSize);
-        memcpy(curFrame.buffer, buffer, curFrame.bufferSize);
-        
-        frames.push(curFrame);
-    }
-
-    cout<<"Receiver Thread finished!"<<endl;
-}
-
-void *ThreadTCPSenderFunction(void *socket) {
-    // Don't need - join with UDP sender - again, same as UDP function, just turn off
-    cout << "Sender Thread Created!" << endl;
-    char buffer[RES_SIZE];
-    int sock = *((int*)socket);
-
-    while (isClientAlive) {
-        if(results.empty()) {
-            this_thread::sleep_for(chrono::milliseconds(1));
-            continue;
-        }
-
-        resBuffer curRes = results.front();
-        results.pop();
-
-        memset(buffer, 0, sizeof(buffer));
-        memcpy(buffer, curRes.resID.b, 4);
-        memcpy(&(buffer[4]), curRes.resType.b, 4);
-        memcpy(&(buffer[8]), curRes.markerNum.b, 4);
-        if(curRes.markerNum.i != 0)
-            memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.markerNum.i);
-        write(sock, buffer, sizeof(buffer));
-        cout<<"frame "<<curRes.resID.i<<" res sent, "<<"marker#: "<<curRes.markerNum.i;
-        cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
-    }    
-
-    cout<<"Sender Thread finished!"<<endl;
 }
 
 void *ThreadProcessFunction(void *param) {
-    // Keep function - this is only called/created on the recognition server
-    cout<<"Process Thread Created!"<<endl;
+    cout<<"Process thread created"<<endl;
     recognizedMarker marker;
     bool markerDetected = false;
 
@@ -235,7 +163,7 @@ void *ThreadProcessFunction(void *param) {
 
             if(curRes.markerNum.i > 0)
                 addCacheItem(curFrame, curRes);
-                cout << "Cache item added" << endl;
+                cout << "Added item to cache" << endl;
         }
         else {
             curRes.resID.i = frmID;
@@ -246,73 +174,8 @@ void *ThreadProcessFunction(void *param) {
     }
 }
 
-void *ThreadTCPOffloaderFunction(void *socket) {
-    // Don't need to offload - work under the same single program
-    cout << "Offloader Thread Created!" << endl;
-    char tmp[4];
-    char *requestbuffer;
-    char *resultbuffer;
-    int sock = *((int*)socket);
-
-    while (isClientAlive) {
-        if(offloadframes.empty()) {
-            this_thread::sleep_for(chrono::milliseconds(1));
-            continue;
-        }
-
-        frameBuffer curFrame = offloadframes.front();
-        offloadframes.pop();
-
-        resBuffer offloadRequest; //it's not result, just utilize the structure
-        offloadRequest.resID.i = curFrame.frmID;
-        offloadRequest.resType.i = curFrame.dataType;
-        offloadRequest.markerNum.i = curFrame.bufferSize;
-        offloadRequest.buffer = curFrame.buffer;
-
-        requestbuffer = (char *)malloc(curFrame.bufferSize+12);
-        memset(requestbuffer, 0, curFrame.bufferSize+12);
-        memcpy(requestbuffer, offloadRequest.resID.b, 4);
-        memcpy(&(requestbuffer[4]), offloadRequest.resType.b, 4);
-        memcpy(&(requestbuffer[8]), offloadRequest.markerNum.b, 4);
-        memcpy(&(requestbuffer[12]), offloadRequest.buffer, offloadRequest.markerNum.i);
-        cout<<"frame "<<curFrame.frmID<<" offloaded to server at "<<wallclock()<<endl;
-        write(sock, requestbuffer, curFrame.bufferSize+12);
-        free(requestbuffer);
-
-        resultbuffer = (char *)malloc(RES_SIZE);
-        memset(resultbuffer, 0, RES_SIZE);
-        if(read(sock, resultbuffer, RES_SIZE) <= 0) {
-            cout<<"recognition server disconnects"<<endl;
-            isClientAlive = false;
-            continue;
-        }
-        cout<<"frame "<<curFrame.frmID<<" res received from server at "<<wallclock()<<endl;
-
-        resBuffer curRes;    
-        memcpy(tmp, resultbuffer, 4);
-        curRes.resID.i = *(int*)tmp;        
-        memcpy(tmp, &(resultbuffer[4]), 4);
-        curRes.resType.i = *(int*)tmp;
-        memcpy(tmp, &(resultbuffer[8]), 4);
-        curRes.markerNum.i = *(int*)tmp;
-        //curRes.buffer = (char *)malloc(RES_SIZE-12);
-        curRes.buffer = (char *)calloc(sizeof(char), RES_SIZE-12);
-        memcpy(curRes.buffer, &(resultbuffer[12]), RES_SIZE-12);
-        free(resultbuffer);
-
-        results.push(curRes);
-        
-        // disabling adding cache items
-        if(curRes.markerNum.i > 0)
-            addCacheItem(curFrame, curRes);
-    }    
-
-    cout<<"Offloader Thread finished!"<<endl;
-}
-
 void *ThreadCacheSearchFunction(void *param) {
-    // Keep function - make it work under one program
-    cout<<"Cache Search Thread Created!"<<endl;
+    cout<<"Cache searcher thread created"<<endl;
     recognizedMarker marker;
     bool markerDetected = false;
 
@@ -331,7 +194,7 @@ void *ThreadCacheSearchFunction(void *param) {
         char* frmdata = curFrame.buffer;
         
         if(frmDataType == IMAGE_DETECT) {
-            cout << "Searching cache" << endl;
+            cout << "Searching the cache" << endl;
             vector<uchar> imgdata(frmdata, frmdata + frmSize);
             Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
             imwrite("cacheQuery.jpg",img_scene);
@@ -375,13 +238,12 @@ void *ThreadCacheSearchFunction(void *param) {
     }
 }
 
-
 void runServer(int port) {
-    pthread_t senderThread, receiverThread, imageProcessThread, processThread, offloadThread, testThread, annotationThread;
+    pthread_t senderThread, receiverThread, imageProcessThread, processThread;
     char buffer[PACKET_SIZE];
     char fileid[4];
     int status = 0;
-    int sockTCP, sockUDP, sockTCPCli;
+    int sockUDP;
 
     memset((char*)&localAddr, 0, sizeof(localAddr));
     localAddr.sin_family = AF_INET;
@@ -389,27 +251,27 @@ void runServer(int port) {
     localAddr.sin_port = htons(port);
 
     if((sockUDP = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-        cout<<"ERROR opening udp socket"<<endl;
+        cout<<"ERROR opening UDP socket"<<endl;
         exit(1);
     }
     if(bind(sockUDP, (struct sockaddr *)&localAddr, sizeof(localAddr)) < 0) {
-        cout<<"ERROR on udp binding"<<endl;
+        cout<<"ERROR on UDP binding"<<endl;
         exit(1);
     }
-    cout << endl << "========server started, waiting for clients==========" << endl;
+    cout << endl << "======== Server started, waiting for clients to connect ==========" << endl;
 
     isClientAlive = true;
     pthread_create(&receiverThread, NULL, ThreadUDPReceiverFunction, (void *)&sockUDP);
     pthread_create(&senderThread, NULL, ThreadUDPSenderFunction, (void *)&sockUDP);
     pthread_create(&imageProcessThread, NULL, ThreadProcessFunction, NULL);
     pthread_create(&processThread, NULL, ThreadCacheSearchFunction, NULL);
-    //pthread_create(&offloadThread, NULL, ThreadTCPOffloaderFunction, (void *)&sockTCPCli);
 
     pthread_join(receiverThread, NULL);
     pthread_join(senderThread, NULL);
     pthread_join(imageProcessThread, NULL);
     pthread_join(processThread, NULL);
-    //pthread_join(offloadThread, NULL);
+
+    cout << endl;
 }
 
 void loadOnline() 
