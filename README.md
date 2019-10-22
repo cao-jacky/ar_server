@@ -2,6 +2,15 @@
 
 The server component of the mobile\_ar\_system - single\_process branch is the caching and recognition processes combined into one "server instance" 
 
+### Docker deployment
+
+Command for running the Docker image is
+
+```sh
+$ sudo docker run -ti --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -p 51717:51717/udp 606eb54233f0
+```
+
+
 ### Dependencies
 
   - `OpenCV` - tested with version 4.1

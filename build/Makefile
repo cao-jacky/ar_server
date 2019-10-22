@@ -8,7 +8,7 @@ CDIR = $(notdir $(CSRCS))
 CXXOBJECTS = $(patsubst %.cpp,%.o, $(CXXDIR)) 
 COBJECTS = $(patsubst %.c,%.o, $(CDIR)) 
 
-CUDA_ROOT = /usr/local/cuda
+CUDA_ROOT = /usr/local/cuda-10.1
 
 SIFT_ROOT = ../lib/cudasift
 EIGEN_ROOT = ../lib/eigen
