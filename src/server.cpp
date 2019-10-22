@@ -330,12 +330,12 @@ int main(int argc, char *argv[])
 
 
     // outputting terminal outputs into dated log files
-    // using namespace std;
-    // string log_file = "logs/log_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
-    // string error_file = "logs/error_" + to_string(mode) + "_" + getCurrentDateTime("now") + ".txt";
+    using namespace std;
+    string log_file = "logs/log_" + getCurrentDateTime("now") + ".txt";
+    string error_file = "logs/error_" + getCurrentDateTime("now") + ".txt";
 
-    // freopen( log_file.c_str(), "w", stdout );
-    // freopen( error_file.c_str(), "w", stderr );
+    freopen( log_file.c_str(), "w", stdout );
+    freopen( error_file.c_str(), "w", stderr );
 
     runServer(port);
 

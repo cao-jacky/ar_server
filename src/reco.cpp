@@ -76,8 +76,6 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     h = img.rows;
     cout << "Image size = (" << w << "," << h << ")" << endl;
 
-    //imwrite("query.jpg",img_scene);
-    // this line breaks on the second query - but why? is there no data being saved?
     cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float*)img.data);
     cimg.Download();
 
@@ -127,6 +125,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
     float enc[SIZE] = {0};
     if (cache) {
+        start = wallclock();
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
     } else {
         start = wallclock();
@@ -136,8 +135,8 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
         finish = wallclock();
         durationgmm = (double)(finish - start);
         cout << "PCA encoding time: " << durationgmm << endl;
+        
         start = wallclock();
-
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
     }
 
@@ -170,48 +169,6 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     cout << "Fisher Vector encoding time: " << durationgmm << endl;
 
     free(dest);
-    free(siftresg);
-    free(siftframe);
-}
-
-void onlineCacheProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage)
-{
-    int siftResult;
-    float *siftresg;
-    float *siftframe;
-    int height, width;
-
-    siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
-
-    float enc[SIZE] = {0};
-    // the problem is with the line below - but how can I solve this? 
-    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 128, siftResult, (128/2.0)*log(2.0*VL_PI), 
-        enc, NULL, siftresg);
-
-    ///////////WARNING: add the other NOOP
-    float sum = 0.0;
-    for (int i = 0; i < SIZE; i++)
-    {
-        sum += enc[i] * enc[i];
-    }
-    for (int i = 0; i < SIZE; i++)
-    {
-        //WARNING: didn't use the max operation
-        enc[i] /= sqrt(sum);
-    }
-    sum = 0.0;
-    for (int i = 0; i < SIZE; i++)
-    {
-      sum += enc[i] * enc[i];
-    }
-    for (int i = 0; i < SIZE; i++)
-    {
-        //WARNING: didn't use the max operation
-        enc[i] /= sqrt(sum);
-    }
-  
-    enc_vec = vector<float>(enc, enc+SIZE);
-
     free(siftresg);
     free(siftframe);
 }
@@ -261,10 +218,17 @@ bool query(Mat queryImage, recognizedMarker &marker)
     float homography[9];
     int numMatches;
 
+    double start, finish;
+    double duration_lshnn;
+
     onlineProcessing(queryImage, tData, test, true, false, false);
 
     for(int j = 0; j < SIZE; j++) t[j] = test[j];
+    start = wallclock();
     table->find_k_nearest_neighbors(t, nn_num, &result);
+    finish = wallclock();
+    duration_lshnn = (double)(finish - start);
+    cout << "LSH NN searching time: " << duration_lshnn << endl;
     cout << "Query - time before matching: " << wallclock() << endl;
 
     for(int idx = 0; idx < result.size(); idx++) {
@@ -342,7 +306,6 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
 
     if(cacheItems.size() == 0) return false;
 
-    //onlineCacheProcessing(queryImage, tData, test, true, false);
     onlineProcessing(queryImage, tData, test, true, false, true);
 
     double minDistance = 999999999;
@@ -405,7 +368,6 @@ void addCacheItem(frameBuffer curFrame, resBuffer curRes)
     Mat cacheQueryImage = queryImage(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
     onlineProcessing(cacheQueryImage, tData, test, true, false, true);
-    //onlineCacheProcessing(cacheQueryImage, tData, test, true, false);
 
     recognizedMarker marker;
     int pointer = 0;

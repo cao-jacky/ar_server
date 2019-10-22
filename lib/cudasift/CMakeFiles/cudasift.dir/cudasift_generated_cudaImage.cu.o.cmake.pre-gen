@@ -72,7 +72,7 @@ set(generated_file_internal "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/
 set(generated_cubin_file_internal "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o.cubin.txt") # path
 
 set(CUDA_NVCC_EXECUTABLE "/usr/local/cuda/bin/nvcc") # path
-set(CUDA_NVCC_FLAGS -lineinfo;-ccbin;/usr/bin/gcc-6;--compiler-options;-O2;-D_FORCE_INLINES;-DVERBOSE_NOT ;; -arch=sm_75) # list
+set(CUDA_NVCC_FLAGS -lineinfo;-ccbin;/usr/bin/gcc-7;--compiler-options;-O2;-D_FORCE_INLINES;-DVERBOSE_NOT ;; -arch=sm_75) # list
 # Build specific configuration flags
 set(CUDA_NVCC_FLAGS_RELEASE  ; )
 set(CUDA_NVCC_FLAGS_DEBUG  ; )
