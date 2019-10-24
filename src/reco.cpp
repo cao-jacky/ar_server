@@ -85,10 +85,10 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     ExtractSift(siftData, cimg, 5, initBlur, thresh, 0.0f, false);
 
     numPts = siftData.numPts;
-    // *siftres = (float *)malloc(sizeof(float)*128*numPts);
-    // *siftframe = (float *)malloc(sizeof(float)*2*numPts);
-    *siftres = (float *)calloc(sizeof(float), sizeof(float)*128*numPts);
-    *siftframe = (float *)calloc(sizeof(char), sizeof(float)*2*numPts);
+    *siftres = (float *)malloc(sizeof(float)*128*numPts);
+    *siftframe = (float *)malloc(sizeof(float)*2*numPts);
+    //*siftres = (float *)calloc(sizeof(float), sizeof(float)*128*numPts);
+    //*siftframe = (float *)calloc(sizeof(char), sizeof(float)*2*numPts);
     float* curRes = *siftres;
     float* curframe = *siftframe;
     SiftPoint* p = siftData.h_data;
@@ -123,9 +123,11 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
-    float enc[SIZE] = {0};
+    float enc[SIZE];
+
     if (cache) {
         start = wallclock();
+        float enc[SIZE] = {0};
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
     } else {
         start = wallclock();
@@ -137,6 +139,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
         cout << "PCA encoding time: " << durationgmm << endl;
         
         start = wallclock();
+        float enc[SIZE] = {0};
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
     }
 
@@ -646,10 +649,10 @@ void trainCacheParams() {
     float *sift_res;
     float *sift_frame;
 
-    // float *final_res = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
-    // float *final_frame = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
-    float *final_res = (float *)calloc(sizeof(float), ROWS * whole_list.size() * 128 * sizeof(float));
-    float *final_frame = (float *)calloc(sizeof(float), ROWS * whole_list.size() * 128 * sizeof(float));
+    float *final_res = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
+    float *final_frame = (float *)malloc(ROWS * whole_list.size() * 128 * sizeof(float));
+    //float *final_res = (float *)calloc(sizeof(float), ROWS * whole_list.size() * 128 * sizeof(float));
+    //float *final_frame = (float *)calloc(sizeof(float), ROWS * whole_list.size() * 128 * sizeof(float));
     Mat training_descriptors(0, 128, CV_32FC1);
     //////////////////train encoder ////////////////
     //////// STEP 1: obtain sample image descriptors
@@ -853,7 +856,7 @@ void distribution(int *order) {
 }
 
 void ThreadQueryFunction() {
-    Mat image = imread("/home/symlab/Downloads/dataset/paintings/eval2/20190609_183259.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    Mat image = imread("/home/jacky/Desktop/mobile_ar_system/ar_server/data/demo/test/fantastic.jpg", CV_LOAD_IMAGE_GRAYSCALE);
     recognizedMarker marker;
 
     for(int i = 0; i < 10; i++) {
@@ -893,9 +896,9 @@ void scalabilityTest() {
         for(int i = 0; i < threadIndex; i++)
             handlerThread[i].join();
 
-	cout<<endl<<"==================================================================="<<endl;
+	    cout<<endl<<"==================================================================="<<endl;
         cout<<"average for loop "<<loop<<": "<<totalTime/10.0/threadIndex<<" with thread #: "<<threadIndex<<endl;
-	cout<<"==================================================================="<<endl<<endl;
+	    cout<<"==================================================================="<<endl<<endl;
     }
 }
 

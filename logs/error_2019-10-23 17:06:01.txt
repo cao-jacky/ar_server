@@ -1,0 +1,2 @@
+checkMsg() CUDA error: FindMaxCorr5() execution failed
+ in file </home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/matching.cu>, line 1192 : invalid argument.

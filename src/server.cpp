@@ -12,10 +12,6 @@
 #include <queue>
 #include <fstream>
 
-#include <iostream>
-#include <cstdio>
-#include <string>  
-
 #define MESSAGE_ECHO 0
 #define FEATURES 1
 #define IMAGE_DETECT 2
@@ -49,6 +45,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
     while (1) {
         memset(buffer, 0, sizeof(buffer));
         recvfrom(sock, buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
+        char *device_ip = inet_ntoa(remoteAddr.sin_addr);
 
         frameBuffer curFrame;    
         memcpy(tmp, buffer, 4);
@@ -71,7 +68,8 @@ void *ThreadUDPReceiverFunction(void *socket) {
         curFrame.bufferSize = *(int*)tmp;
         cout<<"================================================"<<endl;
         cout<<"Frame "<<curFrame.frmID<<" received, filesize: "<<curFrame.bufferSize;
-        cout<<" at "<<setprecision(15)<<wallclock()<<endl;
+        cout<<" at "<<setprecision(15)<<wallclock();
+        cout<<" from device with IP "<<device_ip<<endl;
         curFrame.buffer = new char[curFrame.bufferSize];
         memset(curFrame.buffer, 0, curFrame.bufferSize);
         memcpy(curFrame.buffer, &(buffer[12]), curFrame.bufferSize);
@@ -326,8 +324,6 @@ int main(int argc, char *argv[])
     loadParams();
 #endif
     encodeDatabase(querysizefactor, nn_num); 
-    //test();
-
 
     // outputting terminal outputs into dated log files
     using namespace std;
@@ -337,7 +333,8 @@ int main(int argc, char *argv[])
     freopen( log_file.c_str(), "w", stdout );
     freopen( error_file.c_str(), "w", stderr );
 
-    runServer(port);
+    //runServer(port);
+    //scalabilityTest();    
 
     freeParams();
     return 0;
