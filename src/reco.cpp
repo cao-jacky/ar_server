@@ -123,11 +123,10 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
-    float enc[SIZE];
+    float enc[SIZE] = {0};
 
     if (cache) {
         start = wallclock();
-        float enc[SIZE] = {0};
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
     } else {
         start = wallclock();
@@ -139,7 +138,6 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
         cout << "PCA encoding time: " << durationgmm << endl;
         
         start = wallclock();
-        float enc[SIZE] = {0};
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
     }
 

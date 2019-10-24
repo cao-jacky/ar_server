@@ -11,7 +11,6 @@
 
 template<int Alignment,typename VectorType> void map_class_vector(const VectorType& m)
 {
-  typedef typename VectorType::Index Index;
   typedef typename VectorType::Scalar Scalar;
 
   Index size = m.size();
@@ -50,7 +49,6 @@ template<int Alignment,typename VectorType> void map_class_vector(const VectorTy
 
 template<int Alignment,typename MatrixType> void map_class_matrix(const MatrixType& _m)
 {
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
 
   Index rows = _m.rows(), cols = _m.cols();
@@ -199,7 +197,7 @@ void bug1453()
   VERIFY_IS_APPROX(RowMatrix32i::Map(data, InnerStride<>(2)), RowMatrixXi::Map(data, 3, 2, Stride<4,2>()));
 }
 
-void test_mapstride()
+EIGEN_DECLARE_TEST(mapstride)
 {
   for(int i = 0; i < g_repeat; i++) {
     int maxn = 30;

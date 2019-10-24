@@ -91,8 +91,7 @@ void gpu_free() {
   cudaFree(sqrtInvSigma_d);  
 }
 
-bool gpu_gmm_1(TYPE const * covariances, TYPE const * priors, TYPE const * means, TYPE* posteriors, 
-  int numClusters, int dimension, int numData, float halfDimLog2Pi, TYPE* enc_g, TYPE* sqrtInvSigma, TYPE* data) {
+bool gpu_gmm_1(TYPE const * covariances, TYPE const * priors, TYPE const * means, TYPE* posteriors, int numClusters, int dimension, int numData, float halfDimLog2Pi, TYPE* enc_g, TYPE* sqrtInvSigma, TYPE* data) {
   int cluster_size = numClusters*sizeof(TYPE);
   int total_size = cluster_size * dimension;
   cudaMalloc((void**)&posteriors_d, numData*numClusters*sizeof(TYPE));

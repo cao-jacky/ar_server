@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
     freopen( log_file.c_str(), "w", stdout );
     freopen( error_file.c_str(), "w", stderr );
 
-    //runServer(port);
+    runServer(port);
     //scalabilityTest();    
 
     freeParams();

@@ -25,7 +25,7 @@
 namespace Eigen {
 namespace TensorSycl {
 namespace internal {
-/// \struct FunctorExtractor:  This struct is used to extract the functors
+/// struct FunctorExtractor:  This struct is used to extract the functors
 /// constructed on
 /// the host-side, to pack them and reuse them in reconstruction of the
 /// expression on the device.
@@ -117,7 +117,7 @@ SYCLEXTRFUNCTERNARY()
 
 
 
-//TensorCustomOp must be specialised otherewise it will be captured by UnaryCategory while its action is different
+//TensorCustomOp must be specialised otherwise it will be captured by UnaryCategory while its action is different
 //from the UnaryCategory and it is similar to the general FunctorExtractor.
 /// specialisation of TensorCustomOp
 #define SYCLEXTRFUNCCUSTOMUNARYOP(CVQual)\

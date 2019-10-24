@@ -242,10 +242,17 @@ struct TensorEvaluator<const TensorConvolutionOp<Indices, InputArgType, KernelAr
   enum {
     IsAligned = TensorEvaluator<InputArgType, const Eigen::SyclDevice>::IsAligned & TensorEvaluator<KernelArgType, const Eigen::SyclDevice>::IsAligned,
     PacketAccess = false,
+    BlockAccess = false,
+    BlockAccessV2 = false,
+    PreferBlockAccess = false,
     Layout = TensorEvaluator<InputArgType, const Eigen::SyclDevice>::Layout,
     CoordAccess = false,  // to be implemented
     RawAccess = false
   };
+
+  //===- Tensor block evaluation strategy (see TensorBlock.h) -------------===//
+  typedef internal::TensorBlockNotImplemented TensorBlockV2;
+  //===--------------------------------------------------------------------===//
 
   EIGEN_DEVICE_FUNC TensorEvaluator(const XprType& op, const Eigen::SyclDevice& device)
       : m_inputImpl(op.inputExpression(), device), m_kernelArg(op.kernelExpression()), m_kernelImpl(op.kernelExpression(), device), m_indices(op.indices()), m_buf(NULL), m_kernel(NULL), m_local_kernel(false), m_device(device)
@@ -352,7 +359,7 @@ struct TensorEvaluator<const TensorConvolutionOp<Indices, InputArgType, KernelAr
           size_t range_x, GRange_x, tileSize_x, range_y, GRange_y, tileSize_y;
           m_device.parallel_for_setup(numX, numP, tileSize_x,tileSize_y,range_x,range_y, GRange_x, GRange_y );
           const size_t shared_mem =(tileSize_x +kernel_size -1)*(tileSize_y);
-          assert(static_cast<unsigned long>(shared_mem) <= m_device.sharedMemPerBlock());
+          gpu_assert(static_cast<unsigned long>(shared_mem) <= m_device.sharedMemPerBlock());
           auto global_range=cl::sycl::range<2>(GRange_x, GRange_y);  // global range
           auto local_range=cl::sycl::range<2>(tileSize_x, tileSize_y);  // local range
           InputLocalAcc local_acc(cl::sycl::range<1>(shared_mem), cgh);
@@ -377,7 +384,7 @@ struct TensorEvaluator<const TensorConvolutionOp<Indices, InputArgType, KernelAr
           size_t range_x, GRange_x, tileSize_x, range_y, GRange_y, tileSize_y, range_z, GRange_z, tileSize_z;
           m_device.parallel_for_setup(numX, numY, numP, tileSize_x, tileSize_y, tileSize_z, range_x, range_y, range_z, GRange_x, GRange_y, GRange_z );
           const size_t shared_mem =(tileSize_x +kernel_size_x -1)*(tileSize_y +kernel_size_y -1) * tileSize_z;
-          assert(static_cast<unsigned long>(shared_mem) <= m_device.sharedMemPerBlock());
+          gpu_assert(static_cast<unsigned long>(shared_mem) <= m_device.sharedMemPerBlock());
           auto global_range=cl::sycl::range<3>(GRange_x, GRange_y, GRange_z);  // global range
           auto local_range=cl::sycl::range<3>(tileSize_x, tileSize_y, tileSize_z);  // local range
           InputLocalAcc local_acc(cl::sycl::range<1>(shared_mem), cgh);
@@ -408,7 +415,7 @@ struct TensorEvaluator<const TensorConvolutionOp<Indices, InputArgType, KernelAr
           size_t range_x, GRange_x, tileSize_x, range_y, GRange_y, tileSize_y, range_z, GRange_z, tileSize_z;
           m_device.parallel_for_setup(numX, numY, numZ, tileSize_x, tileSize_y, tileSize_z, range_x, range_y, range_z, GRange_x, GRange_y, GRange_z );
           const size_t shared_mem =(tileSize_x +kernel_size_x -1)*(tileSize_y +kernel_size_y -1) * (tileSize_z +kernel_size_y -1);
-          assert(static_cast<unsigned long>(shared_mem) <= m_device.sharedMemPerBlock());
+          gpu_assert(static_cast<unsigned long>(shared_mem) <= m_device.sharedMemPerBlock());
           auto global_range=cl::sycl::range<3>(GRange_x, GRange_y, GRange_z);  // global range
           auto local_range=cl::sycl::range<3>(tileSize_x, tileSize_y, tileSize_z);  // local range
           InputLocalAcc local_acc(cl::sycl::range<1>(shared_mem), cgh);

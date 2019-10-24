@@ -15,7 +15,7 @@
 #  Eigen3::Eigen - The header-only Eigen library
 #
 # This module reads hints about search locations from 
-# the following enviroment variables:
+# the following environment variables:
 #
 # EIGEN3_ROOT
 # EIGEN3_ROOT_DIR
@@ -68,6 +68,7 @@ if (EIGEN3_INCLUDE_DIR)
   # in cache already
   _eigen3_check_version()
   set(EIGEN3_FOUND ${EIGEN3_VERSION_OK})
+  set(Eigen3_FOUND ${EIGEN3_VERSION_OK})
 
 else (EIGEN3_INCLUDE_DIR)
   
