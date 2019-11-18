@@ -1,3 +1,5 @@
 *~
 *.o
 *.tar
+/logs_server/*.txt
+/logs_devices/*.txt
