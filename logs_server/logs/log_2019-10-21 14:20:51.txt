@@ -1,0 +1,19 @@
+
+======== Server started, waiting for clients to connect ==========
+Process thread created
+UDP receiver thread createdCache searcher thread created
+
+UDP sender thread created
+================================================
+Frame 27 received, filesize: 15863 at 1571656878.0351
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.39 ms 259
+Incl prefiltering & memcpy =  1.76 ms 259
+
+259 SIFT points extracted in time: 0.0146400928497314
+PCA encoding time: 0.0019991397857666
+Fisher Vector encoding time: 0.00737714767456055
+LSH NN searching time: 0.00288295745849609
+Query - time before matching: 1571656878.07019
+Testing 1

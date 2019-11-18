@@ -1,0 +1,1094 @@
+0 0 0 0 0 0 0 0 0 0 0 1 0 1 7 8 7 15 24 26 22 35 30 48 51 46 31 30 28 22 21 22 8 10 6 6 2 1 3 1 0 0 0 0 0 0 0 0 0 0 
+
+11 13 14 14 14 14 14 14 14 15 15 15 15 15 15 15 15 16 16 16 16 16 16 16 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 29 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 31 32 32 32 32 32 32 32 32 33 33 33 33 33 33 33 33 33 33 34 34 34 34 34 34 35 35 35 35 35 35 36 36 37 38 38 38 39 
+
+20 25 15 19 23 31 16 25 22 26 21 26 27 14 30 25 28 27 22 21 21 26 29 21 27 23 17 25 20 23 27 29 24 25 28 21 26 29 23 25 19 24 28 19 24 23 20 11 26 24 30 22 22 18 28 23 18 20 22 25 28 28 21 28 33 27 14 17 29 28 17 33 23 17 19 30 29 27 24 25 16 21 33 16 21 18 21 21 26 30 24 24 31 23 22 30 24 30 30 23 24 32 23 33 26 33 28 33 23 21 20 18 18 36 23 19 33 30 27 24 35 22 19 26 22 31 32 26 29 25 25 21 28 34 23 18 27 25 24 22 21 31 23 32 28 34 20 24 24 22 24 22 24 17 23 22 22 23 23 19 19 21 35 27 28 30 25 18 29 15 16 17 17 34 24 17 25 24 23 28 30 24 26 32 23 26 21 20 25 24 23 31 22 30 29 23 19 19 23 14 35 15 18 22 29 21 21 31 31 25 24 17 31 25 24 32 28 18 27 26 28 27 25 19 22 23 20 27 19 19 35 25 23 23 21 31 23 32 23 22 30 23 21 31 39 18 26 21 22 25 26 20 21 26 25 25 17 37 18 27 30 20 25 26 31 33 21 25 24 27 28 20 27 15 23 21 25 25 24 24 28 18 24 31 25 34 20 21 19 24 18 20 26 26 29 19 20 27 20 23 26 14 28 24 24 24 22 22 30 17 15 28 25 27 27 19 19 25 21 20 25 21 31 28 16 18 35 24 25 27 27 24 27 18 23 29 30 28 15 26 24 32 27 27 17 36 29 31 28 20 20 22 30 25 25 19 18 18 24 25 16 28 23 26 24 29 23 19 25 21 26 25 23 28 26 22 14 24 38 22 30 19 28 20 24 25 34 22 27 24 30 15 31 25 16 27 24 29 21 27 18 18 18 29 31 26 28 31 24 30 20 23 30 26 17 26 26 29 28 31 18 22 25 24 32 29 24 20 18 31 22 34 25 23 23 17 14 23 33 21 19 19 33 35 29 23 19 26 13 23 38 27 18 18 27 31 29 23 27 21 25 31 24 21 23 30 23 22 21 19 27 31 25 24 25 24 24 23 21 22 38 19 23 24 24 25 29 26 14 26 23 26 24 29 15 20 23 24 29 25 24 22 22 28 21 19 21 25 23 17 25 24 
+
+Image size = (540,720)
+SIFT extraction time =        0.39 ms 1000
+Incl prefiltering & memcpy =  2.38 ms 1000
+
+1000 SIFT points extracted in time: 0.00400805
+PCA encoding time: 0.0026648
+Fisher Vector encoding time: 0.00801802
+LSH NN searching time: 0.00256586
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.31 ms
+Matching features: 478 565 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.35 ms 1000
+Incl prefiltering & memcpy =  1.51 ms 1000
+
+1000 SIFT points extracted in time: 0.00279808
+PCA encoding time: 0.00232196
+Fisher Vector encoding time: 0.00647783
+LSH NN searching time: 0.00239182
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.29 ms
+Matching features: 475 566 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.71 ms 1000
+
+1000 SIFT points extracted in time: 0.003124
+PCA encoding time: 0.00258207
+Fisher Vector encoding time: 0.01175
+LSH NN searching time: 0.00269413
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.47 ms
+Matching features: 472 562 47.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.72 ms 1000
+
+1000 SIFT points extracted in time: 0.00304389
+PCA encoding time: 0.00128388
+Fisher Vector encoding time: 0.00880504
+LSH NN searching time: 0.000550032
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 477 569 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.03 ms 1000
+
+1000 SIFT points extracted in time: 0.00173116
+PCA encoding time: 0.00114298
+Fisher Vector encoding time: 0.00890994
+LSH NN searching time: 0.000583172
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 479 569 47.9% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.03 ms 1000
+
+1000 SIFT points extracted in time: 0.00172305
+PCA encoding time: 0.00115108
+Fisher Vector encoding time: 0.00894785
+LSH NN searching time: 0.00058198
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 470 563 47% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.02 ms 1000
+
+1000 SIFT points extracted in time: 0.00171781
+PCA encoding time: 0.00159788
+Fisher Vector encoding time: 0.00892305
+LSH NN searching time: 0.000579834
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 479 566 47.9% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.03 ms 1000
+
+1000 SIFT points extracted in time: 0.00172782
+PCA encoding time: 0.00118518
+Fisher Vector encoding time: 0.0088439
+LSH NN searching time: 0.000581026
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 483 570 48.3% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.01 ms 1000
+
+1000 SIFT points extracted in time: 0.00170493
+PCA encoding time: 0.00125194
+Fisher Vector encoding time: 0.00887799
+LSH NN searching time: 0.000555992
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 477 569 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.02 ms 1000
+
+1000 SIFT points extracted in time: 0.00171304
+PCA encoding time: 0.00127816
+Fisher Vector encoding time: 0.00892091
+LSH NN searching time: 0.000592947
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 475 568 47.5% 
+after matching 1.57184e+09
+
+===================================================================
+average for loop 0: 19.9 with thread #: 1
+===================================================================
+
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.81 ms 1000
+
+1000 SIFT points extracted in time: 0.00148797
+PCA encoding time: 0.000699997
+Fisher Vector encoding time: 0.00890183
+LSH NN searching time: 0.000585079
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 481 568 48.1% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.54 ms 1000
+
+1000 SIFT points extracted in time: 0.00255394
+PCA encoding time: 0.00140309
+Fisher Vector encoding time: 0.00894308
+LSH NN searching time: 0.00151587
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.28 ms
+Matching features: 473 565 47.3% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.52 ms 1000
+Incl prefiltering & memcpy =  1.91 ms 1000
+
+1000 SIFT points extracted in time: 0.00324893
+PCA encoding time: 0.000637054
+Fisher Vector encoding time: 0.00892496
+LSH NN searching time: 0.000554085
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 481 573 48.1% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.09 ms 1000
+
+1000 SIFT points extracted in time: 0.00200915
+PCA encoding time: 0.00114608
+Fisher Vector encoding time: 0.00910902
+LSH NN searching time: 0.00125909
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.26 ms
+Matching features: 480 569 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.20 ms 1000
+
+1000 SIFT points extracted in time: 0.00207305
+PCA encoding time: 0.00177002
+Fisher Vector encoding time: 0.00882888
+LSH NN searching time: 0.000550985
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 472 566 47.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.74 ms 1000
+
+1000 SIFT points extracted in time: 0.00311112
+PCA encoding time: 0.00172496
+Fisher Vector encoding time: 0.00888205
+LSH NN searching time: 0.000587225
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 473 566 47.3% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.74 ms 1000
+
+1000 SIFT points extracted in time: 0.00332189
+PCA encoding time: 0.00178409
+Fisher Vector encoding time: 0.00900888
+LSH NN searching time: 0.000563145
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 566 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.74 ms 1000
+
+1000 SIFT points extracted in time: 0.00308299
+PCA encoding time: 0.00191402
+Fisher Vector encoding time: 0.00889993
+LSH NN searching time: 0.00058794
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 476 569 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00312805
+PCA encoding time: 0.00212598
+Fisher Vector encoding time: 0.00884891
+LSH NN searching time: 0.000552177
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 479 569 47.9% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.79 ms 1000
+
+1000 SIFT points extracted in time: 0.00313687
+PCA encoding time: 0.00200796
+Fisher Vector encoding time: 0.00880885
+LSH NN searching time: 0.000612974
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 471 562 47.1% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.00 ms 1000
+
+1000 SIFT points extracted in time: 0.00183415
+PCA encoding time: 0.00126004
+Fisher Vector encoding time: 0.00892401
+LSH NN searching time: 0.000550985
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 479 566 47.9% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.16 ms 1000
+
+1000 SIFT points extracted in time: 0.00196791
+PCA encoding time: 0.0015049
+Fisher Vector encoding time: 0.009022
+LSH NN searching time: 0.000555038
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 475 567 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.04 ms 1000
+
+1000 SIFT points extracted in time: 0.00194716
+PCA encoding time: 0.00130796
+Fisher Vector encoding time: 0.00888705
+LSH NN searching time: 0.000546932
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 567 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00316501
+PCA encoding time: 0.00273299
+Fisher Vector encoding time: 0.00889397
+LSH NN searching time: 0.000563145
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 482 568 48.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.45 ms 1000
+Incl prefiltering & memcpy =  1.90 ms 1000
+
+1000 SIFT points extracted in time: 0.00372195
+PCA encoding time: 0.00368905
+Fisher Vector encoding time: 0.008883
+LSH NN searching time: 0.000553131
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 476 566 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.74 ms 1000
+
+1000 SIFT points extracted in time: 0.00310206
+PCA encoding time: 0.0030899
+Fisher Vector encoding time: 0.00918198
+LSH NN searching time: 0.00265789
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.35 ms
+Matching features: 476 570 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00353408
+PCA encoding time: 0.00309491
+Fisher Vector encoding time: 0.00925183
+LSH NN searching time: 0.00268388
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.35 ms
+Matching features: 478 567 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.74 ms 1000
+
+1000 SIFT points extracted in time: 0.00307798
+PCA encoding time: 0.00260496
+Fisher Vector encoding time: 0.00920701
+LSH NN searching time: 0.00266695
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.35 ms
+Matching features: 472 565 47.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  0.97 ms 1000
+
+1000 SIFT points extracted in time: 0.00175214
+PCA encoding time: 0.000998974
+Fisher Vector encoding time: 0.00883603
+LSH NN searching time: 0.000549078
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 478 566 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.17 ms 1000
+
+1000 SIFT points extracted in time: 0.00201106
+PCA encoding time: 0.00153112
+Fisher Vector encoding time: 0.00910497
+LSH NN searching time: 0.00220299
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.32 ms
+Matching features: 471 563 47.1% 
+after matching 1.57184e+09
+
+===================================================================
+average for loop 1: 18.75 with thread #: 2
+===================================================================
+
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.81 ms 1000
+
+1000 SIFT points extracted in time: 0.00133705
+PCA encoding time: 0.000649929
+Fisher Vector encoding time: 0.00882316
+LSH NN searching time: 0.000550985
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 569 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.05 ms 1000
+
+1000 SIFT points extracted in time: 0.00185299
+PCA encoding time: 0.000900984
+Fisher Vector encoding time: 0.00892496
+LSH NN searching time: 0.000585079
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 478 568 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.84 ms 1000
+
+1000 SIFT points extracted in time: 0.00135612
+PCA encoding time: 0.000664949
+Fisher Vector encoding time: 0.00894213
+LSH NN searching time: 0.000587225
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 568 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.49 ms 1000
+Incl prefiltering & memcpy =  2.60 ms 1000
+
+1000 SIFT points extracted in time: 0.00448203
+PCA encoding time: 0.00257301
+Fisher Vector encoding time: 0.00917697
+LSH NN searching time: 0.00269914
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.34 ms
+Matching features: 478 567 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.45 ms 1000
+Incl prefiltering & memcpy =  1.77 ms 1000
+
+1000 SIFT points extracted in time: 0.00309706
+PCA encoding time: 0.00164795
+Fisher Vector encoding time: 0.00887609
+LSH NN searching time: 0.000720024
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 474 563 47.4% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.17 ms 1000
+
+1000 SIFT points extracted in time: 0.00204587
+PCA encoding time: 0.00216603
+Fisher Vector encoding time: 0.00904202
+LSH NN searching time: 0.000571966
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 481 573 48.1% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.69 ms 1000
+
+1000 SIFT points extracted in time: 0.00121284
+PCA encoding time: 0.000774145
+Fisher Vector encoding time: 0.00885701
+LSH NN searching time: 0.000584126
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 572 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.76 ms 1000
+
+1000 SIFT points extracted in time: 0.00364709
+PCA encoding time: 0.00262213
+Fisher Vector encoding time: 0.00910401
+LSH NN searching time: 0.00288916
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.47 ms
+Matching features: 479 571 47.9% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.76 ms 1000
+
+1000 SIFT points extracted in time: 0.00321698
+PCA encoding time: 0.00271297
+Fisher Vector encoding time: 0.00907111
+LSH NN searching time: 0.000597
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 475 564 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.22 ms 1000
+
+1000 SIFT points extracted in time: 0.00192094
+PCA encoding time: 0.00160503
+Fisher Vector encoding time: 0.0089612
+LSH NN searching time: 0.000550985
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 567 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.68 ms 1000
+
+1000 SIFT points extracted in time: 0.00110793
+PCA encoding time: 0.000782013
+Fisher Vector encoding time: 0.00878286
+LSH NN searching time: 0.000584126
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 477 568 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.64 ms 1000
+
+1000 SIFT points extracted in time: 0.00305891
+PCA encoding time: 0.00261497
+Fisher Vector encoding time: 0.00918317
+LSH NN searching time: 0.00289607
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.46 ms
+Matching features: 477 567 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.003232
+PCA encoding time: 0.00190091
+Fisher Vector encoding time: 0.00893688
+LSH NN searching time: 0.000637054
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 473 565 47.3% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.25 ms 1000
+
+1000 SIFT points extracted in time: 0.00196004
+PCA encoding time: 0.00170922
+Fisher Vector encoding time: 0.00893092
+LSH NN searching time: 0.000553131
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 474 568 47.4% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00120187
+PCA encoding time: 0.000620127
+Fisher Vector encoding time: 0.00882101
+LSH NN searching time: 0.000580788
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 472 562 47.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.62 ms 1000
+
+1000 SIFT points extracted in time: 0.003021
+PCA encoding time: 0.00261712
+Fisher Vector encoding time: 0.0091331
+LSH NN searching time: 0.0028789
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.46 ms
+Matching features: 476 567 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00318789
+PCA encoding time: 0.00183797
+Fisher Vector encoding time: 0.00889516
+LSH NN searching time: 0.000541925
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 478 567 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.27 ms 1000
+
+1000 SIFT points extracted in time: 0.002038
+PCA encoding time: 0.00145984
+Fisher Vector encoding time: 0.00885582
+LSH NN searching time: 0.000552177
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 478 566 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.67 ms 1000
+
+1000 SIFT points extracted in time: 0.001158
+PCA encoding time: 0.000705004
+Fisher Vector encoding time: 0.00890207
+LSH NN searching time: 0.00058198
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 474 564 47.4% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.63 ms 1000
+
+1000 SIFT points extracted in time: 0.00296617
+PCA encoding time: 0.00261116
+Fisher Vector encoding time: 0.00913405
+LSH NN searching time: 0.00286984
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.46 ms
+Matching features: 474 564 47.4% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.80 ms 1000
+
+1000 SIFT points extracted in time: 0.00324011
+PCA encoding time: 0.00263691
+Fisher Vector encoding time: 0.00917006
+LSH NN searching time: 0.00267911
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.35 ms
+Matching features: 475 565 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.47 ms 1000
+Incl prefiltering & memcpy =  2.13 ms 1000
+
+1000 SIFT points extracted in time: 0.0033989
+PCA encoding time: 0.00195503
+Fisher Vector encoding time: 0.00897789
+LSH NN searching time: 0.000659943
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 475 566 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.66 ms 1000
+
+1000 SIFT points extracted in time: 0.00108409
+PCA encoding time: 0.000622034
+Fisher Vector encoding time: 0.0087862
+LSH NN searching time: 0.000577927
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 480 567 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.63 ms 1000
+
+1000 SIFT points extracted in time: 0.00297308
+PCA encoding time: 0.00258994
+Fisher Vector encoding time: 0.00925303
+LSH NN searching time: 0.002882
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.46 ms
+Matching features: 475 567 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.46 ms 1000
+Incl prefiltering & memcpy =  1.82 ms 1000
+
+1000 SIFT points extracted in time: 0.00324202
+PCA encoding time: 0.00162482
+Fisher Vector encoding time: 0.00887918
+LSH NN searching time: 0.000590086
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 472 562 47.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.36 ms 1000
+
+1000 SIFT points extracted in time: 0.00217581
+PCA encoding time: 0.00183296
+Fisher Vector encoding time: 0.00890303
+LSH NN searching time: 0.000571966
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 476 565 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.67 ms 1000
+
+1000 SIFT points extracted in time: 0.00110197
+PCA encoding time: 0.000619173
+Fisher Vector encoding time: 0.00874305
+LSH NN searching time: 0.00062418
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 472 567 47.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.66 ms 1000
+
+1000 SIFT points extracted in time: 0.00302696
+PCA encoding time: 0.00300312
+Fisher Vector encoding time: 0.00911379
+LSH NN searching time: 0.00289202
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.47 ms
+Matching features: 481 568 48.1% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00318408
+PCA encoding time: 0.0027101
+Fisher Vector encoding time: 0.00890684
+LSH NN searching time: 0.000607014
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.23 ms
+Matching features: 477 566 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  1.22 ms 1000
+
+1000 SIFT points extracted in time: 0.00193
+PCA encoding time: 0.00132108
+Fisher Vector encoding time: 0.00886106
+LSH NN searching time: 0.000667095
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 484 571 48.4% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.68 ms 1000
+
+1000 SIFT points extracted in time: 0.00110912
+PCA encoding time: 0.000782967
+Fisher Vector encoding time: 0.00878096
+LSH NN searching time: 0.000546932
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.24 ms
+Matching features: 476 566 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.48 ms 1000
+Incl prefiltering & memcpy =  1.70 ms 1000
+
+1000 SIFT points extracted in time: 0.00302505
+PCA encoding time: 0.00263405
+Fisher Vector encoding time: 0.00918102
+LSH NN searching time: 0.00285196
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.47 ms
+Matching features: 471 564 47.1% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00312495
+PCA encoding time: 0.00141191
+Fisher Vector encoding time: 0.00884795
+LSH NN searching time: 0.000544071
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 478 567 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.81 ms 1000
+
+1000 SIFT points extracted in time: 0.00152302
+PCA encoding time: 0.000648975
+Fisher Vector encoding time: 0.00898123
+LSH NN searching time: 0.000553131
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 477 568 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.67 ms 1000
+
+1000 SIFT points extracted in time: 0.00110006
+PCA encoding time: 0.000618935
+Fisher Vector encoding time: 0.00880098
+LSH NN searching time: 0.00058198
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 482 567 48.2% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.65 ms 1000
+
+1000 SIFT points extracted in time: 0.00298285
+PCA encoding time: 0.00264406
+Fisher Vector encoding time: 0.00914288
+LSH NN searching time: 0.00284219
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.46 ms
+Matching features: 480 570 48% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.42 ms 1000
+Incl prefiltering & memcpy =  1.74 ms 1000
+
+1000 SIFT points extracted in time: 0.00315809
+PCA encoding time: 0.00181818
+Fisher Vector encoding time: 0.00881004
+LSH NN searching time: 0.000710964
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 478 571 47.8% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.34 ms 1000
+Incl prefiltering & memcpy =  1.48 ms 1000
+
+1000 SIFT points extracted in time: 0.00236201
+PCA encoding time: 0.00217581
+Fisher Vector encoding time: 0.00889015
+LSH NN searching time: 0.000551939
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.22 ms
+Matching features: 477 569 47.7% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.67 ms 1000
+
+1000 SIFT points extracted in time: 0.0011332
+PCA encoding time: 0.000607967
+Fisher Vector encoding time: 0.00878906
+LSH NN searching time: 0.000631094
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 475 567 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.43 ms 1000
+Incl prefiltering & memcpy =  1.64 ms 1000
+
+1000 SIFT points extracted in time: 0.00305009
+PCA encoding time: 0.00275207
+Fisher Vector encoding time: 0.00918984
+LSH NN searching time: 0.00284004
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.48 ms
+Matching features: 482 570 48.2% 
+after matching 1.57184e+09
+
+===================================================================
+average for loop 2: 19.1 with thread #: 4
+===================================================================
+
+Image size = (540,720)
+SIFT extraction time =        0.33 ms 1000
+Incl prefiltering & memcpy =  0.81 ms 1000
+
+1000 SIFT points extracted in time: 0.00131202
+PCA encoding time: 0.000638008
+Fisher Vector encoding time: 0.00883412
+LSH NN searching time: 0.000543833
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.23 ms
+Matching features: 475 568 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.31 ms 1000
+Incl prefiltering & memcpy =  0.73 ms 1000
+
+1000 SIFT points extracted in time: 0.00113606
+PCA encoding time: 0.000622988
+Fisher Vector encoding time: 0.00882721
+LSH NN searching time: 0.000540018
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 475 565 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.15 ms 1000
+
+1000 SIFT points extracted in time: 0.00185513
+PCA encoding time: 0.00117898
+Fisher Vector encoding time: 0.00884795
+LSH NN searching time: 0.000553846
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 475 568 47.5% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  0.67 ms 1000
+
+1000 SIFT points extracted in time: 0.00118089
+PCA encoding time: 0.000610113
+Fisher Vector encoding time: 0.00941205
+LSH NN searching time: 0.000644922
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 476 568 47.6% 
+after matching 1.57184e+09
+Image size = (540,720)
+SIFT extraction time =        0.32 ms 1000
+Incl prefiltering & memcpy =  1.20 ms 1000
+
+1000 SIFT points extracted in time: 0.00194311
+PCA encoding time: 0.000929832
+Fisher Vector encoding time: 0.00890899
+LSH NN searching time: 0.000561953
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000
+MatchSiftData time =          0.21 ms
+Matching features: 474 565 47.4% 
+after matching 1.57184e+09
+Image size = (540,720)
+Image size = (540,720)
+SIFT extraction time =        0.83 ms 0
+SIFT extraction time =        0.35 ms 1000
+Incl prefiltering & memcpy =  1.15 ms 0
+
+0 SIFT points extracted in time: 0.0017972
+Incl prefiltering & memcpy =  1.84 ms 1000
+
+1000 SIFT points extracted in time: 0.00318599
+PCA encoding time: 0.000955105
+Fisher Vector encoding time: 0.000703096
+PCA encoding time: 0.000908136
+LSH NN searching time: 0.000748158
+Query - time before matching: 1.57184e+09
+Testing 77
+Number of feature points: -1871075376 0
+Matching features: 0 0 -0% 
+Fisher Vector encoding time: 0.00890112
+LSH NN searching time: 0.000551939
+Query - time before matching: 1.57184e+09
+Testing 1
+Number of feature points: 1000 1000

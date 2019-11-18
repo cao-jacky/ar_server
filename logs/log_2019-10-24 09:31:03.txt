@@ -1,6 +1,0 @@
-
-======== Server started, waiting for clients to connect ==========
-UDP receiver thread created
-Process thread created
-Cache searcher thread created
-UDP sender thread created

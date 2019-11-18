@@ -1,0 +1,528 @@
+--------- beginning of main
+10-24 15:14:43.355  3109  3109 I dar.poster_edg: Late-enabling -Xcheck:jni
+10-24 15:14:43.640  3109  3109 I dar.poster_edg: The ClassLoaderContext is a special shared library.
+10-24 15:14:43.853  3109  3109 I Perf    : Connecting to perf service.
+10-24 15:14:43.876  3109  3109 I FirebaseInitProvider: FirebaseApp initialization unsuccessful
+10-24 15:14:43.913  3109  3109 I Poster  :  onCreate() called.
+10-24 15:14:43.921  3109  3109 I DecorView: It non-support bigbang
+10-24 15:14:43.925  3109  3109 I PhoneWindow: isNeedChangeNaviBarColor taskInfo: [android.app.ActivityManager$RunningTaskInfo@c93a69a] size: 1
+10-24 15:14:43.926  3109  3109 I PhoneWindow: isAPPNeedChange pkgName: symlab.cloudridar.poster_edge needKeep: false
+10-24 15:14:43.926  3109  3109 I PhoneWindow: isNeedChangeNaviBarColor false
+10-24 15:14:43.926  3109  3109 I PhoneWindow: generateLayout mNavigationBarColor: ff000000
+10-24 15:14:43.926  3109  3109 I PhoneWindow: generateLayout isLightNavi false, Visibility: 0
+10-24 15:14:43.936  3109  3109 D OpenGLRenderer: Skia GL Pipeline
+10-24 15:14:43.950  3109  3109 I Rajawali: Rajawali | Bombshell | v1.1 Development 
+10-24 15:14:43.950  3109  3109 I Rajawali: THIS IS A DEV BRANCH CONTAINING SIGNIFICANT CHANGES. PLEASE REFER TO CHANGELOG.md FOR MORE INFORMATION.
+10-24 15:14:43.966  3109  3109 I Adreno  : QUALCOMM build                   : a4d39a0, I6fd668c4d3
+10-24 15:14:43.966  3109  3109 I Adreno  : Build Date                       : 10/05/18
+10-24 15:14:43.966  3109  3109 I Adreno  : OpenGL ES Shader Compiler Version: EV031.25.03.01
+10-24 15:14:43.966  3109  3109 I Adreno  : Local Branch                     : 
+10-24 15:14:43.966  3109  3109 I Adreno  : Remote Branch                    : refs/tags/AU_LINUX_ANDROID_LA.UM.7.2.R1.09.00.00.442.049
+10-24 15:14:43.966  3109  3109 I Adreno  : Remote Branch                    : NONE
+10-24 15:14:43.966  3109  3109 I Adreno  : Reconstruct Branch               : NOTHING
+10-24 15:14:43.966  3109  3109 I Adreno  : Build Config                     : S L 6.0.7 AArch32
+10-24 15:14:43.970  3109  3109 I Adreno  : PFP: 0x005ff112, ME: 0x005ff066
+10-24 15:14:43.974  3109  3109 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+10-24 15:14:43.974  3109  3109 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+10-24 15:14:44.000  3109  3109 I Poster  :  onStart() called.
+10-24 15:14:44.001  3109  3109 I Poster  :  onResume() called.
+10-24 15:14:44.112  3109  3164 D Poster  : UDP connection
+10-24 15:14:44.140  3109  3218 I Adreno  : QUALCOMM build                   : a4d39a0, I6fd668c4d3
+10-24 15:14:44.140  3109  3218 I Adreno  : Build Date                       : 10/05/18
+10-24 15:14:44.140  3109  3218 I Adreno  : OpenGL ES Shader Compiler Version: EV031.25.03.01
+10-24 15:14:44.140  3109  3218 I Adreno  : Local Branch                     : 
+10-24 15:14:44.140  3109  3218 I Adreno  : Remote Branch                    : refs/tags/AU_LINUX_ANDROID_LA.UM.7.2.R1.09.00.00.442.049
+10-24 15:14:44.140  3109  3218 I Adreno  : Remote Branch                    : NONE
+10-24 15:14:44.140  3109  3218 I Adreno  : Reconstruct Branch               : NOTHING
+10-24 15:14:44.140  3109  3218 I Adreno  : Build Config                     : S L 6.0.7 AArch32
+10-24 15:14:44.150  3109  3218 I Adreno  : PFP: 0x005ff112, ME: 0x005ff066
+10-24 15:14:44.151  3109  3218 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+10-24 15:14:44.151  3109  3218 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+10-24 15:14:44.152  3109  3218 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 15:14:44.152  3109  3218 D OpenGLRenderer: Swap behavior 2
+10-24 15:14:44.154  3109  3109 I Poster  :  surfaceCreated() called.
+10-24 15:14:44.203  3109  3109 I Poster  :  surfaceChanged() called.
+10-24 15:14:46.531  3109  3161 V Poster  : No object picked!
+10-24 15:14:46.559  3109  3164 D Evaluation: get gray scaled frame data at 1571919286559
+10-24 15:14:46.563  3109  3164 D Evaluation: frame 43 sent with size 2854 at 1571919286563
+10-24 15:14:46.619  3109  3164 W System.err: java.net.PortUnreachableException
+10-24 15:14:46.619  3109  3164 W System.err: 	at sun.nio.ch.DatagramChannelImpl.receive0(Native Method)
+10-24 15:14:46.619  3109  3164 W System.err: 	at sun.nio.ch.DatagramChannelImpl.receiveIntoNativeBuffer(DatagramChannelImpl.java:464)
+10-24 15:14:46.620  3109  3164 W System.err: 	at sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:450)
+10-24 15:14:46.620  3109  3164 W System.err: 	at sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:393)
+10-24 15:14:46.620  3109  3164 W System.err: 	at symlab.CloudAR.network.UDPReceivingTask.run(UDPReceivingTask.java:65)
+10-24 15:14:46.620  3109  3164 W System.err: 	at android.os.Handler.handleCallback(Handler.java:874)
+10-24 15:14:46.620  3109  3164 W System.err: 	at android.os.Handler.dispatchMessage(Handler.java:100)
+10-24 15:14:46.620  3109  3164 W System.err: 	at android.os.Looper.loop(Looper.java:198)
+10-24 15:14:46.620  3109  3164 W System.err: 	at android.os.HandlerThread.run(HandlerThread.java:65)
+10-24 15:14:53.860  3109  3161 V Poster  : No object picked!
+10-24 15:14:53.892  3109  3164 D Evaluation: get gray scaled frame data at 1571919293892
+10-24 15:14:53.918  3109  3164 D Evaluation: frame 234 sent with size 11038 at 1571919293918
+10-24 15:14:53.983  3109  3164 V Poster  : something received
+10-24 15:14:53.985  3109  3164 D Evaluation: 1 res received at 1571919293985
+10-24 15:14:54.676  3109  3109 I Poster  :  onPause() called.
+10-24 15:14:55.466  3109  3109 I Poster  :  surfaceDestroyed() called.
+10-24 15:14:55.486  3109  3109 I Poster  :  onStop() called.
+10-24 15:14:56.428  3109  3109 I Poster  :  onDestroy() called.
+10-24 15:14:56.912  3583  3583 I dar.poster_edg: Late-enabling -Xcheck:jni
+10-24 15:14:57.110  3583  3583 I dar.poster_edg: The ClassLoaderContext is a special shared library.
+10-24 15:14:57.242  3583  3583 I Perf    : Connecting to perf service.
+10-24 15:14:57.271  3583  3583 I FirebaseInitProvider: FirebaseApp initialization unsuccessful
+10-24 15:14:57.313  3583  3583 I Poster  :  onCreate() called.
+10-24 15:14:57.321  3583  3583 I DecorView: It non-support bigbang
+10-24 15:14:57.325  3583  3583 I PhoneWindow: isNeedChangeNaviBarColor taskInfo: [android.app.ActivityManager$RunningTaskInfo@c93a69a] size: 1
+10-24 15:14:57.325  3583  3583 I PhoneWindow: isAPPNeedChange pkgName: symlab.cloudridar.poster_edge needKeep: false
+10-24 15:14:57.325  3583  3583 I PhoneWindow: isNeedChangeNaviBarColor false
+10-24 15:14:57.325  3583  3583 I PhoneWindow: generateLayout mNavigationBarColor: ff000000
+10-24 15:14:57.325  3583  3583 I PhoneWindow: generateLayout isLightNavi false, Visibility: 0
+10-24 15:14:57.334  3583  3583 D OpenGLRenderer: Skia GL Pipeline
+10-24 15:14:57.346  3583  3583 I Rajawali: Rajawali | Bombshell | v1.1 Development 
+10-24 15:14:57.346  3583  3583 I Rajawali: THIS IS A DEV BRANCH CONTAINING SIGNIFICANT CHANGES. PLEASE REFER TO CHANGELOG.md FOR MORE INFORMATION.
+10-24 15:14:57.359  3583  3583 I Adreno  : QUALCOMM build                   : a4d39a0, I6fd668c4d3
+10-24 15:14:57.359  3583  3583 I Adreno  : Build Date                       : 10/05/18
+10-24 15:14:57.359  3583  3583 I Adreno  : OpenGL ES Shader Compiler Version: EV031.25.03.01
+10-24 15:14:57.359  3583  3583 I Adreno  : Local Branch                     : 
+10-24 15:14:57.359  3583  3583 I Adreno  : Remote Branch                    : refs/tags/AU_LINUX_ANDROID_LA.UM.7.2.R1.09.00.00.442.049
+10-24 15:14:57.359  3583  3583 I Adreno  : Remote Branch                    : NONE
+10-24 15:14:57.359  3583  3583 I Adreno  : Reconstruct Branch               : NOTHING
+10-24 15:14:57.359  3583  3583 I Adreno  : Build Config                     : S L 6.0.7 AArch32
+10-24 15:14:57.363  3583  3583 I Adreno  : PFP: 0x005ff112, ME: 0x005ff066
+10-24 15:14:57.366  3583  3583 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+10-24 15:14:57.366  3583  3583 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+10-24 15:14:57.390  3583  3583 I Poster  :  onStart() called.
+10-24 15:14:57.391  3583  3583 I Poster  :  onResume() called.
+10-24 15:14:57.482  3583  3680 D Poster  : UDP connection
+10-24 15:14:57.515  3583  3741 I Adreno  : QUALCOMM build                   : a4d39a0, I6fd668c4d3
+10-24 15:14:57.515  3583  3741 I Adreno  : Build Date                       : 10/05/18
+10-24 15:14:57.515  3583  3741 I Adreno  : OpenGL ES Shader Compiler Version: EV031.25.03.01
+10-24 15:14:57.515  3583  3741 I Adreno  : Local Branch                     : 
+10-24 15:14:57.515  3583  3741 I Adreno  : Remote Branch                    : refs/tags/AU_LINUX_ANDROID_LA.UM.7.2.R1.09.00.00.442.049
+10-24 15:14:57.515  3583  3741 I Adreno  : Remote Branch                    : NONE
+10-24 15:14:57.515  3583  3741 I Adreno  : Reconstruct Branch               : NOTHING
+10-24 15:14:57.515  3583  3741 I Adreno  : Build Config                     : S L 6.0.7 AArch32
+10-24 15:14:57.518  3583  3741 I Adreno  : PFP: 0x005ff112, ME: 0x005ff066
+10-24 15:14:57.519  3583  3741 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+10-24 15:14:57.519  3583  3741 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+10-24 15:14:57.520  3583  3741 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 15:14:57.521  3583  3741 D OpenGLRenderer: Swap behavior 2
+10-24 15:14:57.536  3583  3583 I Poster  :  surfaceCreated() called.
+10-24 15:14:57.577  3583  3583 I Poster  :  surfaceChanged() called.
+10-24 15:14:58.677  3583  3676 V Poster  : No object picked!
+10-24 15:14:58.715  3583  3680 D Evaluation: get gray scaled frame data at 1571919298714
+10-24 15:14:58.724  3583  3680 D Evaluation: frame 25 sent with size 17051 at 1571919298724
+10-24 15:14:58.771  3583  3680 V Poster  : something received
+10-24 15:14:58.774  3583  3680 D Evaluation: 1 res received at 1571919298773
+10-24 15:14:58.804  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:14:59.640  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:14:59.640  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:01.295  3583  3676 V Poster  : No object picked!
+10-24 15:15:01.406  3583  3680 D Evaluation: get gray scaled frame data at 1571919301406
+10-24 15:15:01.438  3583  3680 D Evaluation: frame 86 sent with size 15121 at 1571919301438
+10-24 15:15:01.505  3583  3680 V Poster  : something received
+10-24 15:15:01.506  3583  3680 D Evaluation: 1 res received at 1571919301506
+10-24 15:15:01.525  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:02.126  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:02.127  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:03.166  3583  3676 V Poster  : No object picked!
+10-24 15:15:03.183  3583  3680 D Evaluation: get gray scaled frame data at 1571919303183
+10-24 15:15:03.196  3583  3680 D Evaluation: frame 130 sent with size 15737 at 1571919303196
+10-24 15:15:03.241  3583  3680 V Poster  : something received
+10-24 15:15:03.242  3583  3680 D Evaluation: 1 res received at 1571919303242
+10-24 15:15:03.255  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:03.855  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:03.856  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:04.903  3583  3676 V Poster  : No object picked!
+10-24 15:15:04.914  3583  3680 D Evaluation: get gray scaled frame data at 1571919304914
+10-24 15:15:04.928  3583  3680 D Evaluation: frame 175 sent with size 16207 at 1571919304928
+10-24 15:15:05.007  3583  3680 V Poster  : something received
+10-24 15:15:05.008  3583  3680 D Evaluation: 1 res received at 1571919305008
+10-24 15:15:05.029  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:05.772  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:05.772  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:06.991  3583  3676 V Poster  : No object picked!
+10-24 15:15:07.019  3583  3680 D Evaluation: get gray scaled frame data at 1571919307019
+10-24 15:15:07.056  3583  3680 D Evaluation: frame 234 sent with size 14755 at 1571919307056
+10-24 15:15:07.107  3583  3680 V Poster  : something received
+10-24 15:15:07.108  3583  3680 D Evaluation: 1 res received at 1571919307108
+10-24 15:15:07.126  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:07.685  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:07.685  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:08.645  3583  3676 V Poster  : No object picked!
+10-24 15:15:08.684  3583  3680 D Evaluation: get gray scaled frame data at 1571919308684
+10-24 15:15:08.704  3583  3680 D Evaluation: frame 272 sent with size 17965 at 1571919308704
+10-24 15:15:08.737  3583  3680 V Poster  : something received
+10-24 15:15:08.738  3583  3680 D Evaluation: 1 res received at 1571919308738
+10-24 15:15:08.753  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:09.502  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:09.502  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:10.468  3583  3676 V Poster  : No object picked!
+10-24 15:15:10.480  3583  3680 D Evaluation: get gray scaled frame data at 1571919310480
+10-24 15:15:10.489  3583  3680 D Evaluation: frame 318 sent with size 13295 at 1571919310489
+10-24 15:15:10.575  3583  3680 V Poster  : something received
+10-24 15:15:10.576  3583  3680 D Evaluation: 1 res received at 1571919310576
+10-24 15:15:10.598  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:11.236  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:11.236  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:12.238  3583  3676 V Poster  : No object picked!
+10-24 15:15:12.294  3583  3680 D Evaluation: get gray scaled frame data at 1571919312294
+10-24 15:15:12.315  3583  3680 D Evaluation: frame 354 sent with size 16024 at 1571919312315
+10-24 15:15:12.366  3583  3680 V Poster  : something received
+10-24 15:15:12.367  3583  3680 D Evaluation: 1 res received at 1571919312367
+10-24 15:15:12.387  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:13.136  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:13.136  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:13.941  3583  3676 V Poster  : No object picked!
+10-24 15:15:13.977  3583  3680 D Evaluation: get gray scaled frame data at 1571919313977
+10-24 15:15:13.988  3583  3680 D Evaluation: frame 389 sent with size 16146 at 1571919313988
+10-24 15:15:14.034  3583  3680 V Poster  : something received
+10-24 15:15:14.035  3583  3680 D Evaluation: 1 res received at 1571919314035
+10-24 15:15:14.049  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:14.597  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:14.597  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:15.629  3583  3676 V Poster  : No object picked!
+10-24 15:15:15.655  3583  3680 D Evaluation: get gray scaled frame data at 1571919315655
+10-24 15:15:15.667  3583  3680 D Evaluation: frame 435 sent with size 14914 at 1571919315667
+10-24 15:15:15.706  3583  3680 V Poster  : something received
+10-24 15:15:15.710  3583  3680 D Evaluation: 1 res received at 1571919315710
+10-24 15:15:15.723  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:16.357  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:16.357  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:17.350  3583  3676 V Poster  : No object picked!
+10-24 15:15:17.384  3583  3680 D Evaluation: get gray scaled frame data at 1571919317384
+10-24 15:15:17.397  3583  3680 D Evaluation: frame 476 sent with size 15391 at 1571919317396
+10-24 15:15:17.442  3583  3680 V Poster  : something received
+10-24 15:15:17.443  3583  3680 D Evaluation: 1 res received at 1571919317443
+10-24 15:15:17.457  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:18.142  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:18.142  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:19.070  3583  3676 V Poster  : No object picked!
+10-24 15:15:19.114  3583  3680 D Evaluation: get gray scaled frame data at 1571919319114
+10-24 15:15:19.130  3583  3680 D Evaluation: frame 515 sent with size 15698 at 1571919319130
+10-24 15:15:19.167  3583  3680 V Poster  : something received
+10-24 15:15:19.168  3583  3680 D Evaluation: 1 res received at 1571919319168
+10-24 15:15:19.202  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:19.720  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:19.720  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:20.907  3583  3676 V Poster  : No object picked!
+10-24 15:15:20.948  3583  3680 D Evaluation: get gray scaled frame data at 1571919320948
+10-24 15:15:20.960  3583  3680 D Evaluation: frame 563 sent with size 17012 at 1571919320960
+10-24 15:15:21.005  3583  3680 V Poster  : something received
+10-24 15:15:21.008  3583  3680 D Evaluation: 1 res received at 1571919321008
+10-24 15:15:21.035  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:21.489  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:21.489  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:22.495  3583  3676 V Poster  : No object picked!
+10-24 15:15:22.506  3583  3680 D Evaluation: get gray scaled frame data at 1571919322506
+10-24 15:15:22.516  3583  3680 D Evaluation: frame 604 sent with size 16579 at 1571919322516
+10-24 15:15:22.569  3583  3680 V Poster  : something received
+10-24 15:15:22.571  3583  3680 D Evaluation: 1 res received at 1571919322571
+10-24 15:15:22.593  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:23.206  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:23.206  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:24.266  3583  3676 V Poster  : No object picked!
+10-24 15:15:24.273  3583  3680 D Evaluation: get gray scaled frame data at 1571919324273
+10-24 15:15:24.285  3583  3680 D Evaluation: frame 647 sent with size 18373 at 1571919324285
+10-24 15:15:24.322  3583  3680 V Poster  : something received
+10-24 15:15:24.323  3583  3680 D Evaluation: 1 res received at 1571919324323
+10-24 15:15:24.338  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:24.958  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:24.958  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:25.903  3583  3676 V Poster  : No object picked!
+10-24 15:15:25.912  3583  3680 D Evaluation: get gray scaled frame data at 1571919325912
+10-24 15:15:25.922  3583  3680 D Evaluation: frame 689 sent with size 17344 at 1571919325922
+10-24 15:15:25.968  3583  3680 V Poster  : something received
+10-24 15:15:25.969  3583  3680 D Evaluation: 1 res received at 1571919325969
+10-24 15:15:25.980  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:26.550  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:26.550  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:27.474  3583  3676 V Poster  : No object picked!
+10-24 15:15:27.513  3583  3680 D Evaluation: get gray scaled frame data at 1571919327513
+10-24 15:15:27.523  3583  3680 D Evaluation: frame 731 sent with size 17549 at 1571919327523
+10-24 15:15:27.569  3583  3680 V Poster  : something received
+10-24 15:15:27.571  3583  3680 D Evaluation: 1 res received at 1571919327571
+10-24 15:15:27.606  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:28.032  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:28.032  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:28.994  3583  3676 V Poster  : No object picked!
+10-24 15:15:29.046  3583  3680 D Evaluation: get gray scaled frame data at 1571919329046
+10-24 15:15:29.072  3583  3680 D Evaluation: frame 767 sent with size 16428 at 1571919329072
+10-24 15:15:29.134  3583  3680 V Poster  : something received
+10-24 15:15:29.136  3583  3680 D Evaluation: 1 res received at 1571919329136
+10-24 15:15:29.158  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:29.649  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:29.649  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:30.647  3583  3676 V Poster  : No object picked!
+10-24 15:15:30.712  3583  3680 D Evaluation: get gray scaled frame data at 1571919330712
+10-24 15:15:30.721  3583  3680 D Evaluation: frame 808 sent with size 14868 at 1571919330721
+10-24 15:15:30.770  3583  3680 V Poster  : something received
+10-24 15:15:30.771  3583  3680 D Evaluation: 1 res received at 1571919330771
+10-24 15:15:30.795  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:31.295  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:31.295  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:32.268  3583  3676 V Poster  : No object picked!
+10-24 15:15:32.287  3583  3680 D Evaluation: get gray scaled frame data at 1571919332287
+10-24 15:15:32.296  3583  3680 D Evaluation: frame 843 sent with size 15404 at 1571919332296
+10-24 15:15:32.330  3583  3680 V Poster  : something received
+10-24 15:15:32.331  3583  3680 D Evaluation: 1 res received at 1571919332331
+10-24 15:15:32.347  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:32.893  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:32.893  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:33.939  3583  3676 V Poster  : No object picked!
+10-24 15:15:33.988  3583  3680 D Evaluation: get gray scaled frame data at 1571919333987
+10-24 15:15:34.011  3583  3680 D Evaluation: frame 886 sent with size 15552 at 1571919334011
+10-24 15:15:34.048  3583  3680 V Poster  : something received
+10-24 15:15:34.054  3583  3680 D Evaluation: 1 res received at 1571919334054
+10-24 15:15:34.075  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:34.582  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:34.582  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:35.576  3583  3676 V Poster  : No object picked!
+10-24 15:15:35.611  3583  3680 D Evaluation: get gray scaled frame data at 1571919335611
+10-24 15:15:35.623  3583  3680 D Evaluation: frame 923 sent with size 17125 at 1571919335622
+10-24 15:15:35.676  3583  3680 V Poster  : something received
+10-24 15:15:35.677  3583  3680 D Evaluation: 1 res received at 1571919335677
+10-24 15:15:35.715  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:36.234  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:36.234  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:37.131  3583  3676 V Poster  : No object picked!
+10-24 15:15:37.225  3583  3680 D Evaluation: get gray scaled frame data at 1571919337225
+10-24 15:15:37.243  3583  3680 D Evaluation: frame 952 sent with size 17739 at 1571919337243
+10-24 15:15:37.295  3583  3680 V Poster  : something received
+10-24 15:15:37.300  3583  3680 D Evaluation: 1 res received at 1571919337298
+10-24 15:15:37.317  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:37.789  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:37.789  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:38.771  3583  3676 V Poster  : No object picked!
+10-24 15:15:38.819  3583  3680 D Evaluation: get gray scaled frame data at 1571919338819
+10-24 15:15:38.830  3583  3680 D Evaluation: frame 989 sent with size 15423 at 1571919338830
+10-24 15:15:38.876  3583  3680 V Poster  : something received
+10-24 15:15:38.877  3583  3680 D Evaluation: 1 res received at 1571919338877
+10-24 15:15:38.890  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:39.393  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:39.393  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:40.305  3583  3676 V Poster  : No object picked!
+10-24 15:15:40.343  3583  3680 D Evaluation: get gray scaled frame data at 1571919340343
+10-24 15:15:40.358  3583  3680 D Evaluation: frame 1022 sent with size 14876 at 1571919340358
+10-24 15:15:40.396  3583  3680 V Poster  : something received
+10-24 15:15:40.399  3583  3680 D Evaluation: 1 res received at 1571919340397
+10-24 15:15:40.416  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:40.926  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:40.926  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:41.976  3583  3676 V Poster  : No object picked!
+10-24 15:15:42.010  3583  3680 D Evaluation: get gray scaled frame data at 1571919342010
+10-24 15:15:42.020  3583  3680 D Evaluation: frame 1063 sent with size 13833 at 1571919342020
+10-24 15:15:42.065  3583  3680 V Poster  : something received
+10-24 15:15:42.069  3583  3680 D Evaluation: 1 res received at 1571919342069
+10-24 15:15:42.083  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:42.579  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:42.579  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:43.498  3583  3676 V Poster  : No object picked!
+10-24 15:15:43.506  3583  3680 D Evaluation: get gray scaled frame data at 1571919343506
+10-24 15:15:43.524  3583  3680 D Evaluation: frame 1097 sent with size 13440 at 1571919343524
+10-24 15:15:43.579  3583  3680 V Poster  : something received
+10-24 15:15:43.580  3583  3680 D Evaluation: 1 res received at 1571919343580
+10-24 15:15:43.592  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:44.143  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:44.143  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:45.165  3583  3676 V Poster  : No object picked!
+10-24 15:15:45.175  3583  3680 D Evaluation: get gray scaled frame data at 1571919345175
+10-24 15:15:45.186  3583  3680 D Evaluation: frame 1136 sent with size 15292 at 1571919345186
+10-24 15:15:45.233  3583  3680 V Poster  : something received
+10-24 15:15:45.236  3583  3680 D Evaluation: 1 res received at 1571919345236
+10-24 15:15:45.253  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:45.689  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:45.689  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:46.703  3583  3676 V Poster  : No object picked!
+10-24 15:15:46.734  3583  3680 D Evaluation: get gray scaled frame data at 1571919346734
+10-24 15:15:46.743  3583  3680 D Evaluation: frame 1174 sent with size 13852 at 1571919346743
+10-24 15:15:46.875  3583  3680 V Poster  : something received
+10-24 15:15:46.876  3583  3680 D Evaluation: 1 res received at 1571919346876
+10-24 15:15:46.902  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:47.312  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:47.312  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:48.506  3583  3676 V Poster  : No object picked!
+10-24 15:15:48.539  3583  3680 D Evaluation: get gray scaled frame data at 1571919348539
+10-24 15:15:48.546  3583  3680 D Evaluation: frame 1218 sent with size 11222 at 1571919348545
+10-24 15:15:48.605  3583  3680 V Poster  : something received
+10-24 15:15:48.607  3583  3680 D Evaluation: 1 res received at 1571919348607
+10-24 15:15:48.631  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:49.180  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:49.180  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:50.110  3583  3676 V Poster  : No object picked!
+10-24 15:15:50.149  3583  3680 D Evaluation: get gray scaled frame data at 1571919350148
+10-24 15:15:50.157  3583  3680 D Evaluation: frame 1259 sent with size 10908 at 1571919350157
+10-24 15:15:50.193  3583  3680 V Poster  : something received
+10-24 15:15:50.194  3583  3680 D Evaluation: 1 res received at 1571919350194
+10-24 15:15:50.210  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:50.669  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:50.669  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:51.630  3583  3676 V Poster  : No object picked!
+10-24 15:15:51.647  3583  3680 D Evaluation: get gray scaled frame data at 1571919351646
+10-24 15:15:51.653  3583  3680 D Evaluation: frame 1290 sent with size 16227 at 1571919351653
+10-24 15:15:51.698  3583  3680 V Poster  : something received
+10-24 15:15:51.702  3583  3680 D Evaluation: 1 res received at 1571919351702
+10-24 15:15:51.718  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:52.197  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:52.197  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:53.101  3583  3676 V Poster  : No object picked!
+10-24 15:15:53.115  3583  3680 D Evaluation: get gray scaled frame data at 1571919353115
+10-24 15:15:53.130  3583  3680 D Evaluation: frame 1327 sent with size 12871 at 1571919353130
+10-24 15:15:53.167  3583  3680 V Poster  : something received
+10-24 15:15:53.168  3583  3680 D Evaluation: 1 res received at 1571919353168
+10-24 15:15:53.181  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:53.684  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:53.684  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:54.671  3583  3676 V Poster  : No object picked!
+10-24 15:15:54.704  3583  3680 D Evaluation: get gray scaled frame data at 1571919354703
+10-24 15:15:54.711  3583  3680 D Evaluation: frame 1368 sent with size 11969 at 1571919354711
+10-24 15:15:54.760  3583  3680 V Poster  : something received
+10-24 15:15:54.763  3583  3680 D Evaluation: 1 res received at 1571919354763
+10-24 15:15:54.772  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:55.177  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:55.177  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:56.158  3583  3676 V Poster  : No object picked!
+10-24 15:15:56.206  3583  3680 D Evaluation: get gray scaled frame data at 1571919356206
+10-24 15:15:56.215  3583  3680 D Evaluation: frame 1408 sent with size 13068 at 1571919356215
+10-24 15:15:56.247  3583  3680 V Poster  : something received
+10-24 15:15:56.248  3583  3680 D Evaluation: 1 res received at 1571919356248
+10-24 15:15:56.272  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:56.730  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:56.730  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:57.661  3583  3676 V Poster  : No object picked!
+10-24 15:15:57.754  3583  3680 D Evaluation: get gray scaled frame data at 1571919357754
+10-24 15:15:57.773  3583  3680 D Evaluation: frame 1450 sent with size 14650 at 1571919357773
+10-24 15:15:57.828  3583  3680 V Poster  : something received
+10-24 15:15:57.830  3583  3680 D Evaluation: 1 res received at 1571919357830
+10-24 15:15:57.848  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:58.245  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:58.245  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:15:59.299  3583  3676 V Poster  : No object picked!
+10-24 15:15:59.340  3583  3680 D Evaluation: get gray scaled frame data at 1571919359340
+10-24 15:15:59.351  3583  3680 D Evaluation: frame 1492 sent with size 12840 at 1571919359351
+10-24 15:15:59.393  3583  3680 V Poster  : something received
+10-24 15:15:59.394  3583  3680 D Evaluation: 1 res received at 1571919359394
+10-24 15:15:59.408  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:15:59.810  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:15:59.810  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:00.636  3583  3676 V Poster  : No object picked!
+10-24 15:16:00.670  3583  3680 D Evaluation: get gray scaled frame data at 1571919360670
+10-24 15:16:00.681  3583  3680 D Evaluation: frame 1530 sent with size 14314 at 1571919360681
+10-24 15:16:00.733  3583  3680 V Poster  : something received
+10-24 15:16:00.734  3583  3680 D Evaluation: 1 res received at 1571919360734
+10-24 15:16:00.764  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:01.254  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:01.254  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:02.273  3583  3676 V Poster  : No object picked!
+10-24 15:16:02.308  3583  3680 D Evaluation: get gray scaled frame data at 1571919362308
+10-24 15:16:02.319  3583  3680 D Evaluation: frame 1569 sent with size 12598 at 1571919362319
+10-24 15:16:02.362  3583  3680 V Poster  : something received
+10-24 15:16:02.365  3583  3680 D Evaluation: 1 res received at 1571919362365
+10-24 15:16:02.384  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:02.848  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:02.848  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:03.829  3583  3676 V Poster  : No object picked!
+10-24 15:16:03.842  3583  3680 D Evaluation: get gray scaled frame data at 1571919363842
+10-24 15:16:03.851  3583  3680 D Evaluation: frame 1607 sent with size 17090 at 1571919363851
+10-24 15:16:03.900  3583  3680 V Poster  : something received
+10-24 15:16:03.901  3583  3680 D Evaluation: 1 res received at 1571919363901
+10-24 15:16:03.920  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:04.392  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:04.392  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:05.280  3583  3676 V Poster  : No object picked!
+10-24 15:16:05.300  3583  3680 D Evaluation: get gray scaled frame data at 1571919365300
+10-24 15:16:05.308  3583  3680 D Evaluation: frame 1644 sent with size 14191 at 1571919365308
+10-24 15:16:05.346  3583  3680 V Poster  : something received
+10-24 15:16:05.347  3583  3680 D Evaluation: 1 res received at 1571919365347
+10-24 15:16:05.376  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:05.778  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:05.779  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:06.733  3583  3676 V Poster  : No object picked!
+10-24 15:16:06.764  3583  3680 D Evaluation: get gray scaled frame data at 1571919366764
+10-24 15:16:06.776  3583  3680 D Evaluation: frame 1683 sent with size 12670 at 1571919366776
+10-24 15:16:06.826  3583  3680 V Poster  : something received
+10-24 15:16:06.827  3583  3680 D Evaluation: 1 res received at 1571919366827
+10-24 15:16:06.850  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:07.374  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:07.374  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:08.304  3583  3676 V Poster  : No object picked!
+10-24 15:16:08.340  3583  3680 D Evaluation: get gray scaled frame data at 1571919368340
+10-24 15:16:08.348  3583  3680 D Evaluation: frame 1716 sent with size 14258 at 1571919368348
+10-24 15:16:08.400  3583  3680 V Poster  : something received
+10-24 15:16:08.401  3583  3680 D Evaluation: 1 res received at 1571919368401
+10-24 15:16:08.413  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:08.868  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:08.868  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:09.858  3583  3676 V Poster  : No object picked!
+10-24 15:16:09.910  3583  3680 D Evaluation: get gray scaled frame data at 1571919369910
+10-24 15:16:09.928  3583  3680 D Evaluation: frame 1746 sent with size 16397 at 1571919369927
+10-24 15:16:09.965  3583  3680 V Poster  : something received
+10-24 15:16:09.966  3583  3680 D Evaluation: 1 res received at 1571919369966
+10-24 15:16:09.996  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:10.372  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:10.372  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:11.431  3583  3676 V Poster  : No object picked!
+10-24 15:16:11.471  3583  3680 D Evaluation: get gray scaled frame data at 1571919371471
+10-24 15:16:11.485  3583  3680 D Evaluation: frame 1782 sent with size 15535 at 1571919371485
+10-24 15:16:11.528  3583  3680 V Poster  : something received
+10-24 15:16:11.528  3583  3680 D Evaluation: 1 res received at 1571919371528
+10-24 15:16:11.555  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:11.910  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:11.910  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:12.798  3583  3676 V Poster  : No object picked!
+10-24 15:16:12.837  3583  3680 D Evaluation: get gray scaled frame data at 1571919372837
+10-24 15:16:12.846  3583  3680 D Evaluation: frame 1818 sent with size 15540 at 1571919372846
+10-24 15:16:12.894  3583  3680 V Poster  : something received
+10-24 15:16:12.895  3583  3680 D Evaluation: 1 res received at 1571919372895
+10-24 15:16:12.915  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:13.493  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:13.493  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:14.301  3583  3676 V Poster  : No object picked!
+10-24 15:16:14.335  3583  3680 D Evaluation: get gray scaled frame data at 1571919374335
+10-24 15:16:14.344  3583  3680 D Evaluation: frame 1848 sent with size 11910 at 1571919374344
+10-24 15:16:14.394  3583  3680 V Poster  : something received
+10-24 15:16:14.395  3583  3680 D Evaluation: 1 res received at 1571919374395
+10-24 15:16:14.410  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:14.879  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:14.879  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:15.789  3583  3676 V Poster  : No object picked!
+10-24 15:16:15.800  3583  3680 D Evaluation: get gray scaled frame data at 1571919375800
+10-24 15:16:15.809  3583  3680 D Evaluation: frame 1887 sent with size 14579 at 1571919375809
+10-24 15:16:15.861  3583  3680 V Poster  : something received
+10-24 15:16:15.863  3583  3680 D Evaluation: 1 res received at 1571919375862
+10-24 15:16:15.881  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:16.357  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:16.357  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:17.292  3583  3676 V Poster  : No object picked!
+10-24 15:16:17.305  3583  3680 D Evaluation: get gray scaled frame data at 1571919377305
+10-24 15:16:17.315  3583  3680 D Evaluation: frame 1919 sent with size 11908 at 1571919377315
+10-24 15:16:17.368  3583  3680 V Poster  : something received
+10-24 15:16:17.369  3583  3680 D Evaluation: 1 res received at 1571919377369
+10-24 15:16:17.406  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:18.128  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:18.128  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:18.795  3583  3676 V Poster  : No object picked!
+10-24 15:16:18.827  3583  3680 D Evaluation: get gray scaled frame data at 1571919378827
+10-24 15:16:18.840  3583  3680 D Evaluation: frame 1946 sent with size 12622 at 1571919378840
+10-24 15:16:18.891  3583  3680 V Poster  : something received
+10-24 15:16:18.892  3583  3680 D Evaluation: 1 res received at 1571919378892
+10-24 15:16:18.914  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:19.438  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:19.438  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:20.232  3583  3676 V Poster  : No object picked!
+10-24 15:16:20.265  3583  3680 D Evaluation: get gray scaled frame data at 1571919380265
+10-24 15:16:20.274  3583  3680 D Evaluation: frame 1981 sent with size 13075 at 1571919380274
+10-24 15:16:20.325  3583  3680 V Poster  : something received
+10-24 15:16:20.326  3583  3680 D Evaluation: 1 res received at 1571919380326
+10-24 15:16:20.343  3583  3677 D Evaluation: image border created: 300.0 x 445.0
+10-24 15:16:20.947  3583  3677 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:20.947  3583  3677 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:23.306  3583  3676 V Poster  : No object picked!
+10-24 15:16:23.334  3583  3680 D Evaluation: get gray scaled frame data at 1571919383334
+10-24 15:16:23.346  3583  3680 D Evaluation: frame 2059 sent with size 5472 at 1571919383346
+10-24 15:16:23.398  3583  3680 V Poster  : something received
+10-24 15:16:23.399  3583  3680 D Evaluation: 1 res received at 1571919383399
+10-24 15:16:24.016  3583  3583 I Poster  :  onPause() called.
+10-24 15:16:24.851  3583  3583 V MediaPlayer_JAVA: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+10-24 15:16:24.851  3583  3583 V MediaPlayer_JAVA: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+10-24 15:16:24.891  3583  3583 I Poster  :  surfaceDestroyed() called.
+10-24 15:16:24.906  3583  3583 I Poster  :  onStop() called.
+10-24 15:16:26.220  3583  3583 I Poster  :  onDestroy() called.

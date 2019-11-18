@@ -1,0 +1,379 @@
+
+======== Server started, waiting for clients to connect ==========
+UDP receiver thread created
+Cache searcher thread created
+Process thread createdUDP sender thread created
+
+echo message!
+echo reply sent!
+echo message!
+echo reply sent!
+================================================
+Frame 89 received, filesize: 11767 at 1571752230.82797
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.40 ms 375
+Incl prefiltering & memcpy =  2.78 ms 375
+
+375 SIFT points extracted in time: 0.016495943069458
+PCA encoding time: 0.00201106071472168
+Fisher Vector encoding time: 0.00756978988647461
+LSH NN searching time: 0.0025639533996582
+Query - time before matching: 1571752230.86401
+Testing 1
+Image size = (300,445)
+SIFT extraction time =        0.28 ms 1000
+Incl prefiltering & memcpy =  1.45 ms 1000
+
+1000 SIFT points extracted in time: 0.0028831958770752
+Number of feature points: 1000 375
+MatchSiftData time =          0.16 ms
+Matching features: 230 252 61.3333320617676% 
+after matching 1571752230.87216
+Image size = (160,270)
+SIFT extraction time =        0.23 ms 375
+Incl prefiltering & memcpy =  0.69 ms 375
+
+375 SIFT points extracted in time: 0.000873088836669922
+PCA encoding time: 0.000700950622558594
+Fisher Vector encoding time: 0.00742793083190918
+Cache item inserted at 1571752230.88176
+
+Added item to cache
+Frame 89 res sent, marker#: 1 at 1571752230.88272
+
+================================================
+Frame 455 received, filesize: 9041 at 1571752230.93399
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.22 ms 205
+Incl prefiltering & memcpy =  0.95 ms 205
+
+205 SIFT points extracted in time: 0.00119519233703613
+PCA encoding time: 0.000751972198486328
+Fisher Vector encoding time: 0.00728201866149902
+Cache query - time before matching: 1571752230.94577
+Number of feature points: 375 205
+MatchSiftData time =          0.11 ms
+Matching features: 145 161 70.7317047119141% 
+Frame 455 res sent, marker#: 1 at 1571752230.94925
+
+================================================
+Frame 581 received, filesize: 8342 at 1571752235.54831
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.22 ms 168
+Incl prefiltering & memcpy =  0.81 ms 168
+
+168 SIFT points extracted in time: 0.00103902816772461
+PCA encoding time: 0.000564813613891602
+Fisher Vector encoding time: 0.0064389705657959
+Cache query - time before matching: 1571752235.55858
+Number of feature points: 375 168
+MatchSiftData time =          0.07 ms
+Matching features: 129 160 76.7857131958008% 
+Frame 581 res sent, marker#: 1 at 1571752235.56085
+
+================================================
+Frame 600 received, filesize: 8619 at 1571752236.21098
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 191
+Incl prefiltering & memcpy =  1.68 ms 191
+
+191 SIFT points extracted in time: 0.0022590160369873
+PCA encoding time: 0.0018460750579834
+Fisher Vector encoding time: 0.0073390007019043
+Cache query - time before matching: 1571752236.22664
+Number of feature points: 375 191
+MatchSiftData time =          0.14 ms
+Matching features: 136 162 71.2041854858398% 
+Frame 600 res sent, marker#: 1 at 1571752236.23223
+
+================================================
+Frame 623 received, filesize: 9432 at 1571752236.97637
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 200
+Incl prefiltering & memcpy =  1.62 ms 200
+
+200 SIFT points extracted in time: 0.00212192535400391
+PCA encoding time: 0.00170016288757324
+Fisher Vector encoding time: 0.00808811187744141
+Cache query - time before matching: 1571752236.99241
+Number of feature points: 375 200
+MatchSiftData time =          0.15 ms
+Matching features: 168 190 84% 
+Frame 623 res sent, marker#: 1 at 1571752236.99869
+
+================================================
+Frame 637 received, filesize: 9140 at 1571752237.4426
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 229
+Incl prefiltering & memcpy =  1.67 ms 229
+
+229 SIFT points extracted in time: 0.00214004516601562
+PCA encoding time: 0.00182199478149414
+Fisher Vector encoding time: 0.00733280181884766
+Cache query - time before matching: 1571752237.45747
+Number of feature points: 375 229
+MatchSiftData time =          0.15 ms
+Matching features: 161 185 70.3056793212891% 
+Frame 637 res sent, marker#: 1 at 1571752237.463
+
+================================================
+Frame 306 received, filesize: 13781 at 1571752238.77934
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.39 ms 373
+Incl prefiltering & memcpy =  1.88 ms 373
+
+373 SIFT points extracted in time: 0.00239014625549316
+PCA encoding time: 0.00187277793884277
+Fisher Vector encoding time: 0.0075068473815918
+Cache query - time before matching: 1571752238.79594
+Number of feature points: 375 373
+MatchSiftData time =          0.16 ms
+Matching features: 244 257 65.4155502319336% 
+Frame 306 res sent, marker#: 1 at 1571752238.80222
+
+================================================
+Frame 323 received, filesize: 13004 at 1571752239.52346
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.42 ms 315
+Incl prefiltering & memcpy =  1.91 ms 315
+
+315 SIFT points extracted in time: 0.00290584564208984
+PCA encoding time: 0.00195717811584473
+Fisher Vector encoding time: 0.00755095481872559
+Cache query - time before matching: 1571752239.54065
+Number of feature points: 375 315
+MatchSiftData time =          0.16 ms
+Matching features: 228 244 72.3809509277344% 
+Frame 323 res sent, marker#: 1 at 1571752239.54582
+
+================================================
+Frame 361 received, filesize: 12941 at 1571752240.85765
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 260
+Incl prefiltering & memcpy =  1.59 ms 260
+
+260 SIFT points extracted in time: 0.00200605392456055
+PCA encoding time: 0.00180697441101074
+Fisher Vector encoding time: 0.00737905502319336
+Cache query - time before matching: 1571752240.87372
+Number of feature points: 375 260
+MatchSiftData time =          0.19 ms
+Matching features: 196 225 75.3846130371094% 
+Frame 361 res sent, marker#: 1 at 1571752240.87935
+
+================================================
+Frame 377 received, filesize: 12449 at 1571752241.48294
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.22 ms 283
+Incl prefiltering & memcpy =  0.79 ms 283
+
+283 SIFT points extracted in time: 0.000960111618041992
+PCA encoding time: 0.000561952590942383
+Fisher Vector encoding time: 0.00737500190734863
+Cache query - time before matching: 1571752241.49316
+Number of feature points: 375 283
+MatchSiftData time =          0.09 ms
+Matching features: 166 194 58.6572456359863% 
+Frame 377 res sent, marker#: 1 at 1571752241.495
+
+================================================
+Frame 391 received, filesize: 11511 at 1571752241.98828
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.22 ms 272
+Incl prefiltering & memcpy =  0.76 ms 272
+
+272 SIFT points extracted in time: 0.000986814498901367
+PCA encoding time: 0.000589132308959961
+Fisher Vector encoding time: 0.00956892967224121
+Cache query - time before matching: 1571752242.00137
+Number of feature points: 375 272
+MatchSiftData time =          0.09 ms
+Matching features: 189 216 69.4852905273438% 
+Frame 391 res sent, marker#: 1 at 1571752242.00311
+
+================================================
+Frame 419 received, filesize: 10386 at 1571752243.15365
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 162
+Incl prefiltering & memcpy =  1.53 ms 162
+
+162 SIFT points extracted in time: 0.00189495086669922
+PCA encoding time: 0.00167393684387207
+Fisher Vector encoding time: 0.00643515586853027
+Cache query - time before matching: 1571752243.16765
+Number of feature points: 375 162
+MatchSiftData time =          0.14 ms
+Matching features: 0 0 0% 
+Image size = (160,270)
+SIFT extraction time =        0.39 ms 162
+Incl prefiltering & memcpy =  1.40 ms 162
+
+162 SIFT points extracted in time: 0.00188493728637695
+PCA encoding time: 0.00168681144714355
+Fisher Vector encoding time: 0.00648093223571777
+LSH NN searching time: 0.00279593467712402
+Query - time before matching: 1571752243.18264
+Testing 45
+Image size = (428,500)
+SIFT extraction time =        0.45 ms 1000
+Incl prefiltering & memcpy =  2.51 ms 1000
+
+1000 SIFT points extracted in time: 0.00423288345336914
+Number of feature points: 1000 162
+MatchSiftData time =          0.21 ms
+Matching features: 0 31 0% 
+Frame 419 res sent, marker#: 0 at 1571752243.20086
+
+================================================
+Frame 434 received, filesize: 13567 at 1571752243.72989
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 242
+Incl prefiltering & memcpy =  1.54 ms 242
+
+242 SIFT points extracted in time: 0.00205516815185547
+PCA encoding time: 0.00186896324157715
+Fisher Vector encoding time: 0.00721597671508789
+Cache query - time before matching: 1571752243.74541
+Number of feature points: 375 242
+MatchSiftData time =          0.14 ms
+Matching features: 0 0 0% 
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 242
+Incl prefiltering & memcpy =  1.38 ms 242
+
+242 SIFT points extracted in time: 0.00175714492797852
+PCA encoding time: 0.00167083740234375
+Fisher Vector encoding time: 0.00726199150085449
+LSH NN searching time: 0.00266194343566895
+Query - time before matching: 1571752243.76126
+Testing 0
+Image size = (300,445)
+SIFT extraction time =        0.37 ms 1000
+Incl prefiltering & memcpy =  1.43 ms 1000
+
+1000 SIFT points extracted in time: 0.00323796272277832
+Number of feature points: 1000 242
+MatchSiftData time =          0.21 ms
+Matching features: 118 145 48.7603302001953% 
+after matching 1571752243.7746
+Image size = (160,270)
+SIFT extraction time =        0.25 ms 242
+Incl prefiltering & memcpy =  0.94 ms 242
+
+242 SIFT points extracted in time: 0.00116491317749023
+PCA encoding time: 0.00120186805725098
+Fisher Vector encoding time: 0.00706005096435547
+Cache item inserted at 1571752243.78504
+
+Added item to cache
+Frame 434 res sent, marker#: 1 at 1571752243.78615
+
+================================================
+Frame 896 received, filesize: 9379 at 1571752246.92762
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 221
+Incl prefiltering & memcpy =  1.54 ms 221
+
+221 SIFT points extracted in time: 0.0019681453704834
+PCA encoding time: 0.00245881080627441
+Fisher Vector encoding time: 0.00743889808654785
+Cache query - time before matching: 1571752246.94389
+Number of feature points: 375 221
+MatchSiftData time =          0.16 ms
+Matching features: 159 183 71.9457015991211% 
+Frame 896 res sent, marker#: 1 at 1571752246.95017
+
+================================================
+Frame 939 received, filesize: 10221 at 1571752248.30243
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.38 ms 223
+Incl prefiltering & memcpy =  1.56 ms 223
+
+223 SIFT points extracted in time: 0.00197219848632812
+PCA encoding time: 0.0024871826171875
+================================================
+Frame 548 received, filesize: 13150 at 1571752248.3119
+Fisher Vector encoding time: 0.0075221061706543
+Cache query - time before matching: 1571752248.31912
+Number of feature points: 375 223
+MatchSiftData time =          0.14 ms
+Matching features: 145 165 65.0224227905273% 
+Searching the cache
+Frame 939 res sent, marker#: 1 at 1571752248.32505
+
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 322
+Incl prefiltering & memcpy =  1.32 ms 322
+
+322 SIFT points extracted in time: 0.00177001953125
+PCA encoding time: 0.00286984443664551
+Fisher Vector encoding time: 0.0074310302734375
+Cache query - time before matching: 1571752248.34056
+Number of feature points: 375 322
+MatchSiftData time =          0.12 ms
+Matching features: 227 245 70.4968948364258% 
+Frame 548 res sent, marker#: 1 at 1571752248.34393
+
+================================================
+Frame 566 received, filesize: 9419 at 1571752249.09567
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 230
+Incl prefiltering & memcpy =  1.64 ms 230
+
+230 SIFT points extracted in time: 0.00234723091125488
+PCA encoding time: 0.00248384475708008
+Fisher Vector encoding time: 0.00735211372375488
+Cache query - time before matching: 1571752249.11244
+Number of feature points: 375 230
+MatchSiftData time =          0.15 ms
+Matching features: 169 197 73.4782638549805% 
+Frame 566 res sent, marker#: 1 at 1571752249.11801
+
+================================================
+Frame 579 received, filesize: 13580 at 1571752249.71726
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.41 ms 327
+Incl prefiltering & memcpy =  1.78 ms 327
+
+327 SIFT points extracted in time: 0.00232386589050293
+PCA encoding time: 0.00262093544006348
+Fisher Vector encoding time: 0.00754499435424805
+Cache query - time before matching: 1571752249.73499
+Number of feature points: 375 327
+MatchSiftData time =          0.16 ms
+Matching features: 238 250 72.7828750610352% 
+Frame 579 res sent, marker#: 1 at 1571752249.74201
+
+================================================
+Frame 980 received, filesize: 9852 at 1571752249.7516
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 250
+Incl prefiltering & memcpy =  1.37 ms 250
+
+250 SIFT points extracted in time: 0.00187802314758301
+PCA encoding time: 0.00252079963684082
+Fisher Vector encoding time: 0.00749421119689941
+Cache query - time before matching: 1571752249.76728
+Number of feature points: 375 250
+MatchSiftData time =          0.15 ms
+Matching features: 188 207 75.1999969482422% 
+Frame 980 res sent, marker#: 1 at 1571752249.7732
+

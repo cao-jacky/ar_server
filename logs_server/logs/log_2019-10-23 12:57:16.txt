@@ -1,0 +1,448 @@
+
+======== Server started, waiting for clients to connect ==========
+UDP sender thread created
+Cache searcher thread created
+Process thread created
+UDP receiver thread created
+================================================
+Frame 299 received, filesize: 12806 at 1571824663.14403 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.38 ms 247
+Incl prefiltering & memcpy =  1.88 ms 247
+
+247 SIFT points extracted in time: 0.0154500007629395
+PCA encoding time: 0.0019228458404541
+Fisher Vector encoding time: 0.00746703147888184
+LSH NN searching time: 0.00291299819946289
+Query - time before matching: 1571824663.1787
+Testing 1
+Image size = (300,445)
+SIFT extraction time =        0.31 ms 1000
+Incl prefiltering & memcpy =  1.49 ms 1000
+
+1000 SIFT points extracted in time: 0.00248098373413086
+Number of feature points: 1000 247
+MatchSiftData time =          0.15 ms
+Matching features: 122 160 49.3927116394043% 
+after matching 1571824663.18777
+Image size = (160,270)
+SIFT extraction time =        0.23 ms 247
+Incl prefiltering & memcpy =  0.67 ms 247
+
+247 SIFT points extracted in time: 0.000856876373291016
+Fisher Vector encoding time: 0.00755906105041504
+Cache item inserted at 1571824663.19691
+
+Added item to cache
+Frame 299 res sent, marker#: 1 at 1571824663.19765
+
+================================================
+Frame 608 received, filesize: 12771 at 1571824674.89756 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 226
+Incl prefiltering & memcpy =  1.75 ms 226
+
+226 SIFT points extracted in time: 0.00226712226867676
+Fisher Vector encoding time: 0.00768804550170898
+Cache query - time before matching: 1571824674.91282
+Number of feature points: 247 226
+MatchSiftData time =          0.14 ms
+Matching features: 146 161 64.6017684936523% 
+Frame 608 res sent, marker#: 1 at 1571824674.91825
+
+================================================
+Frame 718 received, filesize: 12813 at 1571824678.89349 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 223
+Incl prefiltering & memcpy =  1.73 ms 223
+
+223 SIFT points extracted in time: 0.00251293182373047
+Fisher Vector encoding time: 0.00778794288635254
+Cache query - time before matching: 1571824678.90869
+Number of feature points: 247 223
+MatchSiftData time =          0.14 ms
+Matching features: 92 117 41.2556037902832% 
+Frame 718 res sent, marker#: 1 at 1571824678.91385
+
+================================================
+Frame 833 received, filesize: 12163 at 1571824682.81069 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 197
+Incl prefiltering & memcpy =  1.69 ms 197
+
+197 SIFT points extracted in time: 0.00228714942932129
+Fisher Vector encoding time: 0.0077059268951416
+Cache query - time before matching: 1571824682.82512
+Number of feature points: 247 197
+MatchSiftData time =          0.13 ms
+Matching features: 92 119 46.7005081176758% 
+Frame 833 res sent, marker#: 1 at 1571824682.82967
+
+================================================
+Frame 887 received, filesize: 12343 at 1571824684.80819 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.39 ms 188
+Incl prefiltering & memcpy =  1.54 ms 188
+
+188 SIFT points extracted in time: 0.00194120407104492
+Fisher Vector encoding time: 0.00768113136291504
+Cache query - time before matching: 1571824684.82254
+Number of feature points: 247 188
+MatchSiftData time =          0.12 ms
+Matching features: 80 106 42.5531921386719% 
+Frame 887 res sent, marker#: 1 at 1571824684.82716
+
+================================================
+Frame 911 received, filesize: 12074 at 1571824685.51774 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 176
+Incl prefiltering & memcpy =  1.66 ms 176
+
+176 SIFT points extracted in time: 0.00212407112121582
+Fisher Vector encoding time: 0.00722289085388184
+Cache query - time before matching: 1571824685.5317
+Number of feature points: 247 176
+MatchSiftData time =          0.13 ms
+Matching features: 83 107 47.1590919494629% 
+Frame 911 res sent, marker#: 1 at 1571824685.53722
+
+================================================
+Frame 950 received, filesize: 8857 at 1571824686.89098 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 113
+Incl prefiltering & memcpy =  1.49 ms 113
+
+113 SIFT points extracted in time: 0.00184106826782227
+Fisher Vector encoding time: 0.00536799430847168
+Cache query - time before matching: 1571824686.90204
+Number of feature points: 247 113
+MatchSiftData time =          0.05 ms
+Matching features: 6 65 5.30973434448242% 
+Image size = (160,270)
+SIFT extraction time =        0.21 ms 113
+Incl prefiltering & memcpy =  0.47 ms 113
+
+113 SIFT points extracted in time: 0.000555038452148438
+PCA encoding time: 0.00037384033203125
+Fisher Vector encoding time: 0.00483918190002441
+LSH NN searching time: 0.000605106353759766
+Query - time before matching: 1571824686.91081
+Testing 1
+Image size = (300,445)
+SIFT extraction time =        0.27 ms 1000
+Incl prefiltering & memcpy =  0.78 ms 1000
+
+1000 SIFT points extracted in time: 0.00118494033813477
+Number of feature points: 1000 113
+MatchSiftData time =          0.07 ms
+Matching features: 0 132 0% 
+Frame 950 res sent, marker#: 0 at 1571824686.9155
+
+================================================
+Frame 1053 received, filesize: 13039 at 1571824690.91408 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 204
+Incl prefiltering & memcpy =  1.64 ms 204
+
+204 SIFT points extracted in time: 0.00206804275512695
+Fisher Vector encoding time: 0.00774693489074707
+Cache query - time before matching: 1571824690.92875
+Number of feature points: 247 204
+MatchSiftData time =          0.13 ms
+Matching features: 116 131 56.8627433776855% 
+Frame 1053 res sent, marker#: 1 at 1571824690.93431
+
+================================================
+Frame 1160 received, filesize: 13555 at 1571824694.84756 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 232
+Incl prefiltering & memcpy =  1.51 ms 232
+
+232 SIFT points extracted in time: 0.00218796730041504
+Fisher Vector encoding time: 0.00774216651916504
+Cache query - time before matching: 1571824694.86184
+Number of feature points: 247 232
+MatchSiftData time =          0.15 ms
+Matching features: 123 139 53.0172424316406% 
+Frame 1160 res sent, marker#: 1 at 1571824694.86722
+
+================================================
+Frame 1276 received, filesize: 13831 at 1571824698.89323 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.37 ms 228
+Incl prefiltering & memcpy =  1.64 ms 228
+
+228 SIFT points extracted in time: 0.00211310386657715
+Fisher Vector encoding time: 0.00756192207336426
+Cache query - time before matching: 1571824698.90722
+Number of feature points: 247 228
+MatchSiftData time =          0.13 ms
+Matching features: 95 126 41.6666679382324% 
+Frame 1276 res sent, marker#: 1 at 1571824698.91275
+
+================================================
+Frame 1379 received, filesize: 13267 at 1571824702.92442 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 218
+Incl prefiltering & memcpy =  1.56 ms 218
+
+218 SIFT points extracted in time: 0.00213813781738281
+Fisher Vector encoding time: 0.00775504112243652
+Cache query - time before matching: 1571824702.93843
+Number of feature points: 247 218
+MatchSiftData time =          0.14 ms
+Matching features: 108 125 49.5412826538086% 
+Frame 1379 res sent, marker#: 1 at 1571824702.9435
+
+================================================
+Frame 1446 received, filesize: 11794 at 1571824705.243 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 216
+Incl prefiltering & memcpy =  1.50 ms 216
+
+216 SIFT points extracted in time: 0.00202083587646484
+Fisher Vector encoding time: 0.00769400596618652
+Cache query - time before matching: 1571824705.25674
+Number of feature points: 247 216
+MatchSiftData time =          0.13 ms
+Matching features: 123 138 56.9444427490234% 
+Frame 1446 res sent, marker#: 1 at 1571824705.26221
+
+================================================
+Frame 1573 received, filesize: 12134 at 1571824709.97662 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.38 ms 164
+Incl prefiltering & memcpy =  1.60 ms 164
+
+164 SIFT points extracted in time: 0.00200104713439941
+Fisher Vector encoding time: 0.00692105293273926
+Cache query - time before matching: 1571824709.99014
+Number of feature points: 247 164
+MatchSiftData time =          0.13 ms
+Matching features: 101 124 61.5853652954102% 
+Frame 1573 res sent, marker#: 1 at 1571824709.99478
+
+================================================
+Frame 1637 received, filesize: 12242 at 1571824712.21638 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 159
+Incl prefiltering & memcpy =  1.58 ms 159
+
+159 SIFT points extracted in time: 0.00196695327758789
+Fisher Vector encoding time: 0.0068211555480957
+Cache query - time before matching: 1571824712.2301
+Number of feature points: 247 159
+MatchSiftData time =          0.13 ms
+Matching features: 86 109 54.0880508422852% 
+Frame 1637 res sent, marker#: 1 at 1571824712.23564
+
+================================================
+Frame 1657 received, filesize: 12361 at 1571824712.8449 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.48 ms 159
+Incl prefiltering & memcpy =  1.64 ms 159
+
+159 SIFT points extracted in time: 0.00202107429504395
+Fisher Vector encoding time: 0.00669693946838379
+Cache query - time before matching: 1571824712.85758
+Number of feature points: 247 159
+MatchSiftData time =          0.12 ms
+Matching features: 80 111 50.3144645690918% 
+Frame 1657 res sent, marker#: 1 at 1571824712.86254
+
+================================================
+Frame 1798 received, filesize: 13611 at 1571824718.12976 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.67 ms 173
+Incl prefiltering & memcpy =  1.88 ms 173
+
+173 SIFT points extracted in time: 0.00243616104125977
+Fisher Vector encoding time: 0.00723600387573242
+Cache query - time before matching: 1571824718.14386
+Number of feature points: 247 173
+MatchSiftData time =          0.14 ms
+Matching features: 55 109 31.7919082641602% 
+Frame 1798 res sent, marker#: 1 at 1571824718.14922
+
+================================================
+Frame 1896 received, filesize: 13289 at 1571824722.04303 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.28 ms 190
+Incl prefiltering & memcpy =  1.53 ms 190
+
+190 SIFT points extracted in time: 0.00210690498352051
+Fisher Vector encoding time: 0.010930061340332
+Cache query - time before matching: 1571824722.06101
+Number of feature points: 247 190
+MatchSiftData time =          0.12 ms
+Matching features: 94 109 49.4736824035645% 
+Frame 1896 res sent, marker#: 1 at 1571824722.06653
+
+================================================
+Frame 1997 received, filesize: 13973 at 1571824725.97789 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.45 ms 221
+Incl prefiltering & memcpy =  1.69 ms 221
+
+221 SIFT points extracted in time: 0.00230002403259277
+Fisher Vector encoding time: 0.00768089294433594
+Cache query - time before matching: 1571824725.99255
+Number of feature points: 247 221
+MatchSiftData time =          0.13 ms
+Matching features: 117 137 52.9411773681641% 
+Frame 1997 res sent, marker#: 1 at 1571824725.99754
+
+================================================
+Frame 2111 received, filesize: 11472 at 1571824730.07386 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.21 ms 181
+Incl prefiltering & memcpy =  0.71 ms 181
+
+181 SIFT points extracted in time: 0.000888824462890625
+Fisher Vector encoding time: 0.00714993476867676
+Cache query - time before matching: 1571824730.08358
+Number of feature points: 247 181
+MatchSiftData time =          0.06 ms
+Matching features: 109 121 60.2209930419922% 
+Frame 2111 res sent, marker#: 1 at 1571824730.08529
+
+================================================
+Frame 2222 received, filesize: 13608 at 1571824734.04888 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 229
+Incl prefiltering & memcpy =  1.52 ms 229
+
+229 SIFT points extracted in time: 0.0020301342010498
+Fisher Vector encoding time: 0.00764799118041992
+Cache query - time before matching: 1571824734.06334
+Number of feature points: 247 229
+MatchSiftData time =          0.13 ms
+Matching features: 128 150 55.8951950073242% 
+Frame 2222 res sent, marker#: 1 at 1571824734.0681
+
+================================================
+Frame 2325 received, filesize: 14150 at 1571824737.97829 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 29
+Incl prefiltering & memcpy =  1.50 ms 29
+
+29 SIFT points extracted in time: 0.00181388854980469
+Fisher Vector encoding time: 0.00492501258850098
+Cache query - time before matching: 1571824737.99002
+Number of feature points: 247 29
+MatchSiftData time =          0.11 ms
+Matching features: 247 0 851.72412109375% 
+Frame 2325 res sent, marker#: 1 at 1571824737.99726
+
+================================================
+Frame 2439 received, filesize: 8905 at 1571824742.08622 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 0
+Incl prefiltering & memcpy =  1.46 ms 0
+
+0 SIFT points extracted in time: 0.00176310539245605
+Fisher Vector encoding time: 0.000665903091430664
+Cache query - time before matching: 1571824742.09285
+Number of feature points: 0 0
+Matching features: 0 0 -nan% 
+Image size = (160,270)
+SIFT extraction time =        0.35 ms 0
+Incl prefiltering & memcpy =  1.25 ms 0
+
+0 SIFT points extracted in time: 0.00151181221008301
+PCA encoding time: 0.00145697593688965
+Fisher Vector encoding time: 0.000640869140625
+LSH NN searching time: 0.00255703926086426
+Query - time before matching: 1571824742.10158
+Testing 77
+Image size = (349,500)
+SIFT extraction time =        0.37 ms 946
+Incl prefiltering & memcpy =  1.66 ms 946
+
+946 SIFT points extracted in time: 0.00325989723205566
+Number of feature points: 946 0
+Matching features: 321 388 inf% 
+after matching 1571824742.1209
+Image size = (160,270)
+SIFT extraction time =        0.35 ms 0
+Incl prefiltering & memcpy =  1.21 ms 0
+
+0 SIFT points extracted in time: 0.00142407417297363
+Fisher Vector encoding time: 0.000658035278320312
+Cache item inserted at 1571824742.12435
+
+Added item to cache
+Frame 2439 res sent, marker#: 1 at 1571824742.1255
+
+echo message!
+echo reply sent!
+================================================
+Frame 2537 received, filesize: 15192 at 1571824746.0815 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.36 ms 40
+Incl prefiltering & memcpy =  1.48 ms 40
+
+40 SIFT points extracted in time: 0.00180697441101074
+Fisher Vector encoding time: 0.00334692001342773
+Cache query - time before matching: 1571824746.09166
+Number of feature points: 247 40
+MatchSiftData time =          0.10 ms
+Matching features: 0 31 0% 
+Image size = (160,270)
+SIFT extraction time =        1.09 ms 40
+Incl prefiltering & memcpy =  2.20 ms 40
+
+40 SIFT points extracted in time: 0.00250983238220215
+PCA encoding time: 0.00167489051818848
+Fisher Vector encoding time: 0.00326299667358398
+LSH NN searching time: 0.00271010398864746
+Query - time before matching: 1571824746.11061
+Testing 105
+Image size = (371,500)
+SIFT extraction time =        0.39 ms 1000
+Incl prefiltering & memcpy =  1.66 ms 1000
+
+1000 SIFT points extracted in time: 0.00329399108886719
+Number of feature points: 1000 40
+MatchSiftData time =          0.18 ms
+Matching features: 0 277 0% 
+Frame 2537 res sent, marker#: 0 at 1571824746.12671
+
+================================================
+Frame 2583 received, filesize: 14178 at 1571824747.71186 from device with IP 10.42.0.215
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.52 ms 58
+Incl prefiltering & memcpy =  1.69 ms 58
+
+58 SIFT points extracted in time: 0.00202107429504395
+Fisher Vector encoding time: 0.00403499603271484
+Cache query - time before matching: 1571824747.72304
+Number of feature points: 247 58
+MatchSiftData time =          0.15 ms
+Matching features: 21 21 36.2068977355957% 
+Frame 2583 res sent, marker#: 1 at 1571824747.72939
+
