@@ -12,6 +12,10 @@
 #include <queue>
 #include <fstream>
 
+#include <iostream>
+#include <sstream>
+#include <string>
+
 #define MESSAGE_ECHO 0
 #define FEATURES 1
 #define IMAGE_DETECT 2
@@ -20,6 +24,8 @@
 #define RES_SIZE 512
 //#define TRAIN
 #define UDP
+
+#define MAXCHAR 1000
 
 using namespace std;
 using namespace cv;
@@ -236,8 +242,84 @@ void *ThreadCacheSearchFunction(void *param) {
     }
 }
 
+int num_lines_searcher(string file_name) {
+    int number_of_lines = 0;
+    string line;
+    ifstream currfile(file_name);
+
+    while (getline(currfile, line))
+        ++number_of_lines;
+    return number_of_lines;
+}
+
+string *edge_server_list_searcher(string servers_details[]) {
+    // manually setting machine IP until "central server" is implemented
+    string current_ip = "10.42.0.1";
+    int current_port = (int) ntohs(localAddr.sin_port);
+    cout<<"Current machine IP is "<<current_ip<<" and port is "<<current_port<<endl;
+
+    ifstream edge_server_file(ef_name);
+    if (edge_server_file.is_open()) {
+        string line;
+        int curr_row_count = 0;
+        while (getline(edge_server_file, line)) {
+            // read through edge server details file, and attempt to make
+            // initial connection with each server 
+            
+            // split string into IP and port
+            istringstream esf(line);
+            int curr_col_count = 0;
+            string indiv_word;
+            int comp_track = 0; // integer tracker for if same machine
+            while (esf >> indiv_word) {
+                // compare IP and port from list to current machine 
+                if ((indiv_word.compare(current_ip)) == 0)
+                    ++ comp_track; 
+                if ((indiv_word.compare(to_string(current_port))) == 0)
+                    ++ comp_track; 
+                servers_details[curr_row_count][curr_col_count] = {(string)indiv_word};
+                ++ curr_col_count;
+            }
+            string final_comp_track = to_string(comp_track);
+            servers_details[curr_row_count][3] = {final_comp_track};
+            cout<<servers_details[curr_row_count][3]<<endl;
+            ++ curr_row_count;
+        }
+        edge_server_file.close();
+    } else {
+        cout<<"Edge server details cannot be found"<<endl;
+    }
+
+}
+
+void *ThreadEdgeServerSearcherFunction(void *param) {
+    // on server startup, read through the list of edger servers and attempt to form an initial communication
+    // imitating a central server - edge should form initial connection to central cloud, and pull list of 
+    // all registered edge servers
+    cout<<"Edge server searcher thread created"<<endl;
+
+    // make an initial connection to central server and returns:
+    // - current machine IP 
+    // - current machine socket/port
+    // - list of all other edge servers which have registered with the 
+    //      central server
+    
+    // cout<<inet_ntoa(localAddr.sin_addr)<<endl;
+    // cout<<ntohs(localAddr.sin_port)<<endl;
+
+    string ef_name = "edge_server_details.txt";
+    int array_len = num_lines_searcher(ef_name);
+    // array: rows = num of servers, columns = IP and port, also whitespace
+    string server_details[array_len][3]; 
+
+
+    // search through the edge server string array and attempt to connect to 
+    // each server which isn't itself 
+ 
+}
+
 void runServer(int port) {
-    pthread_t senderThread, receiverThread, imageProcessThread, processThread;
+    pthread_t senderThread, receiverThread, imageProcessThread, processThread, edgeSearchThread;
     char buffer[PACKET_SIZE];
     char fileid[4];
     int status = 0;
@@ -263,11 +345,13 @@ void runServer(int port) {
     pthread_create(&senderThread, NULL, ThreadUDPSenderFunction, (void *)&sockUDP);
     pthread_create(&imageProcessThread, NULL, ThreadProcessFunction, NULL);
     pthread_create(&processThread, NULL, ThreadCacheSearchFunction, NULL);
+    pthread_create(&edgeSearchThread, NULL, ThreadEdgeServerSearcherFunction, NULL);
 
     pthread_join(receiverThread, NULL);
     pthread_join(senderThread, NULL);
     pthread_join(imageProcessThread, NULL);
     pthread_join(processThread, NULL);
+    pthread_join(edgeSearchThread, NULL);
 
     cout << endl;
 }
@@ -294,9 +378,7 @@ inline string getCurrentDateTime( string s ){
         char  buf[80];
         tstruct = *localtime(&now);
         if(s=="now")
-            strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
-        else if(s=="date")
-            strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+            strftime(buf, sizeof(buf), "%s", &tstruct);
         return string(buf);
     };
 
@@ -330,8 +412,8 @@ int main(int argc, char *argv[])
     string log_file = "logs_server/logs/log_" + getCurrentDateTime("now") + ".txt";
     string error_file = "logs_server/errors/error_" + getCurrentDateTime("now") + ".txt";
 
-    freopen( log_file.c_str(), "w", stdout );
-    freopen( error_file.c_str(), "w", stderr );
+    // freopen( log_file.c_str(), "w", stdout );
+    // freopen( error_file.c_str(), "w", stderr );
 
     runServer(port);
     //scalabilityTest();    
