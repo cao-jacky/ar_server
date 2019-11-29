@@ -16,8 +16,6 @@
 #include <sstream>
 #include <string>
 
-#include <errno.h>
-
 #define MESSAGE_ECHO 0
 #define FEATURES 1
 #define IMAGE_DETECT 2
@@ -28,8 +26,6 @@
 #define UDP
 
 #define MAXCHAR 1000
-
-#define EDGE_SERVER_IH 5 // edge server initial handshake 
 
 using namespace std;
 using namespace cv;
@@ -72,10 +68,6 @@ void *ThreadUDPReceiverFunction(void *socket) {
             sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
             cout<<"echo reply sent!"<<endl;
             continue;
-        } 
-        if (curFrame.dataType == EDGE_SERVER_IH) {
-            // Initial echo handshake to verify edge is online
-            cout<<"Initial handshake being performed"<<endl;
         }
 
         memcpy(tmp, &(buffer[8]), 4);
@@ -260,45 +252,12 @@ int num_lines_searcher(string file_name) {
     return number_of_lines;
 }
 
-// void *ThreadEdgeServerManagerFunction(void *param) {
 
-// }
-
-void handshake_send(string server_port, string server_ip, int server_sock) {
-    cout<<"Attempting handshake"<<endl;
-    cout << server_port << " " << server_ip << endl;
-    char buffer[PACKET_SIZE];
-
-    int sp_int = stoi(server_port);
-    const char *si_cc = server_ip.c_str();
-
-    char hs_frame_id[] = "1";
-
-    memset(buffer, 0, sizeof(buffer));
-    memcpy(buffer, hs_frame_id, 4);
-    memcpy(&(buffer[4]), "5", 4);
-
-    struct sockaddr_in server_sa;
-    server_sa.sin_family = AF_INET;
-    server_sa.sin_addr.s_addr = inet_addr(si_cc);
-    server_sa.sin_port = htons(sp_int);
-
-    char *ip = inet_ntoa(server_sa.sin_addr);
-
-    int success = sendto(server_sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&server_sa, sizeof(server_ip));
-    cout << success << endl;
-    if(success == -1){
-            printf("%s\n",strerror(errno));
-        }
-}
-
-void *ThreadEdgeServerSearcherFunction(void *socket) {
+void *ThreadEdgeServerSearcherFunction(void *param) {
     // on server startup, read through the list of edger servers and attempt to form an initial communication
     // imitating a central server - edge should form initial connection to central cloud, and pull list of 
     // all registered edge servers
     cout<<"Edge server searcher thread created"<<endl;
-
-    int sock = *((int*)socket);
 
     // make an initial connection to central server and returns:
     // - current machine IP 
@@ -312,14 +271,12 @@ void *ThreadEdgeServerSearcherFunction(void *socket) {
     // manually setting machine IP until "central server" is implemented
     string current_ip = "10.42.0.1";
     int current_port = (int) ntohs(localAddr.sin_port);
-    // cout<<"Current machine IP is "<<current_ip<<" and port is "<<current_port<<endl;
+    cout<<"Current machine IP is "<<current_ip<<" and port is "<<current_port<<endl;
 
     string ef_name = "edge_server_details.txt";
     int array_len = num_lines_searcher(ef_name);
     // array: rows = num of servers, columns = IP and port, also whitespace
-    string server_details[array_len][4]; 
-
-    string curr_parse_ip, curr_parse_port;
+    string server_details[array_len][3]; 
 
     ifstream edge_server_file(ef_name);
     if (edge_server_file.is_open()) {
@@ -345,27 +302,14 @@ void *ThreadEdgeServerSearcherFunction(void *socket) {
             }
             string final_comp_track = to_string(comp_track);
             server_details[curr_row_count][3] = {final_comp_track};
-
-            curr_parse_ip = server_details[curr_row_count][0];
-            curr_parse_port = server_details[curr_row_count][1];
-            if (comp_track == 2) {
-                cout<<"Current machine IP is "<<curr_parse_ip
-                    <<" and port is "<<curr_parse_port<<endl;
-            } else {
-                cout<<"One edge server has IP "<<curr_parse_ip
-                    <<" and port is "<<curr_parse_port<<endl;
-
-                // send a UDP frame to be listened by respective server
-
-                handshake_send(curr_parse_port, curr_parse_ip, sock);
-
-            }
+            cout<<server_details[curr_row_count][3]<<endl;
             ++ curr_row_count;
         }
         edge_server_file.close();
     } else {
         cout<<"Edge server details cannot be found"<<endl;
     }
+ 
 }
 
 void runServer(int port) {
@@ -395,7 +339,7 @@ void runServer(int port) {
     pthread_create(&senderThread, NULL, ThreadUDPSenderFunction, (void *)&sockUDP);
     pthread_create(&imageProcessThread, NULL, ThreadProcessFunction, NULL);
     pthread_create(&processThread, NULL, ThreadCacheSearchFunction, NULL);
-    pthread_create(&edgeSearchThread, NULL, ThreadEdgeServerSearcherFunction, (void *)&sockUDP);
+    pthread_create(&edgeSearchThread, NULL, ThreadEdgeServerSearcherFunction, NULL);
 
     pthread_join(receiverThread, NULL);
     pthread_join(senderThread, NULL);
