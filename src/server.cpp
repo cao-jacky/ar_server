@@ -63,19 +63,20 @@ void *ThreadUDPReceiverFunction(void *socket) {
         memcpy(tmp, &(buffer[4]), 4);
         curFrame.dataType = *(int*)tmp;
 
-        if(curFrame.dataType == MESSAGE_ECHO) {
-            cout<<"echo message!"<<endl;
-            charint echoID;
-            echoID.i = curFrame.frmID;
-            char echo[4];
-            memcpy(echo, echoID.b, 4);
-            sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
-            cout<<"echo reply sent!"<<endl;
-            continue;
-        } 
-        if (curFrame.dataType == EDGE_SERVER_IH) {
+        // if(curFrame.dataType == MESSAGE_ECHO) {
+        //     cout<<"echo message!"<<endl;
+        //     charint echoID;
+        //     echoID.i = curFrame.frmID;
+        //     char echo[4];
+        //     memcpy(echo, echoID.b, 4);
+        //     sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
+        //     cout<<"echo reply sent!"<<endl;
+        //     continue;
+        // } 
+        if (curFrame.dataType == MESSAGE_ECHO && curFrame.frmID == 1) {
             // Initial echo handshake to verify edge is online
             cout<<"Initial handshake being performed"<<endl;
+            continue;
         }
 
         memcpy(tmp, &(buffer[8]), 4);
@@ -272,24 +273,19 @@ void handshake_send(string server_port, string server_ip, int server_sock) {
     int sp_int = stoi(server_port);
     const char *si_cc = server_ip.c_str();
 
-    char hs_frame_id[] = "1";
+    char hs_frame_id[4] = {(int)1};
+    char hs_id[4] = {(int)5};
 
     memset(buffer, 0, sizeof(buffer));
     memcpy(buffer, hs_frame_id, 4);
-    memcpy(&(buffer[4]), "5", 4);
+    // memcpy(&(buffer[4]), hs_id, 4);
 
     struct sockaddr_in server_sa;
     server_sa.sin_family = AF_INET;
     server_sa.sin_addr.s_addr = inet_addr(si_cc);
     server_sa.sin_port = htons(sp_int);
 
-    char *ip = inet_ntoa(server_sa.sin_addr);
-
-    int success = sendto(server_sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&server_sa, sizeof(server_ip));
-    cout << success << endl;
-    if(success == -1){
-            printf("%s\n",strerror(errno));
-        }
+    sendto(server_sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&server_sa, sizeof(server_ip));
 }
 
 void *ThreadEdgeServerSearcherFunction(void *socket) {
