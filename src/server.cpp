@@ -62,6 +62,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
         curFrame.frmID = *(int*)tmp;        
         memcpy(tmp, &(buffer[4]), 4);
         curFrame.dataType = *(int*)tmp;
+        cout<< curFrame.dataType << endl;
 
         // if(curFrame.dataType == MESSAGE_ECHO) {
         //     cout<<"echo message!"<<endl;
@@ -274,11 +275,11 @@ void handshake_send(string server_port, string server_ip, int server_sock) {
     const char *si_cc = server_ip.c_str();
 
     char hs_frame_id[4] = {(int)1};
-    char hs_id[4] = {(int)5};
+    int hs_id = 5;
 
     memset(buffer, 0, sizeof(buffer));
     memcpy(buffer, hs_frame_id, 4);
-    // memcpy(&(buffer[4]), hs_id, 4);
+    // memcpy(&(buffer[4]), &hs_id, 4);
 
     struct sockaddr_in server_sa;
     server_sa.sin_family = AF_INET;
