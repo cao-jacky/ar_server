@@ -1,0 +1,306 @@
+--------- beginning of system
+11-26 12:23:35.525  9443  9443 D ActivityThread: Attach thread to application
+11-26 12:23:35.647  9443  9443 V ActivityThread: callActivityOnCreate
+11-26 12:23:35.692  9443  9443 D ActivityThread: add activity client record, r= ActivityRecord{4d8f3ee token=android.os.BinderProxy@442f816 {symlab.cloudridar.poster_edge/symlab.posterApp.PosterActivity}} token= android.os.BinderProxy@442f816
+11-26 12:23:35.707  9443  9443 I PermissionManager: camera remind result:true
+11-26 12:23:35.707  9443  9443 I BackgroundPermManager: pkgName: symlab.cloudridar.poster_edge,pid: 9443 ,uidOf3RdApk: 10148 ,permType: 0 ,permCfg: 1
+11-26 12:23:35.719  9443  9443 D ActivityThread: isOptEnabled=false isWechatScanOpt=false
+11-26 12:23:35.790  9443  9443 I PermissionManager: camera remind result:true
+11-26 12:23:39.884  9443  9443 I BackgroundPermManager: pkgName: symlab.cloudridar.poster_edge,pid: 9443 ,uidOf3RdApk: 10148 ,permType: 0 ,permCfg: 0
+11-26 12:23:40.905  9443  9443 D ActivityThread: Remove activity client record, r= ActivityRecord{4d8f3ee token=android.os.BinderProxy@442f816 {symlab.cloudridar.poster_edge/symlab.posterApp.PosterActivity}} token= android.os.BinderProxy@442f816
+--------- beginning of main
+11-26 13:38:50.349 20156 20182 E         : [ZeroHung]zrhung_get_config: Get config failed for wp[0x0102]
+11-26 13:38:50.349 20156 20182 W ZrHung.AppEyeUiProbe: Failed to get config from zrhung
+11-26 13:38:50.354 20180 20180 W logcat  : type=1400 audit(0.0:8792): avc: granted { create } for name="logcat_1574768330336.txt" scontext=u:r:untrusted_app_27:s0:c512,c768 tcontext=u:object_r:sdcardfs:s0:c512,c768 tclass=file
+11-26 13:38:50.356 20156 20156 V ActivityThread: callActivityOnCreate
+11-26 13:38:50.356 20156 20156 I Poster  :  onCreate() called.
+11-26 13:38:50.359 20156 20156 I HwApsImpl: APS: new HwApsImpl created
+11-26 13:38:50.365 20156 20156 V HwWidgetFactory: : successes to get AllImpl object and return....
+11-26 13:38:50.373 20156 20156 D OpenGLRenderer: Skia GL Pipeline
+11-26 13:38:50.376 20156 20156 I Rajawali: Rajawali | Bombshell | v1.1 Development 
+11-26 13:38:50.376 20156 20156 I Rajawali: THIS IS A DEV BRANCH CONTAINING SIGNIFICANT CHANGES. PLEASE REFER TO CHANGELOG.md FOR MORE INFORMATION.
+11-26 13:38:50.381 20156 20156 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+11-26 13:38:50.381 20156 20156 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+11-26 13:38:50.382 20156 20156 I iGraphics: [0020080c] pn: symlab.cloudridar.poster_edge, p: 20156
+11-26 13:38:50.395 20156 20156 D ActivityThread: add activity client record, r= ActivityRecord{4d8f3ee token=android.os.BinderProxy@442f816 {symlab.cloudridar.poster_edge/symlab.posterApp.PosterActivity}} token= android.os.BinderProxy@442f816
+11-26 13:38:50.397 20156 20156 I Poster  :  onStart() called.
+11-26 13:38:50.398 20156 20156 D ZrHung.AppEyeUiProbe: notify runnable to start.
+11-26 13:38:50.399 20156 20156 I Poster  :  onResume() called.
+11-26 13:38:50.403 20156 20156 I PermissionManager: camera remind result:true
+11-26 13:38:50.403 20156 20156 I Camera  : open camera: 0, package name: symlab.cloudridar.poster_edge
+11-26 13:38:50.403 20156 20156 I BackgroundPermManager: pkgName: symlab.cloudridar.poster_edge,pid: 20156 ,uidOf3RdApk: 10148 ,permType: 0 ,permCfg: 1
+11-26 13:38:50.404 20156 20156 I HwCameraUtil: notifySurfaceFlingerCameraStatus : isFront = false , isOpend = true
+11-26 13:38:50.414 20156 20156 D ActivityThread: isOptEnabled=false isWechatScanOpt=false
+11-26 13:38:50.419 20156 20156 I HwSecImmHelper: mSecurityInputMethodService is null
+11-26 13:38:50.426 20156 20156 D OpenGLRenderer:   HWUI Binary is  enabled
+11-26 13:38:50.431 20156 20156 I ViewRootImpl[PosterActivity]: view add KeepScreenOnFlag
+11-26 13:38:50.432 20156 20202 D Poster  : UDP connection
+11-26 13:38:50.444 20156 20220 D HiTouch_PressGestureDetector: onAttached, package=symlab.cloudridar.poster_edge, windowType=1, mHiTouchRestricted=false
+11-26 13:38:50.452 20156 20219 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+11-26 13:38:50.453 20156 20219 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+11-26 13:38:50.453 20156 20219 I OpenGLRenderer: Initialized EGL, version 1.4, mEglDisplay 0x1
+11-26 13:38:50.453 20156 20219 D OpenGLRenderer: Swap behavior 2
+11-26 13:38:50.457 20156 20156 I Poster  :  surfaceCreated() called.
+11-26 13:38:50.462 20156 20156 I PermissionManager: camera remind result:true
+11-26 13:38:50.464 20156 20219 D mali_winsys: EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, EGLBoolean) returns 0x3000
+11-26 13:38:50.467 20156 20156 I Poster  :  surfaceChanged() called.
+11-26 13:38:50.476 20156 20199 D mali_winsys: EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, EGLBoolean) returns 0x3000
+11-26 13:38:50.500 20156 20156 W InputMethodManager: startInputReason = 1
+11-26 13:38:50.502 20156 20156 W InputMethodManager: startInputReason = 5
+11-26 13:38:51.435 20156 20156 D stylus  : init stylus touchlistener.
+11-26 13:38:51.437 20156 20156 W Settings: Setting device_provisioned has moved from android.provider.Settings.Secure to android.provider.Settings.Global.
+11-26 13:38:51.437 20156 20156 V HiTouch_HiTouchSensor: User setup is finished.
+11-26 13:38:51.450 20156 20199 V Poster  : No object picked!
+11-26 13:38:51.469 20156 20202 D Evaluation: get gray scaled frame data at 1574768331469
+11-26 13:38:51.476 20156 20202 D Evaluation: frame 22 sent with size 15151 at 1574768331476
+11-26 13:38:51.806 20156 20202 V Poster  : something received
+11-26 13:38:51.808 20156 20202 D Evaluation: 1 res received at 1574768331808
+11-26 13:38:51.815 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:38:51.824 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:38:51.825 20156 20200 I MediaPlayerNative: setDataSource(103, 65015676, 62964903)
+11-26 13:38:51.834 20156 20169 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:38:51.839 20156 20200 D HwGalleryCacheManagerImpl: mIsEffect:false
+11-26 13:38:52.351 20156 20200 V PlayerBase: baseRelease() piid=799 state=1
+11-26 13:38:52.351 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:38:52.355 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:38:52.355 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:38:52.357 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:38:53.268 20156 20199 V Poster  : No object picked!
+11-26 13:38:53.324 20156 20202 D Evaluation: get gray scaled frame data at 1574768333324
+11-26 13:38:53.333 20156 20202 D Evaluation: frame 76 sent with size 16249 at 1574768333333
+11-26 13:38:53.367 20156 20168 E         : [ZeroHung]zrhung_get_config: Get config failed for wp[0x0008]
+11-26 13:38:53.388 20156 20166 W System  : A resource failed to call close. 
+11-26 13:38:53.390 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 1 line
+11-26 13:38:53.397 20156 20166 W System  : A resource failed to call close. 
+11-26 13:38:53.594 20156 20202 V Poster  : something received
+11-26 13:38:53.596 20156 20202 D Evaluation: 1 res received at 1574768333596
+11-26 13:38:53.603 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:38:53.609 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:38:53.609 20156 20200 I MediaPlayerNative: setDataSource(88, 65015676, 62964903)
+11-26 13:38:53.619 20156 20171 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:38:54.152 20156 20200 V PlayerBase: baseRelease() piid=807 state=1
+11-26 13:38:54.153 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:38:54.154 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:38:54.154 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:38:54.160 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:38:55.018 20156 20199 V Poster  : No object picked!
+11-26 13:38:55.056 20156 20202 D Evaluation: get gray scaled frame data at 1574768335056
+11-26 13:38:55.065 20156 20202 D Evaluation: frame 124 sent with size 17394 at 1574768335065
+11-26 13:38:55.335 20156 20156 I AwareBitmapCacher: init lrucache size: 2097152 pid=20156
+11-26 13:38:55.366 20156 20202 V Poster  : something received
+11-26 13:38:55.368 20156 20202 D Evaluation: 1 res received at 1574768335368
+11-26 13:38:55.376 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:38:55.381 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:38:55.381 20156 20200 I MediaPlayerNative: setDataSource(105, 65015676, 62964903)
+11-26 13:38:55.390 20156 20171 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:38:55.912 20156 20200 V PlayerBase: baseRelease() piid=815 state=1
+11-26 13:38:55.913 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:38:55.914 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:38:55.914 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:38:55.917 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:38:56.762 20156 20199 V Poster  : No object picked!
+11-26 13:38:56.823 20156 20202 D Evaluation: get gray scaled frame data at 1574768336823
+11-26 13:38:56.833 20156 20202 D Evaluation: frame 174 sent with size 17318 at 1574768336832
+11-26 13:38:57.125 20156 20202 V Poster  : something received
+11-26 13:38:57.131 20156 20202 D Evaluation: 1 res received at 1574768337131
+11-26 13:38:57.135 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:38:57.139 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:38:57.140 20156 20200 I MediaPlayerNative: setDataSource(105, 65015676, 62964903)
+11-26 13:38:57.153 20156 20169 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:38:57.620 20156 20200 V PlayerBase: baseRelease() piid=823 state=1
+11-26 13:38:57.623 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:38:57.624 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:38:57.624 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:38:57.634 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:38:58.502 20156 20199 V Poster  : No object picked!
+11-26 13:38:58.514 20156 20202 D Evaluation: get gray scaled frame data at 1574768338514
+11-26 13:38:58.526 20156 20202 D Evaluation: frame 223 sent with size 16643 at 1574768338526
+11-26 13:38:58.794 20156 20202 V Poster  : something received
+11-26 13:38:58.796 20156 20202 D Evaluation: 1 res received at 1574768338796
+11-26 13:38:58.803 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:38:58.807 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:38:58.807 20156 20200 I MediaPlayerNative: setDataSource(109, 65015676, 62964903)
+11-26 13:38:58.816 20156 20171 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:38:59.743 20156 20200 V PlayerBase: baseRelease() piid=831 state=1
+11-26 13:38:59.744 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:38:59.745 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:38:59.745 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:38:59.748 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:39:00.151 20156 20199 V Poster  : No object picked!
+11-26 13:39:00.240 20156 20202 D Evaluation: get gray scaled frame data at 1574768340239
+11-26 13:39:00.252 20156 20202 D Evaluation: frame 263 sent with size 16770 at 1574768340252
+11-26 13:39:00.539 20156 20202 V Poster  : something received
+11-26 13:39:00.545 20156 20202 D Evaluation: 0 res received at 1574768340545
+11-26 13:39:01.884 20156 20199 V Poster  : No object picked!
+11-26 13:39:01.900 20156 20202 D Evaluation: get gray scaled frame data at 1574768341900
+11-26 13:39:01.908 20156 20202 D Evaluation: frame 301 sent with size 16730 at 1574768341908
+11-26 13:39:02.187 20156 20202 V Poster  : something received
+11-26 13:39:02.190 20156 20202 D Evaluation: 1 res received at 1574768342190
+11-26 13:39:03.196 20156 20199 V Poster  : No object picked!
+11-26 13:39:03.233 20156 20202 D Evaluation: get gray scaled frame data at 1574768343233
+11-26 13:39:03.246 20156 20202 D Evaluation: frame 334 sent with size 15005 at 1574768343246
+11-26 13:39:03.536 20156 20202 V Poster  : something received
+11-26 13:39:03.539 20156 20202 D Evaluation: 1 res received at 1574768343539
+11-26 13:39:03.544 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:39:03.548 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:39:03.549 20156 20200 I MediaPlayerNative: setDataSource(110, 65015676, 62964903)
+11-26 13:39:03.559 20156 20171 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:39:04.391 20156 20199 V Poster  : No object picked!
+11-26 13:39:04.582 20156 20199 V PlayerBase: baseStart() piid=839
+11-26 13:39:04.583 20156 20199 I MediaPlayer: [HSM] stayAwake true uid: 10148, pid: 20156
+11-26 13:39:04.584 20156 20199 I MediaPlayerNative: Pid:20156 MediaPlayer::start
+11-26 13:39:04.584 20156 20199 D MediaPlayerNative: Action:start, CurrentState:MEDIA_PLAYER_STARTED
+11-26 13:39:04.657 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.660 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.664 20156 20171 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.667 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.670 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.673 20156 20171 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.689 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.691 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.692 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.693 20156 20321 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.693 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.694 20156 20176 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.695 20156 20176 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.696 20156 20176 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.697 20156 20321 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.698 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.699 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.700 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.701 20156 20170 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.702 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.702 20156 20169 W MapperHal: buffer descriptor with invalid usage bits 0x2000
+11-26 13:39:04.719 20156 20321 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:39:04.719 20156 20321 D MediaPlayerNative: Message: MEDIA_INFO(200), ext1=MEDIA_INFO_RENDERING_START(3), ext2=0
+11-26 13:39:04.719 20156 20321 W MediaPlayerNative: info/warning (3, 0)
+11-26 13:39:05.289 20156 20200 V PlayerBase: baseRelease() piid=839 state=2
+11-26 13:39:05.289 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:39:05.290 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:39:05.290 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:39:05.351 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:39:05.352 20156 20200 W MediaPlayer: mediaplayer went away with unhandled events
+11-26 13:39:06.049 20156 20199 V Poster  : No object picked!
+11-26 13:39:06.078 20156 20202 D Evaluation: get gray scaled frame data at 1574768346078
+11-26 13:39:06.084 20156 20202 D Evaluation: frame 403 sent with size 15420 at 1574768346084
+11-26 13:39:06.418 20156 20202 V Poster  : something received
+11-26 13:39:06.424 20156 20202 D Evaluation: 1 res received at 1574768346424
+11-26 13:39:07.362 20156 20199 V Poster  : No object picked!
+11-26 13:39:07.380 20156 20202 D Evaluation: get gray scaled frame data at 1574768347380
+11-26 13:39:07.391 20156 20168 E         : [ZeroHung]zrhung_get_config: Get config failed for wp[0x0008]
+11-26 13:39:07.394 20156 20202 D Evaluation: frame 435 sent with size 14925 at 1574768347394
+11-26 13:39:07.434 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.459 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 5 lines
+11-26 13:39:07.460 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.464 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.465 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.468 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.468 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.471 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.472 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.481 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.481 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 1 line
+11-26 13:39:07.483 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:07.668 20156 20202 V Poster  : something received
+11-26 13:39:07.675 20156 20202 D Evaluation: 0 res received at 1574768347675
+11-26 13:39:08.531 20156 20199 V Poster  : No object picked!
+11-26 13:39:08.595 20156 20202 D Evaluation: get gray scaled frame data at 1574768348595
+11-26 13:39:08.608 20156 20202 D Evaluation: frame 464 sent with size 14891 at 1574768348608
+11-26 13:39:08.870 20156 20202 V Poster  : something received
+11-26 13:39:08.874 20156 20202 D Evaluation: 1 res received at 1574768348874
+11-26 13:39:08.881 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:39:08.886 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:39:08.886 20156 20200 I MediaPlayerNative: setDataSource(51, 65015676, 62964903)
+11-26 13:39:08.898 20156 20321 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:39:09.901 20156 20199 V PlayerBase: baseStart() piid=847
+11-26 13:39:09.902 20156 20200 V PlayerBase: baseRelease() piid=847 state=2
+11-26 13:39:09.902 20156 20199 I MediaPlayer: [HSM] stayAwake true uid: 10148, pid: 20156
+11-26 13:39:09.902 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:39:09.903 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:39:09.903 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:39:09.904 20156 20199 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:39:09.904 20156 20199 W MediaPlayer: Start Error, Maybe the MediaPlayer have been Changed 
+11-26 13:39:09.906 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:39:10.410 20156 20199 V Poster  : No object picked!
+11-26 13:39:10.443 20156 20202 D Evaluation: get gray scaled frame data at 1574768350443
+11-26 13:39:10.458 20156 20202 D Evaluation: frame 501 sent with size 16895 at 1574768350458
+11-26 13:39:10.792 20156 20202 V Poster  : something received
+11-26 13:39:10.796 20156 20202 D Evaluation: 1 res received at 1574768350796
+11-26 13:39:11.510 20156 20199 V Poster  : No object picked!
+11-26 13:39:11.552 20156 20202 D Evaluation: get gray scaled frame data at 1574768351552
+11-26 13:39:11.563 20156 20202 D Evaluation: frame 523 sent with size 11176 at 1574768351563
+11-26 13:39:11.764 20156 20202 V Poster  : something received
+11-26 13:39:11.766 20156 20202 D Evaluation: 0 res received at 1574768351766
+11-26 13:39:12.636 20156 20199 V Poster  : No object picked!
+11-26 13:39:12.658 20156 20202 D Evaluation: get gray scaled frame data at 1574768352658
+11-26 13:39:12.668 20156 20202 D Evaluation: frame 551 sent with size 16243 at 1574768352668
+11-26 13:39:12.940 20156 20202 V Poster  : something received
+11-26 13:39:12.943 20156 20202 D Evaluation: 1 res received at 1574768352943
+11-26 13:39:12.950 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:39:12.955 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:39:12.955 20156 20200 I MediaPlayerNative: setDataSource(109, 65015676, 62964903)
+11-26 13:39:12.966 20156 20169 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:39:13.817 20156 20200 V PlayerBase: baseRelease() piid=855 state=1
+11-26 13:39:13.818 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:39:13.818 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:39:13.818 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:39:13.820 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor
+11-26 13:39:14.898 20156 20199 V Poster  : No object picked!
+11-26 13:39:14.912 20156 20202 D Evaluation: get gray scaled frame data at 1574768354912
+11-26 13:39:14.930 20156 20202 D Evaluation: frame 605 sent with size 16624 at 1574768354930
+11-26 13:39:15.257 20156 20202 V Poster  : something received
+11-26 13:39:15.264 20156 20202 D Evaluation: 1 res received at 1574768355264
+11-26 13:39:16.514 20156 20199 V Poster  : No object picked!
+11-26 13:39:16.566 20156 20202 D Evaluation: get gray scaled frame data at 1574768356566
+11-26 13:39:16.579 20156 20202 D Evaluation: frame 649 sent with size 15954 at 1574768356579
+11-26 13:39:16.871 20156 20202 V Poster  : something received
+11-26 13:39:16.874 20156 20202 D Evaluation: 0 res received at 1574768356874
+11-26 13:39:18.794 20156 20199 V Poster  : No object picked!
+11-26 13:39:18.837 20156 20202 D Evaluation: get gray scaled frame data at 1574768358837
+11-26 13:39:18.852 20156 20202 D Evaluation: frame 702 sent with size 13948 at 1574768358852
+11-26 13:39:19.113 20156 20202 V Poster  : something received
+11-26 13:39:19.116 20156 20202 D Evaluation: 0 res received at 1574768359116
+11-26 13:39:19.813 20156 20199 V Poster  : No object picked!
+11-26 13:39:19.853 20156 20202 D Evaluation: get gray scaled frame data at 1574768359853
+11-26 13:39:19.865 20156 20202 D Evaluation: frame 725 sent with size 13764 at 1574768359864
+11-26 13:39:20.088 20156 20202 V Poster  : something received
+11-26 13:39:20.091 20156 20202 D Evaluation: 1 res received at 1574768360091
+11-26 13:39:23.803 20156 20168 E         : [ZeroHung]zrhung_get_config: Get config failed for wp[0x0008]
+11-26 13:39:23.860 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.867 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 3 lines
+11-26 13:39:23.867 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.869 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.869 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 1 line
+11-26 13:39:23.871 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.872 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.877 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 1 line
+11-26 13:39:23.877 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.881 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.881 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.885 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:23.887 20156 20166 I chatty  : uid=10148(symlab.cloudridar.poster_edge) FinalizerDaemon identical 2 lines
+11-26 13:39:23.887 20156 20166 W System  : A resource failed to call close. 
+11-26 13:39:25.318 20156 20199 V Poster  : No object picked!
+11-26 13:39:25.405 20156 20202 D Evaluation: get gray scaled frame data at 1574768365404
+11-26 13:39:25.411 20156 20202 D Evaluation: frame 852 sent with size 13966 at 1574768365411
+11-26 13:39:25.886 20156 20202 V Poster  : something received
+11-26 13:39:25.892 20156 20202 D Evaluation: 1 res received at 1574768365892
+11-26 13:39:27.564 20156 20199 V Poster  : No object picked!
+11-26 13:39:27.621 20156 20202 D Evaluation: get gray scaled frame data at 1574768367621
+11-26 13:39:27.631 20156 20202 D Evaluation: frame 903 sent with size 16769 at 1574768367631
+11-26 13:39:27.919 20156 20202 V Poster  : something received
+11-26 13:39:27.923 20156 20202 D Evaluation: 1 res received at 1574768367923
+11-26 13:39:30.114 20156 20199 V Poster  : No object picked!
+11-26 13:39:30.168 20156 20202 D Evaluation: get gray scaled frame data at 1574768370167
+11-26 13:39:30.179 20156 20202 D Evaluation: frame 963 sent with size 16440 at 1574768370179
+11-26 13:39:30.472 20156 20202 V Poster  : something received
+11-26 13:39:30.477 20156 20202 D Evaluation: 1 res received at 1574768370476
+11-26 13:39:30.481 20156 20200 D Evaluation: image border created: 300.0 x 445.0
+11-26 13:39:30.486 20156 20200 D MediaPlayerNative: MediaPlayer::setVolume(1.000000, 1.000000)
+11-26 13:39:30.486 20156 20200 I MediaPlayerNative: setDataSource(104, 65015676, 62964903)
+11-26 13:39:30.501 20156 20176 D MediaPlayerNative: Message: MEDIA_SET_VIDEO_SIZE(5), ext1=1280, ext2=720
+11-26 13:39:31.469 20156 20200 V PlayerBase: baseRelease() piid=863 state=1
+11-26 13:39:31.470 20156 20200 I MediaPlayer: [HSM] stayAwake false uid: 10148, pid: 20156
+11-26 13:39:31.471 20156 20200 V MediaPlayer: resetDrmState:  mDrmInfo=null mDrmProvisioningThread=null mPrepareDrmInProgress=false mActiveDrmScheme=false
+11-26 13:39:31.471 20156 20200 V MediaPlayer: cleanDrmObj: mDrmObj=null mDrmSessionId=null
+11-26 13:39:31.475 20156 20200 I MediaPlayerNative: Pid:20156 MediaPlayer destructor

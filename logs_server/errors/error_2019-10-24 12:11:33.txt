@@ -1,1 +1,0 @@
-safeCall() Runtime API error in file </home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/matching.cu>, line 1191 : an illegal memory access was encountered.

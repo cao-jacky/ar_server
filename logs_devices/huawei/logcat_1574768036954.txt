@@ -1,0 +1,78 @@
+--------- beginning of system
+11-26 12:23:35.525  9443  9443 D ActivityThread: Attach thread to application
+11-26 12:23:35.647  9443  9443 V ActivityThread: callActivityOnCreate
+11-26 12:23:35.692  9443  9443 D ActivityThread: add activity client record, r= ActivityRecord{4d8f3ee token=android.os.BinderProxy@442f816 {symlab.cloudridar.poster_edge/symlab.posterApp.PosterActivity}} token= android.os.BinderProxy@442f816
+11-26 12:23:35.707  9443  9443 I PermissionManager: camera remind result:true
+11-26 12:23:35.707  9443  9443 I BackgroundPermManager: pkgName: symlab.cloudridar.poster_edge,pid: 9443 ,uidOf3RdApk: 10148 ,permType: 0 ,permCfg: 1
+11-26 12:23:35.719  9443  9443 D ActivityThread: isOptEnabled=false isWechatScanOpt=false
+11-26 12:23:35.790  9443  9443 I PermissionManager: camera remind result:true
+11-26 12:23:39.884  9443  9443 I BackgroundPermManager: pkgName: symlab.cloudridar.poster_edge,pid: 9443 ,uidOf3RdApk: 10148 ,permType: 0 ,permCfg: 0
+11-26 12:23:40.905  9443  9443 D ActivityThread: Remove activity client record, r= ActivityRecord{4d8f3ee token=android.os.BinderProxy@442f816 {symlab.cloudridar.poster_edge/symlab.posterApp.PosterActivity}} token= android.os.BinderProxy@442f816
+--------- beginning of main
+11-26 13:33:56.965 19293 19319 E         : [ZeroHung]zrhung_get_config: Get config failed for wp[0x0102]
+11-26 13:33:56.965 19293 19319 W ZrHung.AppEyeUiProbe: Failed to get config from zrhung
+11-26 13:33:56.966 19317 19317 W logcat  : type=1400 audit(0.0:7282): avc: granted { create } for name="logcat_1574768036954.txt" scontext=u:r:untrusted_app_27:s0:c512,c768 tcontext=u:object_r:sdcardfs:s0:c512,c768 tclass=file
+11-26 13:33:56.971 19293 19293 V ActivityThread: callActivityOnCreate
+11-26 13:33:56.971 19293 19293 I Poster  :  onCreate() called.
+11-26 13:33:56.974 19293 19293 I HwApsImpl: APS: new HwApsImpl created
+11-26 13:33:56.981 19293 19293 V HwWidgetFactory: : successes to get AllImpl object and return....
+11-26 13:33:56.988 19293 19293 D OpenGLRenderer: Skia GL Pipeline
+11-26 13:33:56.991 19293 19293 I Rajawali: Rajawali | Bombshell | v1.1 Development 
+11-26 13:33:56.991 19293 19293 I Rajawali: THIS IS A DEV BRANCH CONTAINING SIGNIFICANT CHANGES. PLEASE REFER TO CHANGELOG.md FOR MORE INFORMATION.
+11-26 13:33:56.996 19293 19293 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+11-26 13:33:56.996 19293 19293 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+11-26 13:33:56.997 19293 19293 I iGraphics: [0020080c] pn: symlab.cloudridar.poster_edge, p: 19293
+11-26 13:33:57.010 19293 19293 D ActivityThread: add activity client record, r= ActivityRecord{4d8f3ee token=android.os.BinderProxy@442f816 {symlab.cloudridar.poster_edge/symlab.posterApp.PosterActivity}} token= android.os.BinderProxy@442f816
+11-26 13:33:57.013 19293 19293 I Poster  :  onStart() called.
+11-26 13:33:57.013 19293 19293 D ZrHung.AppEyeUiProbe: notify runnable to start.
+11-26 13:33:57.014 19293 19293 I Poster  :  onResume() called.
+11-26 13:33:57.019 19293 19293 I PermissionManager: camera remind result:true
+11-26 13:33:57.019 19293 19293 I Camera  : open camera: 0, package name: symlab.cloudridar.poster_edge
+11-26 13:33:57.019 19293 19293 I BackgroundPermManager: pkgName: symlab.cloudridar.poster_edge,pid: 19293 ,uidOf3RdApk: 10148 ,permType: 0 ,permCfg: 1
+11-26 13:33:57.020 19293 19293 I HwCameraUtil: notifySurfaceFlingerCameraStatus : isFront = false , isOpend = true
+11-26 13:33:57.027 19293 19293 D ActivityThread: isOptEnabled=false isWechatScanOpt=false
+11-26 13:33:57.031 19293 19293 I HwSecImmHelper: mSecurityInputMethodService is null
+11-26 13:33:57.038 19293 19339 D Poster  : UDP connection
+11-26 13:33:57.040 19293 19293 D OpenGLRenderer:   HWUI Binary is  enabled
+11-26 13:33:57.044 19293 19293 I ViewRootImpl[PosterActivity]: view add KeepScreenOnFlag
+11-26 13:33:57.053 19293 19357 D HiTouch_PressGestureDetector: onAttached, package=symlab.cloudridar.poster_edge, windowType=1, mHiTouchRestricted=false
+11-26 13:33:57.059 19293 19356 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+11-26 13:33:57.059 19293 19356 I ConfigStore: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasHDRDisplay retrieved: 0
+11-26 13:33:57.059 19293 19356 I OpenGLRenderer: Initialized EGL, version 1.4, mEglDisplay 0x1
+11-26 13:33:57.059 19293 19356 D OpenGLRenderer: Swap behavior 2
+11-26 13:33:57.064 19293 19293 I Poster  :  surfaceCreated() called.
+11-26 13:33:57.068 19293 19356 D mali_winsys: EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, EGLBoolean) returns 0x3000
+11-26 13:33:57.070 19293 19293 I PermissionManager: camera remind result:true
+11-26 13:33:57.074 19293 19293 I Poster  :  surfaceChanged() called.
+11-26 13:33:57.083 19293 19336 D mali_winsys: EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, EGLBoolean) returns 0x3000
+11-26 13:33:57.113 19293 19293 W InputMethodManager: startInputReason = 1
+11-26 13:33:57.119 19293 19293 W InputMethodManager: startInputReason = 5
+11-26 13:33:57.951 19293 19293 D stylus  : init stylus touchlistener.
+11-26 13:33:57.953 19293 19293 W Settings: Setting device_provisioned has moved from android.provider.Settings.Secure to android.provider.Settings.Global.
+11-26 13:33:57.953 19293 19293 V HiTouch_HiTouchSensor: User setup is finished.
+11-26 13:33:57.960 19293 19336 V Poster  : No object picked!
+11-26 13:33:57.990 19293 19339 D Evaluation: get gray scaled frame data at 1574768037990
+11-26 13:33:57.996 19293 19339 D Evaluation: frame 19 sent with size 18586 at 1574768037996
+11-26 13:33:58.460 19293 19339 V Poster  : something received
+11-26 13:33:58.462 19293 19339 D Evaluation: 0 res received at 1574768038462
+11-26 13:33:59.210 19293 19336 V Poster  : No object picked!
+11-26 13:33:59.226 19293 19339 D Evaluation: get gray scaled frame data at 1574768039226
+11-26 13:33:59.240 19293 19339 D Evaluation: frame 55 sent with size 16735 at 1574768039240
+11-26 13:33:59.618 19293 19305 E         : [ZeroHung]zrhung_get_config: Get config failed for wp[0x0008]
+11-26 13:33:59.639 19293 19303 W System  : A resource failed to call close. 
+11-26 13:33:59.641 19293 19303 W System  : A resource failed to call close. 
+11-26 13:33:59.644 19293 19303 W System  : A resource failed to call close. 
+11-26 13:34:00.989 19293 19336 V Poster  : No object picked!
+11-26 13:34:01.004 19293 19339 D Evaluation: get gray scaled frame data at 1574768041004
+11-26 13:34:01.020 19293 19339 D Evaluation: frame 107 sent with size 16831 at 1574768041020
+11-26 13:34:01.952 19293 19293 I AwareBitmapCacher: init lrucache size: 2097152 pid=19293
+11-26 13:34:02.855 19293 19336 V Poster  : No object picked!
+11-26 13:34:02.888 19293 19339 D Evaluation: get gray scaled frame data at 1574768042888
+11-26 13:34:02.904 19293 19339 D Evaluation: frame 163 sent with size 14980 at 1574768042904
+11-26 13:34:03.172 19293 19339 V Poster  : something received
+11-26 13:34:03.174 19293 19339 D Evaluation: 0 res received at 1574768043174
+11-26 13:34:03.916 19293 19336 V Poster  : No object picked!
+11-26 13:34:03.933 19293 19339 D Evaluation: get gray scaled frame data at 1574768043933
+11-26 13:34:03.948 19293 19339 D Evaluation: frame 194 sent with size 18114 at 1574768043948
+11-26 13:34:04.239 19293 19339 V Poster  : something received
+11-26 13:34:04.242 19293 19339 D Evaluation: 0 res received at 1574768044242
