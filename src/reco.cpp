@@ -118,12 +118,8 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     int numPts;
     double start, finish, durationgmm;
 
-    int sg_init_vm = getValue();
-    cout << "virtual memory initial " << sg_init_vm << endl;
-
+    int sg_init_vm = getValueVirtualMem();
     int sg_init_pm = getValuePhysicalMem();
-    cout << "physical memory initial " << sg_init_pm << endl;
-
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&a[0],&a[1],&a[2],&a[3]);
     fclose(fp);
@@ -172,20 +168,16 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
 
     int sg_final_vm = getValue();
-    cout << "virtual memory final " << sg_final_vm << endl;
+    cout << "SIFT virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
 
     int sg_final_pm = getValuePhysicalMem();
-    cout << "physical memory final " << sg_final_pm << endl;
-
-    // int sg_final_cpu = getCurrentValue();
-    // cout << "cpu final " << sg_final_cpu << endl;
+    cout << "SIFT physical memory usage is " << sg_final_pm - sg_init_pm << endl;
 
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
     fclose(fp);
-
     loadavg = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) / ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[2]+a[3]));
-    cout << "The current CPU utilization is " << loadavg <<endl;
+    cout << "SIFT CPU utilisation is " << loadavg <<endl;
 
     return numPts;
 }
@@ -205,6 +197,12 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
     float enc[SIZE] = {0};
 
+    int sg_init_vm = getValueVirtualMem();
+    int sg_init_pm = getValuePhysicalMem();
+    fp = fopen("/proc/stat","r");
+    fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&a[0],&a[1],&a[2],&a[3]);
+    fclose(fp);
+
     if (cache) {
         start = wallclock();
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, siftresg);
@@ -216,6 +214,18 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
         finish = wallclock();
         durationgmm = (double)(finish - start);
         cout << "PCA encoding time: " << durationgmm << endl;
+        
+        int sg_final_vm = getValue();
+        cout << "PCA encoding virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
+
+        int sg_final_pm = getValuePhysicalMem();
+        cout << "PCA encoding physical memory usage is " << sg_final_pm - sg_init_pm << endl;
+
+        fp = fopen("/proc/stat","r");
+        fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
+        fclose(fp);
+        loadavg = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) / ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[2]+a[3]));
+        cout << "PCA encoding CPU utilisation is " << loadavg <<endl;
         
         start = wallclock();
         gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
@@ -248,6 +258,18 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     finish = wallclock();
     durationgmm = (double)(finish - start);
     cout << "Fisher Vector encoding time: " << durationgmm << endl;
+
+    int sg_final_vm = getValue();
+    cout << "Fisher Vector encoding virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
+
+    int sg_final_pm = getValuePhysicalMem();
+    cout << "Fisher Vector encoding physical memory usage is " << sg_final_pm - sg_init_pm << endl;
+
+    fp = fopen("/proc/stat","r");
+    fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
+    fclose(fp);
+    loadavg = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) / ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[2]+a[3]));
+    cout << "Fisher Vector encoding CPU utilisation is " << loadavg <<endl;
 
     free(dest);
     free(siftresg);
