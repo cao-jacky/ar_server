@@ -333,6 +333,8 @@ bool query(Mat queryImage, recognizedMarker &marker)
     double start, finish;
     double duration_lshnn;
 
+    init();
+
     onlineProcessing(queryImage, tData, test, true, false, false);
 
     for(int j = 0; j < SIZE; j++) t[j] = test[j];
