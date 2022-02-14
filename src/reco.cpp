@@ -163,7 +163,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     cout << "virtual memory final " << sg_final_vm << endl;
 
     int sg_final_pm = getValuePhysicalMem();
-    cout << "physical memory initial " << sg_final_pm << endl;
+    cout << "physical memory final " << sg_final_pm << endl;
 
     return numPts;
 }
