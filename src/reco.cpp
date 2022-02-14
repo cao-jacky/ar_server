@@ -1,3 +1,7 @@
+#include "stdlib.h"
+#include "stdio.h"
+#include "string.h"
+
 #include "reco.hpp"
 #include <fstream>
 #include <ctime>
@@ -52,6 +56,32 @@ unique_ptr<LSHNearestNeighborQuery<DenseVector<float>>> table;
 vector<cacheItem> cacheItems;
 atomic<int> totalTime;
 
+int parseLine(char* line){
+    // This assumes that a digit will be found and the line ends in " Kb".
+    int i = strlen(line);
+    const char* p = line;
+    while (*p <'0' || *p > '9') p++;
+    line[i-3] = '\0';
+    i = atoi(p);
+    return i;
+}
+
+int getValue(){ //Note: this value is in KB!
+    FILE* file = fopen("/proc/self/status", "r");
+    int result = -1;
+    char line[128];
+
+    while (fgets(line, 128, file) != NULL){
+        if (strncmp(line, "VmSize:", 7) == 0){
+            result = parseLine(line);
+            break;
+        }
+    }
+    fclose(file);
+    return result;
+}
+
+
 double wallclock (void)
 {
     struct timeval tv;
@@ -67,6 +97,9 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     CudaImage cimg;
     int numPts;
     double start, finish, durationgmm;
+
+    int sg_init_vm = getValue();
+    cout << sg_init_vm << endl;
 
     //if(online) resize(img, img, Size(), 0.5, 0.5);
     if(isColorImage) cvtColor(img, img, CV_BGR2GRAY);
