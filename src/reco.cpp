@@ -167,7 +167,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     durationgmm = (double)(finish - start);
     cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
 
-    int sg_final_vm = getValue();
+    int sg_final_vm = getValueVirtualMem();
     cout << "SIFT virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
 
     int sg_final_pm = getValuePhysicalMem();
@@ -215,7 +215,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
         durationgmm = (double)(finish - start);
         cout << "PCA encoding time: " << durationgmm << endl;
         
-        int sg_final_vm = getValue();
+        int sg_final_vm = getValueVirtualMem();
         cout << "PCA encoding virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
 
         int sg_final_pm = getValuePhysicalMem();
@@ -259,7 +259,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     durationgmm = (double)(finish - start);
     cout << "Fisher Vector encoding time: " << durationgmm << endl;
 
-    int sg_final_vm = getValue();
+    int sg_final_vm = getValueVirtualMem();
     cout << "Fisher Vector encoding virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
 
     int sg_final_pm = getValuePhysicalMem();
