@@ -127,7 +127,6 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&a[0],&a[1],&a[2],&a[3]);
     fclose(fp);
-    sleep(1);
 
     // int sg_init_cpu = init();
     // cout << "cpu initial " << sg_init_cpu << endl;
@@ -186,7 +185,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     fclose(fp);
 
     loadavg = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) / ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[2]+a[3]));
-    printf("The current CPU utilization is : %Lf\n",loadavg);
+    cout << "The current CPU utilization is " << loadavg <<endl;
 
     return numPts;
 }
