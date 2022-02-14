@@ -260,10 +260,10 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     cout << "Fisher Vector encoding time: " << durationgmm << endl;
 
     int fv_final_vm = getValueVirtualMem();
-    cout << "Fisher Vector encoding virtual memory usage is " << sg_final_vm - init_vm << endl;
+    cout << "Fisher Vector encoding virtual memory usage is " << fv_final_vm - init_vm << endl;
 
     int fv_final_vm = getValuePhysicalMem();
-    cout << "Fisher Vector encoding physical memory usage is " << sg_final_pm - init_pm << endl;
+    cout << "Fisher Vector encoding physical memory usage is " << fv_final_vm - init_pm << endl;
 
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
