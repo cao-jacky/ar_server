@@ -168,10 +168,10 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
 
     int sg_final_vm = getValueVirtualMem();
-    cout << "SIFT virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
+    cout << "SIFT virtual memory usage is " << sg_final_vm << endl;
 
     int sg_final_pm = getValuePhysicalMem();
-    cout << "SIFT physical memory usage is " << sg_final_pm - sg_init_pm << endl;
+    cout << "SIFT physical memory usage is " << sg_final_pm << endl;
 
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
