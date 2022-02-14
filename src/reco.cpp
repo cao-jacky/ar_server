@@ -197,8 +197,8 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
 
     float enc[SIZE] = {0};
 
-    int sg_init_vm = getValueVirtualMem();
-    int sg_init_pm = getValuePhysicalMem();
+    int init_vm = getValueVirtualMem();
+    int init_pm = getValuePhysicalMem();
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&a[0],&a[1],&a[2],&a[3]);
     fclose(fp);
@@ -215,11 +215,11 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
         durationgmm = (double)(finish - start);
         cout << "PCA encoding time: " << durationgmm << endl;
         
-        int sg_final_vm = getValueVirtualMem();
-        cout << "PCA encoding virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
+        int pe_final_vm = getValueVirtualMem();
+        cout << "PCA encoding virtual memory usage is " << pe_final_vm - init_vm << endl;
 
-        int sg_final_pm = getValuePhysicalMem();
-        cout << "PCA encoding physical memory usage is " << sg_final_pm - sg_init_pm << endl;
+        int pe_final_pm = getValuePhysicalMem();
+        cout << "PCA encoding physical memory usage is " << pe_final_pm - init_pm << endl;
 
         fp = fopen("/proc/stat","r");
         fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
@@ -259,11 +259,11 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     durationgmm = (double)(finish - start);
     cout << "Fisher Vector encoding time: " << durationgmm << endl;
 
-    int sg_final_vm = getValueVirtualMem();
-    cout << "Fisher Vector encoding virtual memory usage is " << sg_final_vm - sg_init_vm << endl;
+    int fv_final_vm = getValueVirtualMem();
+    cout << "Fisher Vector encoding virtual memory usage is " << sg_final_vm - init_vm << endl;
 
-    int sg_final_pm = getValuePhysicalMem();
-    cout << "Fisher Vector encoding physical memory usage is " << sg_final_pm - sg_init_pm << endl;
+    int fv_final_vm = getValuePhysicalMem();
+    cout << "Fisher Vector encoding physical memory usage is " << sg_final_pm - init_pm << endl;
 
     fp = fopen("/proc/stat","r");
     fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
