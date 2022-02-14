@@ -72,7 +72,7 @@ int parseLine(char* line){
     return i;
 }
 
-int getValue(){ //Note: this value is in KB!
+int getValueVirtualMem(){ //Note: this value is in KB!
     FILE* file = fopen("/proc/self/status", "r");
     int result = -1;
     char line[128];
