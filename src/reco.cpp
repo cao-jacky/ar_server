@@ -99,7 +99,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     double start, finish, durationgmm;
 
     int sg_init_vm = getValue();
-    cout << sg_init_vm << endl;
+    cout << "virtual memory initial " << sg_init_vm << endl;
 
     //if(online) resize(img, img, Size(), 0.5, 0.5);
     if(isColorImage) cvtColor(img, img, CV_BGR2GRAY);
@@ -140,6 +140,9 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     finish = wallclock();
     durationgmm = (double)(finish - start);
     cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
+    int sg_final_vm = getValue();
+    cout << "virtual memory final " << sg_final_vm << endl;
+
     return numPts;
 }
 
