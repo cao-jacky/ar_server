@@ -81,6 +81,21 @@ int getValue(){ //Note: this value is in KB!
     return result;
 }
 
+int getValuePhysicalMem(){ //Note: this value is in KB!
+    FILE* file = fopen("/proc/self/status", "r");
+    int result = -1;
+    char line[128];
+
+    while (fgets(line, 128, file) != NULL){
+        if (strncmp(line, "VmRSS:", 6) == 0){
+            result = parseLine(line);
+            break;
+        }
+    }
+    fclose(file);
+    return result;
+}
+
 
 double wallclock (void)
 {
@@ -100,6 +115,9 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
 
     int sg_init_vm = getValue();
     cout << "virtual memory initial " << sg_init_vm << endl;
+
+    int sg_init_pm = getValuePhysicalMem();
+    cout << "physical memory initial " << sg_init_pm << endl;
 
     //if(online) resize(img, img, Size(), 0.5, 0.5);
     if(isColorImage) cvtColor(img, img, CV_BGR2GRAY);
@@ -140,8 +158,12 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     finish = wallclock();
     durationgmm = (double)(finish - start);
     cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
+
     int sg_final_vm = getValue();
     cout << "virtual memory final " << sg_final_vm << endl;
+
+    int sg_init_pm = getValuePhysicalMem();
+    cout << "physical memory initial " << sg_init_pm << endl;
 
     return numPts;
 }
