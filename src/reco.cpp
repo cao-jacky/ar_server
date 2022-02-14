@@ -1,6 +1,8 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
+#include "sys/times.h"
+#include "sys/vtimes.h"
 
 #include "reco.hpp"
 #include <fstream>
@@ -56,6 +58,9 @@ unique_ptr<LSHNearestNeighborQuery<DenseVector<float>>> table;
 vector<cacheItem> cacheItems;
 atomic<int> totalTime;
 
+static clock_t lastCPU, lastSysCPU, lastUserCPU;
+static int numProcessors;
+
 int parseLine(char* line){
     // This assumes that a digit will be found and the line ends in " Kb".
     int i = strlen(line);
@@ -96,6 +101,48 @@ int getValuePhysicalMem(){ //Note: this value is in KB!
     return result;
 }
 
+void init(){
+    FILE* file;
+    struct tms timeSample;
+    char line[128];
+
+    lastCPU = times(&timeSample);
+    lastSysCPU = timeSample.tms_stime;
+    lastUserCPU = timeSample.tms_utime;
+
+    file = fopen("/proc/cpuinfo", "r");
+    numProcessors = 0;
+    while(fgets(line, 128, file) != NULL){
+        if (strncmp(line, "processor", 9) == 0) numProcessors++;
+    }
+    fclose(file);
+}
+
+double getCurrentValue(){
+    struct tms timeSample;
+    clock_t now;
+    double percent;
+
+    now = times(&timeSample);
+    if (now <= lastCPU || timeSample.tms_stime < lastSysCPU ||
+        timeSample.tms_utime < lastUserCPU){
+        //Overflow detection. Just skip this value.
+        percent = -1.0;
+    }
+    else{
+        percent = (timeSample.tms_stime - lastSysCPU) +
+            (timeSample.tms_utime - lastUserCPU);
+        percent /= (now - lastCPU);
+        percent /= numProcessors;
+        percent *= 100;
+    }
+    lastCPU = now;
+    lastSysCPU = timeSample.tms_stime;
+    lastUserCPU = timeSample.tms_utime;
+
+    return percent;
+}
+
 
 double wallclock (void)
 {
@@ -118,6 +165,9 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
 
     int sg_init_pm = getValuePhysicalMem();
     cout << "physical memory initial " << sg_init_pm << endl;
+
+    int sg_init_cpu = init();
+    cout << "cpu initial " << sg_init_cpu << endl;
 
     //if(online) resize(img, img, Size(), 0.5, 0.5);
     if(isColorImage) cvtColor(img, img, CV_BGR2GRAY);
@@ -164,6 +214,9 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
 
     int sg_final_pm = getValuePhysicalMem();
     cout << "physical memory final " << sg_final_pm << endl;
+
+    int sg_final_cpu = getCurrentValue();
+    cout << "cpu final " << sg_final_cpu << endl;
 
     return numPts;
 }
