@@ -166,7 +166,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     int sg_init_pm = getValuePhysicalMem();
     cout << "physical memory initial " << sg_init_pm << endl;
 
-    int sg_init_cpu = init();
+    int sg_init_cpu = getCurrentValue();
     cout << "cpu initial " << sg_init_cpu << endl;
 
     //if(online) resize(img, img, Size(), 0.5, 0.5);
