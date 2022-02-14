@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/geomFuncs.cpp" "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/geomFuncs.cpp.o"
-  "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/mainSift.cpp" "/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/mainSift.cpp.o"
+  "/home/ar_server/lib/cudasift/geomFuncs.cpp" "/home/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/geomFuncs.cpp.o"
+  "/home/ar_server/lib/cudasift/mainSift.cpp" "/home/ar_server/lib/cudasift/CMakeFiles/cudasift.dir/mainSift.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -13,7 +13,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "."
   "/usr/local/cuda/include"
-  "/usr/local/include/opencv4"
+  "/usr/include/opencv"
   )
 
 # Targets to which this target links.

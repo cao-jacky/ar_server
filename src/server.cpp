@@ -1,6 +1,8 @@
 #include "reco.hpp"
 #include "cuda_files.h"
 
+#include <opencv2/opencv.hpp>
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

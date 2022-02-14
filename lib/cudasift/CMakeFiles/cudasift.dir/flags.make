@@ -6,5 +6,5 @@ CXX_FLAGS =  -O2 -msse2  -O3 -DNDEBUG
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/jacky/Desktop/mobile_ar_system/ar_server/lib/cudasift -I/usr/local/cuda/include -isystem /usr/local/include/opencv4 
+CXX_INCLUDES = -I/home/ar_server/lib/cudasift -I/usr/local/cuda/include -isystem /usr/include/opencv 
 
