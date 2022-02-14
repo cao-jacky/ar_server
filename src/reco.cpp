@@ -58,8 +58,9 @@ unique_ptr<LSHNearestNeighborQuery<DenseVector<float>>> table;
 vector<cacheItem> cacheItems;
 atomic<int> totalTime;
 
-static clock_t lastCPU, lastSysCPU, lastUserCPU;
-static int numProcessors;
+long double a[4], b[4], loadavg;
+FILE *fp;
+char dump[50];
 
 int parseLine(char* line){
     // This assumes that a digit will be found and the line ends in " Kb".
@@ -101,49 +102,6 @@ int getValuePhysicalMem(){ //Note: this value is in KB!
     return result;
 }
 
-void init(){
-    FILE* file;
-    struct tms timeSample;
-    char line[128];
-
-    lastCPU = times(&timeSample);
-    lastSysCPU = timeSample.tms_stime;
-    lastUserCPU = timeSample.tms_utime;
-
-    file = fopen("/proc/cpuinfo", "r");
-    numProcessors = 0;
-    while(fgets(line, 128, file) != NULL){
-        if (strncmp(line, "processor", 9) == 0) numProcessors++;
-    }
-    fclose(file);
-}
-
-double getCurrentValue(){
-    struct tms timeSample;
-    clock_t now;
-    double percent;
-
-    now = times(&timeSample);
-    if (now <= lastCPU || timeSample.tms_stime < lastSysCPU ||
-        timeSample.tms_utime < lastUserCPU){
-        //Overflow detection. Just skip this value.
-        percent = -1.0;
-    }
-    else{
-        percent = (timeSample.tms_stime - lastSysCPU) +
-            (timeSample.tms_utime - lastUserCPU);
-        percent /= (now - lastCPU);
-        percent /= numProcessors;
-        percent *= 100;
-    }
-    lastCPU = now;
-    lastSysCPU = timeSample.tms_stime;
-    lastUserCPU = timeSample.tms_utime;
-
-    return percent;
-}
-
-
 double wallclock (void)
 {
     struct timeval tv;
@@ -166,8 +124,13 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     int sg_init_pm = getValuePhysicalMem();
     cout << "physical memory initial " << sg_init_pm << endl;
 
-    int sg_init_cpu = getCurrentValue();
-    cout << "cpu initial " << sg_init_cpu << endl;
+    fp = fopen("/proc/stat","r");
+    fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&a[0],&a[1],&a[2],&a[3]);
+    fclose(fp);
+    sleep(1);
+
+    // int sg_init_cpu = init();
+    // cout << "cpu initial " << sg_init_cpu << endl;
 
     //if(online) resize(img, img, Size(), 0.5, 0.5);
     if(isColorImage) cvtColor(img, img, CV_BGR2GRAY);
@@ -215,8 +178,15 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     int sg_final_pm = getValuePhysicalMem();
     cout << "physical memory final " << sg_final_pm << endl;
 
-    int sg_final_cpu = getCurrentValue();
-    cout << "cpu final " << sg_final_cpu << endl;
+    // int sg_final_cpu = getCurrentValue();
+    // cout << "cpu final " << sg_final_cpu << endl;
+
+    fp = fopen("/proc/stat","r");
+    fscanf(fp,"%*s %Lf %Lf %Lf %Lf",&b[0],&b[1],&b[2],&b[3]);
+    fclose(fp);
+
+    loadavg = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) / ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[2]+a[3]));
+    printf("The current CPU utilization is : %Lf\n",loadavg);
 
     return numPts;
 }
@@ -332,8 +302,6 @@ bool query(Mat queryImage, recognizedMarker &marker)
 
     double start, finish;
     double duration_lshnn;
-
-    init();
 
     onlineProcessing(queryImage, tData, test, true, false, false);
 
