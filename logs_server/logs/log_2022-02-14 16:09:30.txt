@@ -1,0 +1,288 @@
+
+======== Server started, waiting for clients to connect ==========
+UDP sender thread createdCache searcher thread created
+UDP receiver thread created
+Process thread created
+
+echo message!
+echo reply sent!
+================================================
+Frame 1 received, filesize: 29022 at 1644847826.54369 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.42 ms 711
+Incl prefiltering & memcpy =  1.47 ms 711
+
+711 SIFT points extracted in time: 0.0222067832946777
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 1052
+SIFT CPU utilisation is 0.0740740740740741
+PCA encoding time: 0.000849008560180664
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 264
+PCA encoding CPU utilisation is 0
+Fisher Vector encoding time: 0.00275802612304688
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 264
+Fisher Vector encoding CPU utilisation is 0
+LSH NN searching time: 0.000852108001708984
+Query - time before matching: 1644847826.57337
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.50 ms 1000
+Incl prefiltering & memcpy =  0.95 ms 1000
+
+1000 SIFT points extracted in time: 0.00137495994567871
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 1848
+SIFT CPU utilisation is 0
+Number of feature points: 1000 711
+MatchSiftData time =          0.26 ms
+Matching features: 0 0 0% 
+Frame 1 res sent, marker#: 0 at 1644847826.57742
+
+================================================
+Frame 2 received, filesize: 29022 at 1644847828.53629 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.47 ms 711
+Incl prefiltering & memcpy =  1.66 ms 711
+
+711 SIFT points extracted in time: 0.00226402282714844
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0
+PCA encoding time: 0.00260019302368164
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is 0
+Fisher Vector encoding time: 0.00362896919250488
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0.125
+LSH NN searching time: 0.00315618515014648
+Query - time before matching: 1644847828.55782
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.51 ms 1000
+Incl prefiltering & memcpy =  1.75 ms 1000
+
+1000 SIFT points extracted in time: 0.00341010093688965
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 1116
+SIFT CPU utilisation is 0.166666666666667
+Number of feature points: 1000 711
+MatchSiftData time =          0.48 ms
+Matching features: 0 0 0% 
+Frame 2 res sent, marker#: 0 at 1644847828.57059
+
+================================================
+Frame 3 received, filesize: 29022 at 1644847830.53586 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.42 ms 711
+Incl prefiltering & memcpy =  0.89 ms 711
+
+711 SIFT points extracted in time: 0.00103902816772461
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0
+PCA encoding time: 0.00064396858215332
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is 0
+Fisher Vector encoding time: 0.00347590446472168
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0.2
+LSH NN searching time: 0.000709056854248047
+Query - time before matching: 1644847830.54901
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.50 ms 1000
+Incl prefiltering & memcpy =  1.11 ms 1000
+
+1000 SIFT points extracted in time: 0.00154304504394531
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 1176
+SIFT CPU utilisation is 0
+Number of feature points: 1000 711
+MatchSiftData time =          0.26 ms
+Matching features: 0 0 0% 
+Frame 3 res sent, marker#: 0 at 1644847830.5531
+
+================================================
+Frame 4 received, filesize: 29022 at 1644847832.53533 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.42 ms 711
+Incl prefiltering & memcpy =  1.07 ms 711
+
+711 SIFT points extracted in time: 0.00130605697631836
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0
+PCA encoding time: 0.00109505653381348
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is 0
+Fisher Vector encoding time: 0.00454902648925781
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0.142857142857143
+LSH NN searching time: 0.00121688842773438
+Query - time before matching: 1644847832.54814
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.51 ms 1000
+Incl prefiltering & memcpy =  1.21 ms 1000
+
+1000 SIFT points extracted in time: 0.00199317932128906
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 528
+SIFT CPU utilisation is 0
+Number of feature points: 1000 711
+MatchSiftData time =          0.48 ms
+Matching features: 0 0 0% 
+Frame 4 res sent, marker#: 0 at 1644847832.55451
+
+================================================
+Frame 5 received, filesize: 29022 at 1644847834.53573 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.42 ms 711
+Incl prefiltering & memcpy =  1.79 ms 711
+
+711 SIFT points extracted in time: 0.00222396850585938
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0.25
+PCA encoding time: 0.00220084190368652
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is 0.333333333333333
+Fisher Vector encoding time: 0.00285100936889648
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0.142857142857143
+LSH NN searching time: 0.00274300575256348
+Query - time before matching: 1644847834.55532
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.51 ms 1000
+Incl prefiltering & memcpy =  2.38 ms 1000
+
+1000 SIFT points extracted in time: 0.00386595726013184
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 1056
+SIFT CPU utilisation is 0
+Number of feature points: 1000 711
+MatchSiftData time =          0.38 ms
+Matching features: 0 0 0% 
+Frame 5 res sent, marker#: 0 at 1644847834.56625
+
+================================================
+Frame 6 received, filesize: 29022 at 1644847836.53595 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.42 ms 711
+Incl prefiltering & memcpy =  0.90 ms 711
+
+711 SIFT points extracted in time: 0.0010521411895752
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0
+PCA encoding time: 0.000648975372314453
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is 0
+Fisher Vector encoding time: 0.00273799896240234
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0
+LSH NN searching time: 0.000674009323120117
+Query - time before matching: 1644847836.54728
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.50 ms 1000
+Incl prefiltering & memcpy =  0.96 ms 1000
+
+1000 SIFT points extracted in time: 0.0014190673828125
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 528
+SIFT CPU utilisation is 0
+Number of feature points: 1000 711
+MatchSiftData time =          0.26 ms
+Matching features: 0 0 0% 
+Frame 6 res sent, marker#: 0 at 1644847836.55169
+
+================================================
+Frame 7 received, filesize: 29022 at 1644847838.53592 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.44 ms 711
+Incl prefiltering & memcpy =  1.56 ms 711
+
+711 SIFT points extracted in time: 0.00202298164367676
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0
+PCA encoding time: 0.00241279602050781
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is 0.25
+Fisher Vector encoding time: 0.00353312492370605
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0.222222222222222
+LSH NN searching time: 0.00304603576660156
+Query - time before matching: 1644847838.55726
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.93 ms 1000
+Incl prefiltering & memcpy =  3.64 ms 1000
+
+1000 SIFT points extracted in time: 0.00521588325500488
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 1056
+SIFT CPU utilisation is 0.142857142857143
+Number of feature points: 1000 711
+MatchSiftData time =          0.50 ms
+Matching features: 0 0 0% 
+Frame 7 res sent, marker#: 0 at 1644847838.57114
+
+================================================
+Frame 8 received, filesize: 29022 at 1644847840.53578 from device with IP 172.17.0.1
+Searching the cache
+Image size = (160,270)
+SIFT extraction time =        0.44 ms 711
+Incl prefiltering & memcpy =  1.61 ms 711
+
+711 SIFT points extracted in time: 0.00205516815185547
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 0
+SIFT CPU utilisation is 0.25
+PCA encoding time: 0.000743865966796875
+PCA encoding virtual memory usage is 0
+PCA encoding physical memory usage is 0
+PCA encoding CPU utilisation is -nan
+Fisher Vector encoding time: 0.00276613235473633
+Fisher Vector encoding virtual memory usage is 0
+Fisher Vector encoding physical memory usage is 0
+Fisher Vector encoding CPU utilisation is 0
+LSH NN searching time: 0.00067591667175293
+Query - time before matching: 1644847840.55204
+Testing 48
+Image size = (321,475)
+SIFT extraction time =        0.54 ms 1000
+Incl prefiltering & memcpy =  1.01 ms 1000
+
+1000 SIFT points extracted in time: 0.0014488697052002
+SIFT virtual memory usage is 0
+SIFT physical memory usage is 528
+SIFT CPU utilisation is 0.666666666666667
+Number of feature points: 1000 711
+MatchSiftData time =          0.40 ms
+Matching features: 0 0 0% 
+Frame 8 res sent, marker#: 0 at 1644847840.55553
+
