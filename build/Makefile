@@ -19,7 +19,7 @@ LIB = -lm -lrt -lpthread -ldl -pipe -L$(SIFT_ROOT) -lcudasift -std=c++0x -pthrea
 LIB += -lcudart -lcufft 
 LIB += `pkg-config --cflags --libs opencv`
 LIB += -fopenmp -lcublas
-LIB += -lopencv_core -lopencv_highgui -lopencv_imgproc
+LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
 
 NVCC	= /usr/local/cuda/bin/nvcc -arch=sm_75 -m 64 $(INC) 
 

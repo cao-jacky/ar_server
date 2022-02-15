@@ -1,2 +1,2 @@
-/usr/bin/ar qc libcudasift.a  CMakeFiles/cudasift.dir/geomFuncs.cpp.o CMakeFiles/cudasift.dir/mainSift.cpp.o CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o
+/usr/bin/ar qc libcudasift.a CMakeFiles/cudasift.dir/geomFuncs.cpp.o CMakeFiles/cudasift.dir/mainSift.cpp.o CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o
 /usr/bin/ranlib libcudasift.a
