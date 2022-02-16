@@ -1,6 +1,8 @@
 #include "reco.hpp"
 #include "cuda_files.h"
 
+#include <map>
+
 #include <opencv2/opencv.hpp>
 
 #include <sys/socket.h>
@@ -14,7 +16,12 @@
 #include <queue>
 #include <fstream>
 
+#define MAIN_PORT 50000
+
 #define MESSAGE_ECHO 0
+#define MESSAGE_REGISTER 1
+#define MESSAGE_NEXT_SERVICE_IP 2
+
 #define FEATURES 1
 #define IMAGE_DETECT 2
 #define BOUNDARY 3
@@ -28,6 +35,8 @@ using namespace cv;
 
 struct sockaddr_in localAddr;
 struct sockaddr_in remoteAddr;
+struct sockaddr_in main_addr;
+
 socklen_t addrlen = sizeof(remoteAddr);
 bool isClientAlive = false;
 
@@ -38,87 +47,209 @@ int recognizedMarkerID;
 vector<char *> onlineImages;
 vector<char *> onlineAnnotations;
 
+// declaring variables needed for distributed operation
+string service;
+int service_value;
+queue<inter_service_buffer> inter_service_data;
+
+// hard coding the maps for each service, nothing clever needed about this
+std::map<string, int> service_map = {
+    {"main", 1},
+    {"sift", 2},
+    {"encoding", 3},
+    {"lsh", 4},
+    {"matching", 5},
+    {"main_return", 6}
+};
+
+std::map<int, string> service_map_reverse = {
+    {1, "main"},
+    {2, "sift"},
+    {3, "encoding"},
+    {4, "lsh"},
+    {5, "matching"},
+    {6, "main_return"}
+};
+
+std::map<string, string> registered_services;
+
+void registerService(int sock) {
+    charint register_id;
+    register_id.i = service_value; // ID of service registering itself
+
+    charint message_type;
+    message_type.i = MESSAGE_REGISTER;
+
+    char registering[8];
+    memcpy(registering, register_id.b, 4);
+    memcpy(&(registering[4]), message_type.b, 4);
+    sendto(sock, registering, sizeof(registering), 0, (struct sockaddr *)&main_addr, sizeof(main_addr));
+    cout << "STATUS: Service " << service << " is attempting to register with main module ";
+    cout << MAIN_PORT+int(service_map.at("main")) << endl;
+}
+
 void *ThreadUDPReceiverFunction(void *socket) {
-    cout<<"UDP receiver thread created"<<endl;
+    cout << "STATUS: UDP receiver thread created" << endl;
     char tmp[4];
     char buffer[PACKET_SIZE];
     int sock = *((int*)socket);
+
+    if (service != "main") {
+        // when first called, try to register with server 
+        registerService(sock);
+    }   
 
     while (1) {
         memset(buffer, 0, sizeof(buffer));
         recvfrom(sock, buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
         char *device_ip = inet_ntoa(remoteAddr.sin_addr);
 
-        frameBuffer curFrame;    
-        memcpy(tmp, buffer, 4);
-        curFrame.frmID = *(int*)tmp;        
-        memcpy(tmp, &(buffer[4]), 4);
-        curFrame.dataType = *(int*)tmp;
+        if (service == "main") {
+            // copy client frames into frames buffer if main 
+            frameBuffer curFrame;    
+            memcpy(tmp, buffer, 4);
+            curFrame.frmID = *(int*)tmp;        
+            memcpy(tmp, &(buffer[4]), 4);
+            curFrame.dataType = *(int*)tmp;
 
-        if(curFrame.dataType == MESSAGE_ECHO) {
-            cout<<"echo message!"<<endl;
-            charint echoID;
-            echoID.i = curFrame.frmID;
-            char echo[4];
-            memcpy(echo, echoID.b, 4);
-            sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
-            cout<<"echo reply sent!"<<endl;
-            continue;
-        }
+            if(curFrame.dataType == MESSAGE_ECHO) {
+                cout << "STATUS: Received an echo message" << endl;
+                charint echoID;
+                echoID.i = curFrame.frmID;
+                char echo[4];
+                memcpy(echo, echoID.b, 4);
+                sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
+                cout << "STATUS: Sent an echo reply" << endl;
+                continue;
+            } else if (curFrame.dataType == MESSAGE_REGISTER) {
+                string service_to_register = service_map_reverse.at(curFrame.frmID);
+                // string service_to_register = distance(service_map.begin(),service_map.find(curFrame.frmID));
 
-        memcpy(tmp, &(buffer[8]), 4);
-        curFrame.bufferSize = *(int*)tmp;
-        cout<<"================================================"<<endl;
-        cout<<"Frame "<<curFrame.frmID<<" received, filesize: "<<curFrame.bufferSize;
-        cout<<" at "<<setprecision(15)<<wallclock();
-        cout<<" from device with IP "<<device_ip<<endl;
-        curFrame.buffer = new char[curFrame.bufferSize];
-        memset(curFrame.buffer, 0, curFrame.bufferSize);
-        memcpy(curFrame.buffer, &(buffer[12]), curFrame.bufferSize);
+                registered_services.insert({service_to_register, device_ip});
+
+                // cout << distance(mymap.begin(),mymap.find("198765432"));
+
+                cout << "STATUS: Received a register request from service " << service_to_register;
+                cout << " located on IP " << device_ip << endl; 
+                cout << "STATUS: Service " << service_to_register << " is now registered" << endl;
+
+                // check whether the service which follows the newly regisetered 
+                // is registered
+                string next_service = service_map_reverse.at(curFrame.frmID+1);
+
+                if (registered_services.find(next_service) == registered_services.end()) {
+                    // not registered, telling the newly registered to wait
+                    cout << "STATUS: Next service " << next_service;
+                    cout << " is not registered, telling " << service_to_register;
+                    cout << " to wait"  << endl;
+                } else {
+                    // service is registered, providing service with associated IP
+                    char *next_ser_ip = &string(registered_services.at(next_service))[0];           
+
+                    charint register_id;
+                    register_id.i = service_value; // ID of service registering itself
+
+                    charint message_type;
+                    message_type.i = MESSAGE_NEXT_SERVICE_IP;
+
+                    char nsi_array[8+sizeof(next_ser_ip)];
+                    memcpy(nsi_array, register_id.b, 4);
+                    memcpy(&(nsi_array[4]), message_type.b, 4);
+                    memcpy(&(nsi_array[8]), nsi_array, sizeof(next_ser_ip));
+                    sendto(sock, nsi_array, sizeof(nsi_array), 0, (struct sockaddr *)&remoteAddr, addrlen);
+
+                    cout << "STATUS: Next service " << next_service;
+                    cout << " is registered, providing " << service_to_register;
+                    cout << " with the IP " << next_ser_ip << endl;   
+                }
+
+
+            } else if (curFrame.dataType == MESSAGE_NEXT_SERVICE_IP) {
+
+            } else if (curFrame.dataType == IMAGE_DETECT){
+                memcpy(tmp, &(buffer[8]), 4);
+                curFrame.bufferSize = *(int*)tmp;
+                // cout<<"================================================"<<endl;
+                cout << "STATUS: Frame " << curFrame.frmID << " received, filesize: ";
+                cout << curFrame.bufferSize << " at "<< setprecision(15)<<wallclock();
+                cout << " from device with IP " << device_ip << endl;
+                curFrame.buffer = new char[curFrame.bufferSize];
+                memset(curFrame.buffer, 0, curFrame.bufferSize);
+                memcpy(curFrame.buffer, &(buffer[12]), curFrame.bufferSize);
+                
+                frames.push(curFrame);
+
+            }
+        } 
         
-        frames.push(curFrame);
+        // else {
+        //     memset(buffer, 0, sizeof(buffer));
+        //     memcpy(buffer, curr_item.frame_id.b, 4);
+        //     memcpy(&(buffer[4]), curr_item.previous_service.b, 4);
+        //     memcpy(&(buffer[8]), curr_item.buffer_size.b, 4);
+        //     memcpy(&(buffer[12]), curr_item.buffer, curr_item.buffer_size.i);
+        //     sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&remoteAddr, addrlen);
+            
+        // }
     }
 }
 
 void *ThreadUDPSenderFunction(void *socket) {
-    cout << "UDP sender thread created" << endl;
+    cout << "STATUS: UDP sender thread created" << endl;
     char buffer[RES_SIZE];
     int sock = *((int*)socket);
 
     while (1) {
-        if(results.empty()) {
+        if(inter_service_data.empty()) {
             this_thread::sleep_for(chrono::milliseconds(1));
             continue;
         }
 
-        resBuffer curRes = results.front();
-        results.pop();
+        if (service == "main") {
+            inter_service_buffer curr_item = inter_service_data.front();
+            inter_service_data.pop();
 
-        memset(buffer, 0, sizeof(buffer));
-        memcpy(buffer, curRes.resID.b, 4);
-        memcpy(&(buffer[4]), curRes.resType.b, 4);
-        memcpy(&(buffer[8]), curRes.markerNum.b, 4);
-        if(curRes.markerNum.i != 0)
-            memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.markerNum.i);
-        sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&remoteAddr, addrlen);
-        cout<<"Frame "<<curRes.resID.i<<" res sent, "<<"marker#: "<<curRes.markerNum.i;
-        cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
+            memset(buffer, 0, sizeof(buffer));
+            memcpy(buffer, curr_item.frame_id.b, 4);
+            memcpy(&(buffer[4]), curr_item.previous_service.b, 4);
+            memcpy(&(buffer[8]), curr_item.buffer_size.b, 4);
+            memcpy(&(buffer[12]), curr_item.buffer, curr_item.buffer_size.i);
+            sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&remoteAddr, addrlen);
+            
+            cout << "STATUS: Frame " << curr_item.frame_id.i << " sent to next step for processing ";
+            cout << " at " << setprecision(15) << wallclock() << endl << endl;
+
+        }
+
+        // resBuffer curRes = results.front();
+        // results.pop();
+
+        // memset(buffer, 0, sizeof(buffer));
+        // memcpy(buffer, curRes.resID.b, 4);
+        // memcpy(&(buffer[4]), curRes.resType.b, 4);
+        // memcpy(&(buffer[8]), curRes.markerNum.b, 4);
+        // if(curRes.markerNum.i != 0)
+        //     memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.markerNum.i);
+        // sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&remoteAddr, addrlen);
+        // cout<<"Frame "<<curRes.resID.i<<" res sent, "<<"marker#: "<<curRes.markerNum.i;
+        // cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
     }    
 }
 
 void *ThreadProcessFunction(void *param) {
-    cout<<"Process thread created"<<endl;
+    cout << "STATUS: Processing thread created" << endl;
     recognizedMarker marker;
+    inter_service_buffer item;
     bool markerDetected = false;
 
     while (1) {
-        if(offloadframes.empty()) {
+        if(frames.empty()) {
             this_thread::sleep_for(chrono::milliseconds(1));
             continue;
         }
 
-        frameBuffer curFrame = offloadframes.front();
-        offloadframes.pop();
+        frameBuffer curFrame = frames.front();
+        frames.pop();
 
         int frmID = curFrame.frmID;
         int frmDataType = curFrame.dataType;
@@ -126,51 +257,69 @@ void *ThreadProcessFunction(void *param) {
         char* frmdata = curFrame.buffer;
         
         if(frmDataType == IMAGE_DETECT) {
-            vector<uchar> imgdata(frmdata, frmdata + frmSize);
-            Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
-            Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
-            markerDetected = query(detect, marker);
-        }
+            if (service == "main") {
+                // perform pre-processing if main service 
+                vector<uchar> imgdata(frmdata, frmdata + frmSize);
+                Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
+                Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
-        resBuffer curRes;
-        if(markerDetected) {
-            charfloat p;
-            curRes.resID.i = frmID;
-            curRes.resType.i = BOUNDARY;
-            curRes.markerNum.i = 1;
-            curRes.buffer = new char[100 * curRes.markerNum.i];
+                int detect_size = sizeof(detect);
 
-            int pointer = 0;
-            memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
-            pointer += 4;
-            memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
-            pointer += 4;
-            memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
-            pointer += 4;
+                cout << "STATUS: Mat detect object has a size of " << detect_size << endl;
 
-            for(int j = 0; j < 4; j++) {
-                p.f = marker.corners[j].x;
-                memcpy(&(curRes.buffer[pointer]), p.b, 4);
-                pointer+=4;
-                p.f = marker.corners[j].y;
-                memcpy(&(curRes.buffer[pointer]), p.b, 4);        
-                pointer+=4;            
+                item.frame_id.i = frmID;
+                item.previous_service.i = service_value;
+                item.buffer_size.i = detect_size;
+                item.buffer = new char[detect_size];
+                memset(item.buffer, 0, detect_size);
+                memcpy(item.buffer, &(detect), detect_size);
+
+                inter_service_data.push(item);
             }
 
-            memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
-
-            recognizedMarkerID = marker.markerID.i;
-
-            if(curRes.markerNum.i > 0)
-                addCacheItem(curFrame, curRes);
-                cout << "Added item to cache" << endl;
-        }
-        else {
-            curRes.resID.i = frmID;
-            curRes.markerNum.i = 0;
+            // markerDetected = query(detect, marker);
         }
 
-        results.push(curRes);
+
+        // resBuffer curRes;
+        // if(markerDetected) {
+        //     charfloat p;
+        //     curRes.resID.i = frmID;
+        //     curRes.resType.i = BOUNDARY;
+        //     curRes.markerNum.i = 1;
+        //     curRes.buffer = new char[100 * curRes.markerNum.i];
+
+        //     int pointer = 0;
+        //     memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
+        //     pointer += 4;
+        //     memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
+        //     pointer += 4;
+        //     memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
+        //     pointer += 4;
+
+        //     for(int j = 0; j < 4; j++) {
+        //         p.f = marker.corners[j].x;
+        //         memcpy(&(curRes.buffer[pointer]), p.b, 4);
+        //         pointer+=4;
+        //         p.f = marker.corners[j].y;
+        //         memcpy(&(curRes.buffer[pointer]), p.b, 4);        
+        //         pointer+=4;            
+        //     }
+
+        //     memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
+
+        //     recognizedMarkerID = marker.markerID.i;
+
+        //     if(curRes.markerNum.i > 0)
+        //         addCacheItem(curFrame, curRes);
+        //         cout << "Added item to cache" << endl;
+        // }
+        // else {
+        //     curRes.resID.i = frmID;
+        //     curRes.markerNum.i = 0;
+        // }
+
+        // results.push(curRes);
     }
 }
 
@@ -238,7 +387,7 @@ void *ThreadCacheSearchFunction(void *param) {
     }
 }
 
-void runServer(int port) {
+void runServer(int port, string service) {
     pthread_t senderThread, receiverThread, imageProcessThread, processThread;
     char buffer[PACKET_SIZE];
     char fileid[4];
@@ -251,25 +400,25 @@ void runServer(int port) {
     localAddr.sin_port = htons(port);
 
     if((sockUDP = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-        cout<<"ERROR opening UDP socket"<<endl;
+        cout << "ERROR: Unable to open UDP socket" << endl;
         exit(1);
     }
     if(bind(sockUDP, (struct sockaddr *)&localAddr, sizeof(localAddr)) < 0) {
-        cout<<"ERROR on UDP binding"<<endl;
+        cout << "ERROR: Unable to bind UDP " << endl;
         exit(1);
     }
-    cout << endl << "======== Server started, waiting for clients to connect ==========" << endl;
+    cout << endl << "STATUS: Server UDP port for service " << service <<  " is bound to " << port << endl;
 
     isClientAlive = true;
     pthread_create(&receiverThread, NULL, ThreadUDPReceiverFunction, (void *)&sockUDP);
     pthread_create(&senderThread, NULL, ThreadUDPSenderFunction, (void *)&sockUDP);
     pthread_create(&imageProcessThread, NULL, ThreadProcessFunction, NULL);
-    pthread_create(&processThread, NULL, ThreadCacheSearchFunction, NULL);
+    // pthread_create(&processThread, NULL, ThreadCacheSearchFunction, NULL);
 
     pthread_join(receiverThread, NULL);
     pthread_join(senderThread, NULL);
     pthread_join(imageProcessThread, NULL);
-    pthread_join(processThread, NULL);
+    // pthread_join(processThread, NULL);
 
     cout << endl;
 }
@@ -304,38 +453,54 @@ inline string getCurrentDateTime( string s ){
 
 int main(int argc, char *argv[])
 {
-    int querysizefactor, nn_num, port;
-    if(argc < 4) {
-        cout << "Usage: " << argv[0] << " size[s/m/l] NN#[1/2/3/4/5] port" << endl;
-        return 1;
-    } else {
-        if (argv[1][0] == 's') querysizefactor = 4;
-        else if (argv[2][0] == 'm') querysizefactor = 2;
-        else querysizefactor = 1;
-        nn_num = argv[2][0] - '0';
-        if (nn_num < 1 || nn_num > 5) nn_num = 5;
-        port = strtol(argv[3], NULL, 10);
-    }
 
-    loadOnline();
-    loadImages(onlineImages);
-    //trainCacheParams();
-#ifdef TRAIN
-    trainParams();
-#else
-    loadParams();
-#endif
-    encodeDatabase(querysizefactor, nn_num); 
+    service = string(argv[1]);
+
+    cout << "STATUS: Selected service is: " << argv[1] << endl;
+    cout << "STATUS: IP of main module provided is " << argv[2] << endl; 
+
+    service_value = service_map.at(argv[1]);
+
+    cout << service_value << endl;
+
+    // setting the specified host IP address and the hardcoded port
+    inet_pton(AF_INET, argv[2], &(main_addr.sin_addr)); 
+    main_addr.sin_port = htons(50000+int(service_map.at("main")));
+
+    int port = MAIN_PORT + service_value; // hardcoding the initial port 
+    
+    runServer(port, service);
+
+    // int querysizefactor, nn_num, port;
+    // if(argc < 4) {
+    //     cout << "Usage: " << argv[0] << " size[s/m/l] NN#[1/2/3/4/5] port" << endl;
+    //     return 1;
+    // } else {
+    //     if (argv[1][0] == 's') querysizefactor = 4;
+    //     else if (argv[2][0] == 'm') querysizefactor = 2;
+    //     else querysizefactor = 1;
+    //     nn_num = argv[2][0] - '0';
+    //     if (nn_num < 1 || nn_num > 5) nn_num = 5;
+    //     port = strtol(argv[3], NULL, 10);
+    // }
+
+//     loadOnline();
+//     loadImages(onlineImages);
+//     //trainCacheParams();
+// #ifdef TRAIN
+//     trainParams();
+// #else
+//     loadParams();
+// #endif
+//     encodeDatabase(querysizefactor, nn_num); 
 
     // outputting terminal outputs into dated log files
-    using namespace std;
-    string log_file = "logs_server/logs/log_" + getCurrentDateTime("now") + ".txt";
-    string error_file = "logs_server/errors/error_" + getCurrentDateTime("now") + ".txt";
+    // using namespace std;
+    // string log_file = "logs_server/logs/log_" + getCurrentDateTime("now") + ".txt";
+    // string error_file = "logs_server/errors/error_" + getCurrentDateTime("now") + ".txt";
 
-    freopen( log_file.c_str(), "w", stdout );
-    freopen( error_file.c_str(), "w", stderr );
-
-    runServer(port);
+    // freopen( log_file.c_str(), "w", stdout );
+    // freopen( error_file.c_str(), "w", stderr );
     //scalabilityTest();    
 
     freeParams();

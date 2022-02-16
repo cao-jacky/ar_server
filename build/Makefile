@@ -29,7 +29,7 @@ LINK	= -O3 -pthread
 CFLAGS	= -O3 -c -pthread -fopenmp -DVL_DISABLE_AVX
 CXXFLAGS= -O3 -c -pthread -std=c++0x -fopenmp -DVL_DISABLE_AVX
 
-gpu_fv: $(COBJECTS) $(CXXOBJECTS) cuda_files.o
+server: $(COBJECTS) $(CXXOBJECTS) cuda_files.o
 	$(CXX) $(LINK) -o ../$@ $(COBJECTS) $(CXXOBJECTS) cuda_files.o $(LIB) 
 
 cuda_files.o: ../src/cuda_files.cu 
@@ -42,7 +42,7 @@ $(CXXOBJECTS): $(CXXSRCS) $(CXXHEADERS) Makefile
 	$(CXX) $(INC) $(CXXFLAGS) $(CXXSRCS)
 
 clean:
-	rm -f ../gpu_fv $(COBJECTS) $(CXXOBJECTS) cuda_files.o kernels.o
+	rm -f ../server $(COBJECTS) $(CXXOBJECTS) cuda_files.o kernels.o
 
 .DEFAULT:
 	@echo The target \"$@\" does not exist in Makefile.

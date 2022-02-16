@@ -11,6 +11,10 @@
 #define RECO_W_OFFSET 160 
 #define RECO_H_OFFSET 0 
 
+struct receiver_arg_struct {
+   int port; 
+};
+
 union charint {
     char b[4];
     int i;
@@ -47,6 +51,13 @@ struct cacheItem {
     SiftData data;
     frameBuffer curFrame;
     recognizedMarker curMarker;
+};
+
+struct inter_service_buffer {
+    charint frame_id;
+    charint previous_service;
+    charint buffer_size;
+    char* buffer;
 };
 
 double wallclock();
