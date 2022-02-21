@@ -18,6 +18,7 @@
 #include <chrono>
 #include <random>
 #include <atomic>
+#include <tuple>
 
 #include "cudaImage.h"
 #include "cuda_files.h"
@@ -124,7 +125,7 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     start = wallclock();
     w = img.cols;
     h = img.rows;
-    cout << "Image size = (" << w << "," << h << ")" << endl;
+    // cout << "Image size = (" << w << "," << h << ")" << endl;
 
     cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float*)img.data);
     cimg.Download();
@@ -156,9 +157,39 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    cout << numPts << " SIFT points extracted in time: " << durationgmm << endl;
+    cout << "STATUS: " << numPts << " SIFT points extracted in time: " << durationgmm << endl;
 
     return numPts;
+}
+
+tuple<int, float> sift_processing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage) {
+    int siftResult;
+    float *siftresg;
+    float *siftframe;
+    int height, width;
+
+    siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+    free(siftframe);
+    return make_tuple(siftResult, *siftresg);
+}
+
+void encoding(float sift_resg, int sift_result) {
+    double start, finish;
+    double durationsift, durationgmm;
+
+    cout << sift_resg << endl;
+    // cout <<  << endl;
+
+    start = wallclock();
+    float *dest = (float *)malloc(sift_result*82*sizeof(float));
+    gpu_pca_mm(projection, projectionCenter, (float*)&sift_resg, dest, sift_result, DST_DIM);
+
+    finish = wallclock();
+    durationgmm = (double)(finish - start);
+    cout << "PCA encoding time: " << durationgmm << endl;
+
+    free(dest);
+    free((float*)&sift_resg);
 }
 
 void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage, bool cache)

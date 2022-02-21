@@ -15,15 +15,19 @@
 #include <iomanip>
 #include <queue>
 #include <fstream>
+#include <tuple>
+
+#include <errno.h>
 
 #define MAIN_PORT 50000
 
 #define MESSAGE_ECHO 0
 #define MESSAGE_REGISTER 1
 #define MESSAGE_NEXT_SERVICE_IP 2
+#define DATA_TRANSMISSION 3
 
 #define FEATURES 1
-#define IMAGE_DETECT 2
+#define IMAGE_DETECT 2 // to change here and in the client
 #define BOUNDARY 3
 #define PACKET_SIZE 60000
 #define RES_SIZE 512
@@ -36,6 +40,7 @@ using namespace cv;
 struct sockaddr_in localAddr;
 struct sockaddr_in remoteAddr;
 struct sockaddr_in main_addr;
+struct sockaddr_in next_service_addr;
 
 socklen_t addrlen = sizeof(remoteAddr);
 bool isClientAlive = false;
@@ -104,14 +109,16 @@ void *ThreadUDPReceiverFunction(void *socket) {
         recvfrom(sock, buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
         char *device_ip = inet_ntoa(remoteAddr.sin_addr);
 
-        if (service == "main") {
-            // copy client frames into frames buffer if main 
-            frameBuffer curFrame;    
-            memcpy(tmp, buffer, 4);
-            curFrame.frmID = *(int*)tmp;        
-            memcpy(tmp, &(buffer[4]), 4);
-            curFrame.dataType = *(int*)tmp;
+        // copy client frames into frames buffer if main 
+        frameBuffer curFrame;    
+        memcpy(tmp, buffer, 4);
+        curFrame.frmID = *(int*)tmp;        
+        memcpy(tmp, &(buffer[4]), 4);
+        curFrame.dataType = *(int*)tmp;
 
+        // cout << "message type is " << curFrame.dataType << endl;
+
+        if (service == "main") {
             if(curFrame.dataType == MESSAGE_ECHO) {
                 cout << "STATUS: Received an echo message" << endl;
                 charint echoID;
@@ -127,7 +134,11 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                 registered_services.insert({service_to_register, device_ip});
 
-                // cout << distance(mymap.begin(),mymap.find("198765432"));
+                if (service_to_register == "sift") {
+                    // main should assign next service IP from current stage
+                    inet_pton(AF_INET, device_ip, &(next_service_addr.sin_addr));
+                    next_service_addr.sin_port = htons(MAIN_PORT+service_map.at(service_to_register));
+                }
 
                 cout << "STATUS: Received a register request from service " << service_to_register;
                 cout << " located on IP " << device_ip << endl; 
@@ -152,20 +163,22 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     charint message_type;
                     message_type.i = MESSAGE_NEXT_SERVICE_IP;
 
-                    char nsi_array[8+sizeof(next_ser_ip)];
+                    // socklen_t addrlen = sizeof(remoteAddr);
+
+                    charint size_next_ip;
+                    size_next_ip.i = strlen(next_ser_ip);
+
+                    char nsi_array[12+strlen(next_ser_ip)];
                     memcpy(nsi_array, register_id.b, 4);
                     memcpy(&(nsi_array[4]), message_type.b, 4);
-                    memcpy(&(nsi_array[8]), nsi_array, sizeof(next_ser_ip));
+                    memcpy(&(nsi_array[8]), size_next_ip.b, 4);
+                    memcpy(&(nsi_array[12]), next_ser_ip, size_next_ip.i);
                     sendto(sock, nsi_array, sizeof(nsi_array), 0, (struct sockaddr *)&remoteAddr, addrlen);
 
-                    cout << "STATUS: Next service " << next_service;
+                    cout << "STATUS: Service " << next_service;
                     cout << " is registered, providing " << service_to_register;
                     cout << " with the IP " << next_ser_ip << endl;   
                 }
-
-
-            } else if (curFrame.dataType == MESSAGE_NEXT_SERVICE_IP) {
-
             } else if (curFrame.dataType == IMAGE_DETECT){
                 memcpy(tmp, &(buffer[8]), 4);
                 curFrame.bufferSize = *(int*)tmp;
@@ -180,6 +193,42 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 frames.push(curFrame);
 
             }
+        } else {
+            if (curFrame.dataType == MESSAGE_NEXT_SERVICE_IP) {
+                // store the IP for the next service into a specific variable
+
+                memcpy(tmp, &(buffer[8]), 4);
+                int next_ip_data_size = *(int*)tmp;
+
+                char tmp_ip[next_ip_data_size];
+                memcpy(tmp_ip, &(buffer[12]), next_ip_data_size);
+                char* next_ip = tmp_ip;
+
+                inet_pton(AF_INET, next_ip, &(next_service_addr.sin_addr)); 
+                next_service_addr.sin_port = htons(MAIN_PORT+service_value+1);
+                cout << "STATUS: Received IP for next service, assigning ";
+                cout << inet_ntoa(next_service_addr.sin_addr) << endl;
+            } else if (curFrame.dataType == DATA_TRANSMISSION) {
+                // performing logic to check that received data is supposed to be sent on
+                memcpy(tmp, &(buffer[8]), 4);
+                int previous_service_val = *(int*)tmp; 
+
+                if (previous_service_val == service_value - 1) {
+                    // if the data received is from previous service, proceed
+                    // with copying out the data
+                    memcpy(tmp, &(buffer[12]), 4);
+                    curFrame.bufferSize = *(int*)tmp;
+
+                    curFrame.buffer = new char[curFrame.bufferSize];
+                    memset(curFrame.buffer, 0, curFrame.bufferSize);
+                    memcpy(curFrame.buffer, &(buffer[16]), curFrame.bufferSize);
+
+                    frames.push(curFrame);
+                }
+
+                cout << "STATUS: Received data from previous service" << endl;
+            }
+
         } 
         
         // else {
@@ -196,8 +245,12 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
 void *ThreadUDPSenderFunction(void *socket) {
     cout << "STATUS: UDP sender thread created" << endl;
-    char buffer[RES_SIZE];
+    // char buffer[RES_SIZE];
     int sock = *((int*)socket);
+
+    socklen_t next_service_addrlen = sizeof(next_service_addr);
+
+    string next_service = service_map_reverse.at(service_value+1);
 
     while (1) {
         if(inter_service_data.empty()) {
@@ -209,17 +262,43 @@ void *ThreadUDPSenderFunction(void *socket) {
             inter_service_buffer curr_item = inter_service_data.front();
             inter_service_data.pop();
 
+            charint message_type;
+            message_type.i = DATA_TRANSMISSION;
+
+            char buffer[16+curr_item.buffer_size.i];
+
             memset(buffer, 0, sizeof(buffer));
             memcpy(buffer, curr_item.frame_id.b, 4);
-            memcpy(&(buffer[4]), curr_item.previous_service.b, 4);
-            memcpy(&(buffer[8]), curr_item.buffer_size.b, 4);
-            memcpy(&(buffer[12]), curr_item.buffer, curr_item.buffer_size.i);
-            sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&remoteAddr, addrlen);
-            
-            cout << "STATUS: Frame " << curr_item.frame_id.i << " sent to next step for processing ";
-            cout << " at " << setprecision(15) << wallclock() << endl << endl;
+            memcpy(&(buffer[4]), message_type.b, 4);
+            memcpy(&(buffer[8]), curr_item.previous_service.b, 4);
+            memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
+            memcpy(&(buffer[16]), &(curr_item.buffer)[0], curr_item.buffer_size.i+1);
+            sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
 
-        }
+            cout << "STATUS: Frame " << curr_item.frame_id.i << " sent to ";
+            cout << next_service  << " service for processing ";
+            cout << "at " << setprecision(15) << wallclock() << endl << endl;
+        } else {
+            inter_service_buffer curr_item = inter_service_data.front();
+            inter_service_data.pop();
+
+            charint message_type;
+            message_type.i = DATA_TRANSMISSION;
+
+            char buffer[16+curr_item.buffer_size.i];
+
+            memset(buffer, 0, sizeof(buffer));
+            memcpy(buffer, curr_item.frame_id.b, 4);
+            memcpy(&(buffer[4]), message_type.b, 4);
+            memcpy(&(buffer[8]), curr_item.previous_service.b, 4);
+            memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
+            memcpy(&(buffer[16]), &(curr_item.buffer)[0], curr_item.buffer_size.i);
+            sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+
+            cout << "STATUS: Forwarding Frame " << curr_item.frame_id.i << " to ";
+            cout << next_service  << " service for processing ";
+            cout << "at " << setprecision(15) << wallclock() << endl << endl;
+        } 
 
         // resBuffer curRes = results.front();
         // results.pop();
@@ -241,6 +320,9 @@ void *ThreadProcessFunction(void *param) {
     recognizedMarker marker;
     inter_service_buffer item;
     bool markerDetected = false;
+    char tmp[4];
+
+    float sift_resg;
 
     while (1) {
         if(frames.empty()) {
@@ -263,23 +345,96 @@ void *ThreadProcessFunction(void *param) {
                 Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
                 Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
-                int detect_size = sizeof(detect);
+                // markerDetected = query(detect, marker);
 
-                cout << "STATUS: Mat detect object has a size of " << detect_size << endl;
+                // encoding into JPG and copying into buffer 
+                vector<uchar> encoding_buffer;
+                vector<int> param(2);
+                param[0] = IMWRITE_JPEG_QUALITY;
+                param[1] = 95; //default(95) 0-100
+                imencode(".jpg", detect, encoding_buffer, param);
+
+                int detect_size = encoding_buffer.size();
+
+                cout << "STATUS: Image reduced to a Mat object of size " << detect_size << endl;
 
                 item.frame_id.i = frmID;
                 item.previous_service.i = service_value;
                 item.buffer_size.i = detect_size;
-                item.buffer = new char[detect_size];
-                memset(item.buffer, 0, detect_size);
-                memcpy(item.buffer, &(detect), detect_size);
+                item.buffer = new unsigned char[detect_size];
+                copy(encoding_buffer.begin(), encoding_buffer.end(), item.buffer);
 
                 inter_service_data.push(item);
             }
 
             // markerDetected = query(detect, marker);
+        } else if (frmDataType == DATA_TRANSMISSION) {
+            if (service == "sift") {
+                SiftData tData;
+                // vector<float> sift_array(2);
+                float sift_array[2];
+                int sift_result;
+                float sift_resg;
+                int height, width;
+                vector<float> test;
+
+                Mat detect_image = imdecode(Mat(1, frmSize, CV_8UC1, frmdata), CV_LOAD_IMAGE_UNCHANGED);
+                // imwrite("sift.jpg", detect_image);
+
+                // markerDetected = query(detect_image, marker);
+
+                auto sift_results = sift_processing(detect_image, tData, test, true, false);
+                // sift_array.push_back((float) get<0>(sift_results));
+                // sift_array.push_back(get<1>(sift_results));
+
+                // sift_array[0] = (float) get<0>(sift_results);
+                // sift_array[1] = get<1>(sift_results);
+
+                charint siftresult;
+                siftresult.i = get<0>(sift_results);
+
+                charfloat siftresg;
+                siftresg.f = get<1>(sift_results);
+
+                // int sift_sizeof = sift_array.size();
+
+                item.frame_id.i = frmID;
+                item.previous_service.i = service_value;
+                item.buffer_size.i = 8;
+                memset(item.buffer, 0, 8);
+                memcpy(&(item.buffer[0]), siftresult.b, 4);
+                memcpy(&(item.buffer[4]), siftresg.b, 4);
+                // item.buffer = new unsigned char[sift_sizeof];
+                // copy(sift_array.begin(), sift_array.end(), item.buffer);
+
+                inter_service_data.push(item);
+            } else if (service == "encoding") {
+                // vector<float> sift_results;
+                // copy(sift_array.begin(), sift_array.end(), item.buffer);
+
+                cout << "STATUS: Performing encoding on received SIFT data" << endl;
+
+                // vector<char> sift_results_char = vector<char>(frmdata, frmdata + frmSize);
+                // copy(sift_results_char.begin(), sift_results_char.end(), sift_results);
+
+                // float* sift_floats = reinterpret_cast<float*>(frmdata);
+                // vector<float> sift_results(sift_floats, sift_floats+2);
+                
+                memcpy(tmp, &(frmdata[0]), 4);
+                int sift_result = *(int*)tmp;
+
+                memcpy(tmp, &(frmdata[4]), 4);
+                sift_resg = *(float*)tmp;
+
+                encoding(sift_resg, sift_result);
+
+                // cout << sift_result << endl;
+                // cout << sift_resg << endl;
+
+            }
         }
 
+        
 
         // resBuffer curRes;
         // if(markerDetected) {
@@ -461,7 +616,7 @@ int main(int argc, char *argv[])
 
     service_value = service_map.at(argv[1]);
 
-    cout << service_value << endl;
+    // cout << service_value << endl;
 
     // setting the specified host IP address and the hardcoded port
     inet_pton(AF_INET, argv[2], &(main_addr.sin_addr)); 

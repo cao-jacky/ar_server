@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -57,7 +58,7 @@ struct inter_service_buffer {
     charint frame_id;
     charint previous_service;
     charint buffer_size;
-    char* buffer;
+    unsigned char* buffer;
 };
 
 double wallclock();
@@ -67,6 +68,8 @@ void trainCacheParams();
 void loadParams();
 void encodeDatabase(int factor, int nn);
 void test();
+std::tuple<int, float> sift_processing(cv::Mat image, SiftData &siftData, std::vector<float> &enc_vec, bool online, bool isColorImage);
+void encoding(float sift_resg, int sift_result);
 bool query(cv::Mat queryImage, recognizedMarker &marker);
 bool cacheQuery(cv::Mat queryImage, recognizedMarker &marker);
 void addCacheItem(frameBuffer curFrame, resBuffer curRes);
