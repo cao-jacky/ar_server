@@ -162,34 +162,53 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     return numPts;
 }
 
-tuple<int, float> sift_processing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage) {
+tuple<int, char*> sift_processing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage) {
     int siftResult;
     float *siftresg;
     float *siftframe;
     int height, width;
 
     siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+
+    // attempting to copy the data to a new variable
+    char* buffer = (char*)calloc(siftResult, sizeof(float)*128);
+    // memset(buffer, 0, sizeof(float)*128*siftResult);
+    int buffer_count = 0;
+    for ( int i = 0; i < siftResult; i++ ) {
+        charfloat sift_curr_result;
+        sift_curr_result.f = *&siftresg[i];
+        memcpy(&(buffer[buffer_count]), sift_curr_result.b, 4);
+        // if (i == 713) {
+        //     cout << sift_curr_result.f << endl;
+        // }
+        buffer_count += 4;
+    }
+
     free(siftframe);
-    return make_tuple(siftResult, *siftresg);
+    return make_tuple(siftResult, buffer);
 }
 
-void encoding(float sift_resg, int sift_result) {
+void encoding(float* sift_resg, int sift_result) {
     double start, finish;
     double durationsift, durationgmm;
 
-    cout << sift_resg << endl;
-    // cout <<  << endl;
+    float enc[SIZE] = {0};
+
+    // cout << *sift_resg << endl;
+    // cout << sift_result << endl;
 
     start = wallclock();
     float *dest = (float *)malloc(sift_result*82*sizeof(float));
-    gpu_pca_mm(projection, projectionCenter, (float*)&sift_resg, dest, sift_result, DST_DIM);
+    gpu_pca_mm(projection, projectionCenter, sift_resg, dest, sift_result, DST_DIM);
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
     cout << "PCA encoding time: " << durationgmm << endl;
+    
+    // gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, sift_result, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
 
-    free(dest);
-    free((float*)&sift_resg);
+    // free(dest);
+    // free(sift_resg);
 }
 
 void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage, bool cache)
@@ -213,6 +232,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     } else {
         start = wallclock();
         float *dest = (float *)malloc(siftResult*82*sizeof(float));
+        // cout << *siftresg << endl;
         gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
 
         finish = wallclock();

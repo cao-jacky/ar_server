@@ -16,6 +16,7 @@
 #include <queue>
 #include <fstream>
 #include <tuple>
+#include <math.h>       
 
 #include <errno.h>
 
@@ -30,6 +31,7 @@
 #define IMAGE_DETECT 2 // to change here and in the client
 #define BOUNDARY 3
 #define PACKET_SIZE 60000
+#define MAX_PACKET_SIZE 50000
 #define RES_SIZE 512
 //#define TRAIN
 #define UDP
@@ -219,9 +221,21 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     memcpy(tmp, &(buffer[12]), 4);
                     curFrame.bufferSize = *(int*)tmp;
 
+                    cout << "buffer size is " << curFrame.bufferSize << endl;
+
+                    // check if a multipacket request
+                    // memcpy(tmp, &(buffer[16]), 4);
+                    // int num_packets = *(int*)tmp;
+
+                    // cout << num_packets << endl;
+
                     curFrame.buffer = new char[curFrame.bufferSize];
                     memset(curFrame.buffer, 0, curFrame.bufferSize);
-                    memcpy(curFrame.buffer, &(buffer[16]), curFrame.bufferSize);
+                    memcpy(curFrame.buffer, &(buffer[20]), curFrame.bufferSize);
+
+                    memcpy(tmp, &(buffer[20]), 4);
+                    int sift_result = *(int*)tmp;
+                    cout << sift_result << endl;
 
                     frames.push(curFrame);
                 }
@@ -265,19 +279,20 @@ void *ThreadUDPSenderFunction(void *socket) {
             charint message_type;
             message_type.i = DATA_TRANSMISSION;
 
-            char buffer[16+curr_item.buffer_size.i];
+            char buffer[20+curr_item.buffer_size.i];
 
             memset(buffer, 0, sizeof(buffer));
             memcpy(buffer, curr_item.frame_id.b, 4);
             memcpy(&(buffer[4]), message_type.b, 4);
             memcpy(&(buffer[8]), curr_item.previous_service.b, 4);
             memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
-            memcpy(&(buffer[16]), &(curr_item.buffer)[0], curr_item.buffer_size.i+1);
+            memcpy(&(buffer[20]), &(curr_item.buffer)[0], curr_item.buffer_size.i+1);
             sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
 
             cout << "STATUS: Frame " << curr_item.frame_id.i << " sent to ";
             cout << next_service  << " service for processing ";
-            cout << "at " << setprecision(15) << wallclock() << endl << endl;
+            cout << "at " << setprecision(15) << wallclock() << " and payload size is ";
+            cout << curr_item.buffer_size.i << endl;
         } else {
             inter_service_buffer curr_item = inter_service_data.front();
             inter_service_data.pop();
@@ -285,19 +300,66 @@ void *ThreadUDPSenderFunction(void *socket) {
             charint message_type;
             message_type.i = DATA_TRANSMISSION;
 
-            char buffer[16+curr_item.buffer_size.i];
+            int item_data_size = curr_item.buffer_size.i; 
+            char buffer[20+item_data_size];
 
             memset(buffer, 0, sizeof(buffer));
             memcpy(buffer, curr_item.frame_id.b, 4);
             memcpy(&(buffer[4]), message_type.b, 4);
             memcpy(&(buffer[8]), curr_item.previous_service.b, 4);
-            memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
-            memcpy(&(buffer[16]), &(curr_item.buffer)[0], curr_item.buffer_size.i);
-            sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+            // int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+            // cout << ". Sender has status " << udp_status << endl;
+            // if(udp_status == -1) {
+            //     printf("Error sending: %i\n",errno);
+            // }
 
-            cout << "STATUS: Forwarding Frame " << curr_item.frame_id.i << " to ";
+            // keeping this buffer size the same, so next service can check 
+            // whether the item is complete
+            memcpy(&(buffer[12]), curr_item.buffer_size.b, 4); 
+
+            // logic to account for if payload greater than max size of 65kB
+            if (item_data_size > MAX_PACKET_SIZE) {
+                int max_packets = ceil(item_data_size / MAX_PACKET_SIZE);
+                cout << "STATUS: Packet payload will be greater than " << MAX_PACKET_SIZE <<  "B. ";
+                cout << "Therefore the data will be sent in " << max_packets << " parts." << endl;
+
+                // setting index to copy data from for pa
+                int initial_index = 0;
+                for (int i = 0; i < max_packets; i++) {
+                    // setting packet number to be read to account for out-of-order delivery
+                    charint curr_packet;
+                    curr_packet.i = i;
+
+                    memcpy(&(buffer[16]), curr_packet.b, 4); 
+                    memcpy(&(buffer[20]), &(curr_item.buffer)[initial_index], MAX_PACKET_SIZE);
+                    
+                    int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+
+                    // int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+                    cout << "STATUS: Sent packet #" << i << " of " << max_packets;
+                    cout << ". Sender has status " << udp_status << endl;
+                    if(udp_status == -1) {
+                        printf("Error sending: %i\n",errno);
+                    }
+                    initial_index = i * MAX_PACKET_SIZE; 
+                }
+            } else {
+                memcpy(&(buffer[20]), curr_item.buffer, curr_item.buffer_size.i);
+                    
+                int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+                // int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+                // cout << "STATUS: Sent data " << i << " of " << max_packets;
+                // cout << ". Sender has status " << udp_status << endl;
+                if(udp_status == -1) {
+                    printf("Error sending: %i\n",errno);
+                }
+
+            }
+
+            cout << "STATUS: Forwarded Frame " << curr_item.frame_id.i << " to ";
             cout << next_service  << " service for processing ";
-            cout << "at " << setprecision(15) << wallclock() << endl << endl;
+            cout << "at " << setprecision(15) << wallclock() << " and payload size is ";
+            cout << curr_item.buffer_size.i << endl;
         } 
 
         // resBuffer curRes = results.front();
@@ -321,8 +383,6 @@ void *ThreadProcessFunction(void *param) {
     inter_service_buffer item;
     bool markerDetected = false;
     char tmp[4];
-
-    float sift_resg;
 
     while (1) {
         if(frames.empty()) {
@@ -381,55 +441,57 @@ void *ThreadProcessFunction(void *param) {
                 Mat detect_image = imdecode(Mat(1, frmSize, CV_8UC1, frmdata), CV_LOAD_IMAGE_UNCHANGED);
                 // imwrite("sift.jpg", detect_image);
 
-                // markerDetected = query(detect_image, marker);
-
                 auto sift_results = sift_processing(detect_image, tData, test, true, false);
-                // sift_array.push_back((float) get<0>(sift_results));
-                // sift_array.push_back(get<1>(sift_results));
-
-                // sift_array[0] = (float) get<0>(sift_results);
-                // sift_array[1] = get<1>(sift_results);
 
                 charint siftresult;
                 siftresult.i = get<0>(sift_results);
 
-                charfloat siftresg;
-                siftresg.f = get<1>(sift_results);
-
-                // int sift_sizeof = sift_array.size();
+                char* sift_buffer = get<1>(sift_results);
+                int sift_buffer_size = 4 * siftresult.i; // size of char values
 
                 item.frame_id.i = frmID;
                 item.previous_service.i = service_value;
-                item.buffer_size.i = 8;
-                memset(item.buffer, 0, 8);
+                item.buffer_size.i = 4 + sift_buffer_size;
+                item.buffer = new unsigned char[4 + sift_buffer_size];
+                memset(item.buffer, 0, 4 + sift_buffer_size);
                 memcpy(&(item.buffer[0]), siftresult.b, 4);
-                memcpy(&(item.buffer[4]), siftresg.b, 4);
-                // item.buffer = new unsigned char[sift_sizeof];
-                // copy(sift_array.begin(), sift_array.end(), item.buffer);
+                memcpy(&(item.buffer[4]), sift_buffer, sift_buffer_size);
 
                 inter_service_data.push(item);
             } else if (service == "encoding") {
-                // vector<float> sift_results;
-                // copy(sift_array.begin(), sift_array.end(), item.buffer);
+                float* siftres;
 
-                cout << "STATUS: Performing encoding on received SIFT data" << endl;
-
-                // vector<char> sift_results_char = vector<char>(frmdata, frmdata + frmSize);
-                // copy(sift_results_char.begin(), sift_results_char.end(), sift_results);
-
-                // float* sift_floats = reinterpret_cast<float*>(frmdata);
-                // vector<float> sift_results(sift_floats, sift_floats+2);
-                
                 memcpy(tmp, &(frmdata[0]), 4);
                 int sift_result = *(int*)tmp;
 
-                memcpy(tmp, &(frmdata[4]), 4);
-                sift_resg = *(float*)tmp;
+                char* sift_resg = (char*)calloc(sift_result, 4);
+                memcpy(sift_resg, &(frmdata[4]), 4*sift_result);
 
-                encoding(sift_resg, sift_result);
+                float tmp[4];
+                memcpy(tmp, &(sift_resg)[2856], 4);
+                cout << *(float*)tmp << endl;
+
+                siftres = (float *)calloc(sizeof(float), sizeof(float)*128*sift_result);
+
+                // looping through char array to convert data back into floats
+                // at i = 0, index should begin at 4
+                int data_index = 0;
+                for (int i=0; i<sift_result; i++) {
+                    memcpy(tmp, &(sift_resg[data_index]), 4);
+                    float *curr_float = (float*)tmp;
+                    // cout << i << " " << curr_float << endl;
+
+                    memcpy(siftres, curr_float, (128+1)*sizeof(float));
+                    siftres += 128;
+                    data_index += 4;
+
+                }
+
+                encoding(siftres, sift_result);
 
                 // cout << sift_result << endl;
                 // cout << sift_resg << endl;
+                cout << "STATUS: Performed encoding on received SIFT data" << endl;
 
             }
         }
@@ -608,6 +670,7 @@ inline string getCurrentDateTime( string s ){
 
 int main(int argc, char *argv[])
 {
+    int querysizefactor, nn_num;
 
     service = string(argv[1]);
 
@@ -615,6 +678,19 @@ int main(int argc, char *argv[])
     cout << "STATUS: IP of main module provided is " << argv[2] << endl; 
 
     service_value = service_map.at(argv[1]);
+
+    if (service_value == 3) {
+        // performing initial variable loading and encoding
+        loadOnline();
+        loadImages(onlineImages);
+        loadParams();
+
+        // arbitrarily encoding the above variables
+        querysizefactor = 3;
+        nn_num = 5;
+        
+        encodeDatabase(querysizefactor, nn_num); 
+    }
 
     // cout << service_value << endl;
 
@@ -639,8 +715,6 @@ int main(int argc, char *argv[])
     //     port = strtol(argv[3], NULL, 10);
     // }
 
-//     loadOnline();
-//     loadImages(onlineImages);
 //     //trainCacheParams();
 // #ifdef TRAIN
 //     trainParams();
