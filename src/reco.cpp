@@ -113,7 +113,113 @@ double wallclock (void)
 
 int ImproveHomography(SiftData &data, float *homography, int numLoops, float minScore, float maxAmbiguity, float thresh);
 
-int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, int &w, int &h, bool online, bool isColorImage)
+char* export_siftdata(SiftData &data_struct) {
+    int spf = 15; // sift point features number
+
+    int num_points = data_struct.numPts;
+    int max_points = data_struct.maxPts;
+
+    SiftPoint *cpu_data = data_struct.h_data;
+
+    // data appears to be mostly stored on the CPU, so below returns nothing
+    // SiftPoint *gpu_data = data_struct.d_data;
+
+    // allocating memory into char*, taking two array as the last two features
+    // are arrays of size 3 and 128 respectively
+    int sd_size = num_points*(spf-2+3+128);
+    cout << "STATUS: Exporting SIFT data will require a char array of size " << 4*sd_size << " Bytes." << endl;
+    char* sift_data = (char*)calloc(sd_size, sizeof(float));
+    int curr_posn = 0; // current position in char array
+    for (int i=0; i<num_points; i++) {
+        SiftPoint *curr_data = (&cpu_data[i]);
+
+        // going through all parts of the SiftPoint structure and storing into char*
+        charfloat cd_xpos;
+        cd_xpos.f = curr_data->xpos;
+        memcpy(&(sift_data[curr_posn]), cd_xpos.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_ypos;
+        cd_ypos.f = curr_data->ypos;
+        memcpy(&(sift_data[curr_posn]), cd_ypos.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_scale;
+        cd_scale.f = curr_data->scale;
+        memcpy(&(sift_data[curr_posn]), cd_scale.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_sharpness;
+        cd_sharpness.f = curr_data->sharpness;
+        memcpy(&(sift_data[curr_posn]), cd_sharpness.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_edgeness;
+        cd_edgeness.f = curr_data->edgeness;
+        memcpy(&(sift_data[curr_posn]), cd_edgeness.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_orientation;
+        cd_orientation.f = curr_data->orientation;
+        memcpy(&(sift_data[curr_posn]), cd_orientation.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_score;
+        cd_score.f = curr_data->score;
+        memcpy(&(sift_data[curr_posn]), cd_score.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_ambiguity;
+        cd_ambiguity.f = curr_data->ambiguity;
+        memcpy(&(sift_data[curr_posn]), cd_ambiguity.b, 4);
+        curr_posn += 4;
+
+        charint cd_match;
+        cd_match.i = curr_data->match;
+        memcpy(&(sift_data[curr_posn]), cd_match.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_match_xpos;
+        cd_match_xpos.f = curr_data->match_xpos;
+        memcpy(&(sift_data[curr_posn]), cd_match_xpos.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_match_ypos;
+        cd_match_ypos.f = curr_data->match_ypos;
+        memcpy(&(sift_data[curr_posn]), cd_match_ypos.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_match_error;
+        cd_match_error.f = curr_data->match_error;
+        memcpy(&(sift_data[curr_posn]), cd_match_error.b, 4);
+        curr_posn += 4;
+
+        charfloat cd_subsampling;
+        cd_subsampling.f = curr_data->subsampling;
+        memcpy(&(sift_data[curr_posn]), cd_subsampling.b, 4);
+        curr_posn += 4;
+
+        // empty array with 3 elements
+        for (int j=0; j<3; j++) {
+            charfloat cd_empty;
+            cd_empty.f = curr_data->empty[j];
+            memcpy(&(sift_data[curr_posn]), cd_empty.b, 4);
+            curr_posn += 4;
+        }
+
+        // data array with 128 elements
+        for (int k=0; k<128; k++) {
+            charfloat cd_data;
+            cd_data.f = curr_data->data[k];
+            memcpy(&(sift_data[curr_posn]), cd_data.b, 4);
+            curr_posn += 4;
+        }
+        // cout << cd_ypos.i << endl;
+    }
+    return sift_data;
+}
+
+tuple<int, char*> sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, int &w, int &h, bool online, bool isColorImage)
 {
     CudaImage cimg;
     int numPts;
@@ -134,6 +240,8 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     float thresh = 2.0f;
     InitSiftData(siftData, 1000, true, true);
     ExtractSift(siftData, cimg, 5, initBlur, thresh, 0.0f, false);
+
+    char* final_sift_data = export_siftdata(siftData);
 
     numPts = siftData.numPts;
     *siftres = (float *)malloc(sizeof(float)*128*numPts);
@@ -159,18 +267,22 @@ int sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, in
     durationgmm = (double)(finish - start);
     cout << "STATUS: " << numPts << " SIFT points extracted in time: " << durationgmm << endl;
 
-    return numPts;
+    return make_tuple(numPts, final_sift_data);
 }
 
-tuple<int, char*> sift_processing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage) {
+tuple<int, char*, char*> sift_processing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage) {
     int siftResult;
+    char* sift_data;
     float *siftresg;
     float *siftframe;
-    int height, width;
+    int height, width; 
 
-    siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+    auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
-    // attempting to copy the data to a new variable
+    siftResult = get<0>(sift_gpu_results);
+    sift_data = get<1>(sift_gpu_results);
+
+    // copying the data to a new variable
     char* buffer = (char*)calloc(siftResult, sizeof(float)*128);
     // memset(buffer, 0, sizeof(float)*128*siftResult);
     int buffer_count = 0;
@@ -178,24 +290,20 @@ tuple<int, char*> sift_processing(Mat image, SiftData &siftData, vector<float> &
         charfloat sift_curr_result;
         sift_curr_result.f = *&siftresg[i];
         memcpy(&(buffer[buffer_count]), sift_curr_result.b, 4);
-        // if (i == 713) {
-        //     cout << sift_curr_result.f << endl;
-        // }
         buffer_count += 4;
     }
 
     free(siftframe);
-    return make_tuple(siftResult, buffer);
+    return make_tuple(siftResult, buffer, sift_data);
 }
 
-void encoding(float* sift_resg, int sift_result) {
+tuple<int, char*> encoding(float* sift_resg, int sift_result) {
     double start, finish;
     double durationsift, durationgmm;
+    vector<float> enc_vec;
+    char* encoded_vector; 
 
     float enc[SIZE] = {0};
-
-    // cout << *sift_resg << endl;
-    // cout << sift_result << endl;
 
     start = wallclock();
     float *dest = (float *)malloc(sift_result*82*sizeof(float));
@@ -203,12 +311,135 @@ void encoding(float* sift_resg, int sift_result) {
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    cout << "PCA encoding time: " << durationgmm << endl;
+    cout << "STATUS: PCA encoding took a time of time " << durationgmm << endl;
     
-    // gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, sift_result, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
+    start = wallclock();
+    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, sift_result, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
+    
+    ///////////WARNING: add the other NOOP
+    float sum = 0.0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        sum += enc[i] * enc[i];
+    }
+    for (int i = 0; i < SIZE; i++)
+    {
+        //WARNING: didn't use the max operation
+        enc[i] /= sqrt(sum);
+    }
+    sum = 0.0;
+    for (int i = 0; i < SIZE; i++)
+    {
+      sum += enc[i] * enc[i];
+    }
+    for (int i = 0; i < SIZE; i++)
+    {
+        //WARNING: didn't use the max operation
+        enc[i] /= sqrt(sum);
+    }
+  
+    enc_vec = vector<float>(enc, enc+SIZE);
+    finish = wallclock();
 
-    // free(dest);
-    // free(sift_resg);
+    durationgmm = (double)(finish - start);
+    cout << "STATUS: Fisher Vector encoding took a time of " << durationgmm << endl;
+
+    // transforming the vector of floats into a char* 
+    float *enc_vec_floats = &(enc_vec[0]);
+    encoded_vector = (char*)calloc(SIZE, sizeof(float)*128);
+    int buffer_count = 0;
+    for (float x : enc_vec) {
+        charfloat enc_vec_result;
+        enc_vec_result.f = x;
+        memcpy(&(encoded_vector[buffer_count]), enc_vec_result.b, 4);
+        buffer_count += 4;
+    }
+    return make_tuple(SIZE, encoded_vector);
+}
+
+tuple<int, char*> lsh_nn(vector<float> enc_vec) {
+    vector<float> test;
+    vector<int> result;
+    DenseVector<float> t(SIZE);
+
+    char* encoded_results; 
+
+    double start, finish;
+    double duration_lshnn;
+
+    test = enc_vec;
+
+    for(int j = 0; j < SIZE; j++) {
+        t[j] = test[j];
+        }
+    start = wallclock();
+    table->find_k_nearest_neighbors(t, nn_num, &result);
+    finish = wallclock();
+    duration_lshnn = (double)(finish - start);
+    cout << "STATUS: LSH NN search took a time of " << duration_lshnn << endl;
+
+    int enc_res_size = result.size();
+    encoded_results = (char*)calloc(enc_res_size, sizeof(int)*128);
+    int buffer_count = 0;
+    for (float x : result) {
+        charint enc_res;
+        enc_res.i = x;
+        memcpy(&(encoded_results[buffer_count]), enc_res.b, 4);
+        buffer_count += 4;
+    }
+    return make_tuple(enc_res_size, encoded_results);
+}
+
+void matching(vector<int> result) {
+    for(int idx = 0; idx < result.size(); idx++) {
+        cout << "Testing " << result[idx] << endl;
+
+        Mat image = imread(whole_list[result[idx]], CV_LOAD_IMAGE_COLOR);
+        SiftData sData;
+        int w, h;
+        float *a, *b;
+        sift_gpu(image, &a, &b, sData, w, h, true, true);
+    
+	    // cout << "Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
+        // MatchSiftData(sData, tData);
+        // FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
+        // int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
+        // double ratio = 100.0f*numFit/min(sData.numPts, tData.numPts);
+        // cout << "Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
+       
+        // if(ratio > 10) {
+        //     Mat H(3, 3, CV_32FC1, homography);
+
+        //     vector<Point2f> obj_corners(4), scene_corners(4);
+        //     obj_corners[0] = cvPoint(0, 0); 
+        //     obj_corners[1] = cvPoint(image.cols, 0);
+        //     obj_corners[2] = cvPoint(image.cols, image.rows); 
+        //     obj_corners[3] = cvPoint(0, image.rows);
+
+        //     try {
+        //         perspectiveTransform(obj_corners, scene_corners, H);
+        //     } catch (Exception) {
+        //         cout << "cv exception" << endl;
+        //         continue;
+        //     }
+
+        //     marker.markerID.i = result[idx];
+        //     marker.height.i = image.rows;
+        //     marker.width.i = image.cols;
+
+        //     for (int i = 0; i < 4; i++) {
+        //         marker.corners[i].x = scene_corners[i].x + RECO_W_OFFSET;
+        //         marker.corners[i].y = scene_corners[i].y + RECO_H_OFFSET;
+        //     }
+        //     marker.markername = "gpu_recognized_image.";
+
+        //     FreeSiftData(tData);
+        //     cout<<"after matching "<<wallclock()<<endl;
+        //     return true; 
+        // }
+    }
+    // FreeSiftData(tData);
+
 }
 
 void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage, bool cache)
@@ -220,9 +451,13 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     float *siftframe;
     int height, width;
 
+    float homography[9];
+    int numMatches;
+
     float *dest;
 
-    siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+    auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+    siftResult = get<0>(sift_gpu_results);
 
     float enc[SIZE] = {0};
 
@@ -232,7 +467,6 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     } else {
         start = wallclock();
         float *dest = (float *)malloc(siftResult*82*sizeof(float));
-        // cout << *siftresg << endl;
         gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
 
         finish = wallclock();
@@ -350,7 +584,7 @@ bool query(Mat queryImage, recognizedMarker &marker)
         sift_gpu(image, &a, &b, sData, w, h, true, true);
 #endif
     
-	cout << "Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
+	    cout << "Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
         MatchSiftData(sData, tData);
         FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
         int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
@@ -583,7 +817,9 @@ void trainParams() {
         //    if(count == 2)
         SiftData siftData;
         Mat image = imread(whole_list[i], CV_LOAD_IMAGE_COLOR);
-        int pre_size = sift_gpu(image, &sift_res, &sift_frame, siftData, width, height, false, true);
+        
+        auto sift_gpu_results = sift_gpu(image, &sift_res, &sift_frame, siftData, width, height, false, true);
+        int pre_size = get<0>(sift_gpu_results);
 
 #ifdef FEATURE_CHECK
         if(pre_size < ROWS) remove(whole_list[i]);
@@ -767,8 +1003,8 @@ void trainCacheParams() {
         cout << "Train file " << i << ": " << whole_list[i] << endl;
         SiftData siftData;
         Mat image = imread(whole_list[i], CV_LOAD_IMAGE_COLOR);
-        int pre_size = sift_gpu(image, &sift_res, &sift_frame, siftData, width, height, false, true);
-
+        auto sift_gpu_results = sift_gpu(image, &sift_res, &sift_frame, siftData, width, height, false, true);
+        int pre_size = get<0>(sift_gpu_results);
 #ifdef FEATURE_CHECK
         if(pre_size < ROWS) remove(whole_list[i]);
         continue;
