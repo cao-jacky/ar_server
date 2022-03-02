@@ -18,6 +18,8 @@
 #include <tuple>
 #include <math.h>       
 
+#include <numeric>
+
 #include <errno.h>
 #include <cerrno>
 
@@ -56,6 +58,8 @@ int recognizedMarkerID;
 
 vector<char *> onlineImages;
 vector<char *> onlineAnnotations;
+
+SiftData reconstructed_data;
 
 // declaring variables needed for distributed operation
 string service;
@@ -238,6 +242,102 @@ void *ThreadUDPReceiverFunction(void *socket) {
     }
 }
 
+void siftdata_reconstructor(char* sd_char_array) {
+    char tmp[4];
+    // SiftPoint *cpu_data;
+
+    // SiftData reconstructed_data;
+
+    int curr_posn = 0;
+
+    memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+    int sd_num_pts = *(int*)tmp;
+    reconstructed_data.numPts = sd_num_pts;
+    curr_posn += 4;
+
+    memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+    reconstructed_data.maxPts = *(int*)tmp;
+    curr_posn += 4;
+    
+    // reconstructed_data.h_data = cpu_data;
+    SiftPoint *cpu_data = (SiftPoint*)calloc(sd_num_pts, sizeof(SiftPoint));
+
+    for (int i=0; i<sd_num_pts; i++) {
+        SiftPoint *curr_data = (&cpu_data[i]);
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->xpos = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->ypos = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->scale = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->sharpness = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->edgeness = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->orientation = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->score = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->ambiguity = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->match = *(int*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->match_xpos = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->match_ypos = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->match_error = *(float*)tmp;
+        curr_posn += 4;
+
+        memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+        curr_data->subsampling = *(float*)tmp;
+        curr_posn += 4;
+
+        // re-creating the empty array
+        for (int j=0; j<3; j++) {
+            memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+            curr_data->empty[j] = *(float*)tmp;
+            curr_posn += 4;
+        }
+
+        for (int k=0; k<128; k++) {
+            memcpy(tmp, &(sd_char_array[curr_posn]), 4);
+            curr_data->data[k] = *(float*)tmp;
+            curr_posn += 4;            
+        }
+
+    }
+
+    // inserting data into reconstructed data structure
+    reconstructed_data.h_data = cpu_data;
+    cout << "[STATUS] SiftData has been reconstructed from sift service." << endl;
+
+}
+
 void *udp_sift_data_listener(void *socket) {
     cout << "[STATUS] Created thread to listen for SIFT data packets for the matching service" << endl;
     int sock = *((int*)socket);
@@ -246,34 +346,53 @@ void *udp_sift_data_listener(void *socket) {
 
     char* sift_data_buffer;
     int curr_recv_packet_no;
+    int prev_recv_packet_no = 0; 
+    int total_packets_no;
+
+    int packet_tally;
 
     while (1) {
         memset(packet_buffer, 0, sizeof(packet_buffer));
         recvfrom(sock, packet_buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
     
-        // copy client frames into frames buffer if main 
-        // frameBuffer curFrame;    
         memcpy(tmp, packet_buffer, 4);
-        int curr_packet_no =  *(int*)tmp;
+        int frame_no =  *(int*)tmp; 
+
+        memcpy(tmp, &(packet_buffer[4]), 4);
+        int curr_packet_no =  *(int*)tmp; 
 
         if (curr_packet_no == 0) {
-            memcpy(tmp, &(packet_buffer[8]), 4);
+            // if the first packet received
+            memcpy(tmp, &(packet_buffer[12]), 4);
             int complete_data_size =  *(int*)tmp;
 
-            memcpy(tmp, &(packet_buffer[4]), 4);
-            int total_packets_no =  *(int*)tmp;
+            memcpy(tmp, &(packet_buffer[8]), 4);
+            total_packets_no =  *(int*)tmp;
 
-            cout << "[STATUS] Receiving SIFT data in packets with an expected total number of packets of ";
+            cout << "[STATUS] Receiving SIFT data in packets for Frame " << frame_no;
+            cout <<  " with an expected total number of packets of ";
             cout << total_packets_no << " and total bytes of " << complete_data_size << endl;
 
             sift_data_buffer = (char*)calloc(complete_data_size, sizeof(char));
+            packet_tally = 0;
         }
 
+        memcpy(&(sift_data_buffer[curr_packet_no*MAX_PACKET_SIZE]), &(packet_buffer[16]), MAX_PACKET_SIZE);
+        cout << "[STATUS] For Frame " << frame_no << " received packet with packet number of " << curr_packet_no << endl;
+    
+        packet_tally++;
 
-        // curFrame.frmID = *(int*)tmp;        
-        // memcpy(tmp, &(buffer[4]), 4);
-        // curFrame.dataType = *(int*)tmp;
-        
+        if (curr_packet_no+1 == total_packets_no) {
+            // need to add logic to check whether all of the packets were received,
+            // and whether they were in the correct order
+
+            if (packet_tally == total_packets_no) {
+                cout << "[STATUS] All packets received for Frame " << frame_no;
+                cout << " will attempt to reconstruct into a SiftData struct" << endl;
+                siftdata_reconstructor(sift_data_buffer);
+            }
+        }
+
     }
 }
 
@@ -474,16 +593,20 @@ void *ThreadProcessFunction(void *param) {
                     cout << "Therefore the data will be sent in " << max_packets << " parts." << endl;
 
                     // preparing the buffer of the packets to be sent
-                    char buffer[12 + MAX_PACKET_SIZE];
+                    char buffer[16 + MAX_PACKET_SIZE];
                     memset(buffer, 0, sizeof(buffer));
+
+                    charint curr_frame_no;
+                    curr_frame_no.i = frmID;
+                    memcpy(&(buffer[0]), curr_frame_no.b, 4);
 
                     charint total_packets;
                     total_packets.i = max_packets;
-                    memcpy(&(buffer[4]), total_packets.b, 4);
+                    memcpy(&(buffer[8]), total_packets.b, 4);
 
                     charint total_size;
                     total_size.i = sift_data_size;
-                    memcpy(&(buffer[8]), total_size.b, 4);
+                    memcpy(&(buffer[12]), total_size.b, 4);
 
                     // setting index to copy data from 
                     int initial_index = 0;
@@ -492,13 +615,13 @@ void *ThreadProcessFunction(void *param) {
                         charint curr_packet;
                         curr_packet.i = i;
 
-                        memcpy(&(buffer[0]), curr_packet.b, 4); 
-                        memcpy(&(buffer[12]), &(sift_data_buffer)[initial_index], MAX_PACKET_SIZE);
+                        memcpy(&(buffer[4]), curr_packet.b, 4); 
+                        memcpy(&(buffer[16]), &(sift_data_buffer)[initial_index], MAX_PACKET_SIZE);
                         
                         int sock = socket(AF_INET, SOCK_DGRAM, 0);
                         int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
 
-                        cout << "[STATUS] Sent packet #" << i << " of " << max_packets;
+                        cout << "[STATUS] Sent packet #" << i+1 << " of " << max_packets;
                         cout << ". Sender has status " << udp_status << endl;
                         if(udp_status == -1) {
                             cout << "Error sending: " << strerror(errno) << endl;
@@ -550,7 +673,6 @@ void *ThreadProcessFunction(void *param) {
 
                 cout << "[STATUS] Performed encoding on received SIFT data" << endl;
             } else if (service == "lsh") {
-                float* enc_vec_f; // encoded vector floats
                 vector<float> enc_vec;
 
                 memcpy(tmp, &(frmdata[0]), 4);
@@ -558,8 +680,6 @@ void *ThreadProcessFunction(void *param) {
 
                 char* enc_vec_char = (char*)calloc(enc_size, 4);
                 memcpy(enc_vec_char, &(frmdata[4]), 4*enc_size);
-
-                enc_vec_f = (float *)calloc(sizeof(float), sizeof(float)*128*enc_size);
 
                 // looping through char array to convert data back into floats
                 // at i = 0, index should begin at 4
@@ -569,8 +689,6 @@ void *ThreadProcessFunction(void *param) {
                     float *curr_float = (float*)tmp;
                     enc_vec.push_back(*curr_float);
 
-                    memcpy(enc_vec_f, curr_float, (128+1)*sizeof(float));
-                    enc_vec_f += 128;
                     data_index += 4;
                 }
                 auto results_returned = lsh_nn(enc_vec);
@@ -591,51 +709,66 @@ void *ThreadProcessFunction(void *param) {
 
                 inter_service_data.push(item);
             } else if (service == "matching") {
+                vector<int> result;
 
+                memcpy(tmp, &(frmdata[0]), 4);
+                int result_size = *(int*)tmp;
+
+                char* results_char = (char*)calloc(result_size, 4);
+                memcpy(results_char, &(frmdata[4]), 4*result_size);
+
+                int data_index = 0;
+                for (int i=0; i<result_size; i++) {
+                    memcpy(tmp, &(results_char[data_index]), 4);
+                    int *curr_int = (int*)tmp;
+                    result.push_back(*curr_int);
+
+                    data_index += 4;
+                }
+                markerDetected = matching(result, reconstructed_data, marker);
+
+                resBuffer curRes;
+                if(markerDetected) {
+                    charfloat p;
+                    curRes.resID.i = frmID;
+                    curRes.resType.i = BOUNDARY;
+                    curRes.markerNum.i = 1;
+                    curRes.buffer = new char[100 * curRes.markerNum.i];
+
+                    int pointer = 0;
+                    memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
+                    pointer += 4;
+                    memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
+                    pointer += 4;
+                    memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
+                    pointer += 4;
+
+                    for(int j = 0; j < 4; j++) {
+                        p.f = marker.corners[j].x;
+                        memcpy(&(curRes.buffer[pointer]), p.b, 4);
+                        pointer+=4;
+                        p.f = marker.corners[j].y;
+                        memcpy(&(curRes.buffer[pointer]), p.b, 4);        
+                        pointer+=4;            
+                    }
+
+                    memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
+
+                    recognizedMarkerID = marker.markerID.i;
+                    // cout << recognizedMarkerID << endl;
+
+                    // if(curRes.markerNum.i > 0)
+                    //     addCacheItem(curFrame, curRes);
+                    //     cout << "Added item to cache" << endl;
+                }
+                else {
+                    curRes.resID.i = frmID;
+                    curRes.markerNum.i = 0;
+                }
+
+                results.push(curRes);
             }
         }
-
-        
-
-        // resBuffer curRes;
-        // if(markerDetected) {
-        //     charfloat p;
-        //     curRes.resID.i = frmID;
-        //     curRes.resType.i = BOUNDARY;
-        //     curRes.markerNum.i = 1;
-        //     curRes.buffer = new char[100 * curRes.markerNum.i];
-
-        //     int pointer = 0;
-        //     memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
-        //     pointer += 4;
-        //     memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
-        //     pointer += 4;
-        //     memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
-        //     pointer += 4;
-
-        //     for(int j = 0; j < 4; j++) {
-        //         p.f = marker.corners[j].x;
-        //         memcpy(&(curRes.buffer[pointer]), p.b, 4);
-        //         pointer+=4;
-        //         p.f = marker.corners[j].y;
-        //         memcpy(&(curRes.buffer[pointer]), p.b, 4);        
-        //         pointer+=4;            
-        //     }
-
-        //     memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
-
-        //     recognizedMarkerID = marker.markerID.i;
-
-        //     if(curRes.markerNum.i > 0)
-        //         addCacheItem(curFrame, curRes);
-        //         cout << "Added item to cache" << endl;
-        // }
-        // else {
-        //     curRes.resID.i = frmID;
-        //     curRes.markerNum.i = 0;
-        // }
-
-        // results.push(curRes);
     }
 }
 
@@ -802,7 +935,7 @@ int main(int argc, char *argv[])
 
     service_value = service_map.at(argv[1]);
 
-    int pp_req[2]{3,4}; // pre-processing required
+    int pp_req[3]{3,4,5}; // pre-processing required
 
     if (find(begin(pp_req), end(pp_req), service_value) != end(pp_req)) {
         // performing initial variable loading and encoding
@@ -813,8 +946,9 @@ int main(int argc, char *argv[])
         // arbitrarily encoding the above variables
         querysizefactor = 3;
         nn_num = 5;
-        
-        encodeDatabase(querysizefactor, nn_num); 
+        if (service_value != 5) {
+            encodeDatabase(querysizefactor, nn_num); 
+        }
     }
 
     // cout << service_value << endl;

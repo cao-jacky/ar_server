@@ -71,7 +71,7 @@ void test();
 std::tuple<int, char*, char*> sift_processing(cv::Mat image, SiftData &siftData, std::vector<float> &enc_vec, bool online, bool isColorImage);
 std::tuple<int, char*> encoding(float* sift_resg, int sift_result);
 std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
-void matching(std::vector<int> result); 
+bool matching(std::vector<int> result, SiftData &tData, recognizedMarker &marker); 
 bool query(cv::Mat queryImage, recognizedMarker &marker);
 bool cacheQuery(cv::Mat queryImage, recognizedMarker &marker);
 void addCacheItem(frameBuffer curFrame, resBuffer curRes);

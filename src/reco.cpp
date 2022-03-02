@@ -130,6 +130,19 @@ char* export_siftdata(SiftData &data_struct) {
     cout << "STATUS: Exporting SIFT data will require a char array of size " << 4*sd_size << " Bytes." << endl;
     char* sift_data = (char*)calloc(sd_size, sizeof(float));
     int curr_posn = 0; // current position in char array
+
+    // inserting data for num_points and max_points 
+    charint sd_num_points;
+    sd_num_points.i = num_points;
+    cout << num_points << endl;
+    memcpy(&(sift_data[curr_posn]), sd_num_points.b, 4);
+    curr_posn += 4;
+
+    charint sd_max_points;
+    sd_max_points.i = max_points;
+    memcpy(&(sift_data[curr_posn]), sd_max_points.b, 4);
+    curr_posn += 4;
+
     for (int i=0; i<num_points; i++) {
         SiftPoint *curr_data = (&cpu_data[i]);
 
@@ -390,53 +403,56 @@ tuple<int, char*> lsh_nn(vector<float> enc_vec) {
     return make_tuple(enc_res_size, encoded_results);
 }
 
-void matching(vector<int> result) {
+bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker) {
+    float homography[9];
+    int numMatches;
+
     for(int idx = 0; idx < result.size(); idx++) {
-        cout << "Testing " << result[idx] << endl;
+        // cout << "Testing " << result[idx] << endl;
 
         Mat image = imread(whole_list[result[idx]], CV_LOAD_IMAGE_COLOR);
         SiftData sData;
         int w, h;
         float *a, *b;
         sift_gpu(image, &a, &b, sData, w, h, true, true);
-    
-	    // cout << "Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
-        // MatchSiftData(sData, tData);
-        // FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
-        // int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
-        // double ratio = 100.0f*numFit/min(sData.numPts, tData.numPts);
-        // cout << "Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
        
-        // if(ratio > 10) {
-        //     Mat H(3, 3, CV_32FC1, homography);
+	    cout << "[STATUS] Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
+        MatchSiftData(sData, tData);
+        FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
+        int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
+        double ratio = 100.0f*numFit/min(sData.numPts, tData.numPts);
+        cout << "[STATUS] Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
+       
+        if(ratio > 10) {
+            Mat H(3, 3, CV_32FC1, homography);
 
-        //     vector<Point2f> obj_corners(4), scene_corners(4);
-        //     obj_corners[0] = cvPoint(0, 0); 
-        //     obj_corners[1] = cvPoint(image.cols, 0);
-        //     obj_corners[2] = cvPoint(image.cols, image.rows); 
-        //     obj_corners[3] = cvPoint(0, image.rows);
+            vector<Point2f> obj_corners(4), scene_corners(4);
+            obj_corners[0] = cvPoint(0, 0); 
+            obj_corners[1] = cvPoint(image.cols, 0);
+            obj_corners[2] = cvPoint(image.cols, image.rows); 
+            obj_corners[3] = cvPoint(0, image.rows);
 
-        //     try {
-        //         perspectiveTransform(obj_corners, scene_corners, H);
-        //     } catch (Exception) {
-        //         cout << "cv exception" << endl;
-        //         continue;
-        //     }
+            try {
+                perspectiveTransform(obj_corners, scene_corners, H);
+            } catch (Exception) {
+                cout << "cv exception" << endl;
+                continue;
+            }
 
-        //     marker.markerID.i = result[idx];
-        //     marker.height.i = image.rows;
-        //     marker.width.i = image.cols;
+            marker.markerID.i = result[idx];
+            marker.height.i = image.rows;
+            marker.width.i = image.cols;
 
-        //     for (int i = 0; i < 4; i++) {
-        //         marker.corners[i].x = scene_corners[i].x + RECO_W_OFFSET;
-        //         marker.corners[i].y = scene_corners[i].y + RECO_H_OFFSET;
-        //     }
-        //     marker.markername = "gpu_recognized_image.";
+            for (int i = 0; i < 4; i++) {
+                marker.corners[i].x = scene_corners[i].x + RECO_W_OFFSET;
+                marker.corners[i].y = scene_corners[i].y + RECO_H_OFFSET;
+            }
+            marker.markername = "gpu_recognized_image.";
 
-        //     FreeSiftData(tData);
-        //     cout<<"after matching "<<wallclock()<<endl;
-        //     return true; 
-        // }
+            // FreeSiftData(tData);
+            // cout<<"after matching "<<wallclock()<<endl;
+            return true; 
+        }
     }
     // FreeSiftData(tData);
 
