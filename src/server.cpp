@@ -79,7 +79,6 @@ std::map<string, int> service_map = {
     {"encoding", 3},
     {"lsh", 4},
     {"matching", 5}
-    // {"main_return", 6}
 };
 
 std::map<int, string> service_map_reverse = {
@@ -88,7 +87,6 @@ std::map<int, string> service_map_reverse = {
     {3, "encoding"},
     {4, "lsh"},
     {5, "matching"}
-    // {6, "main_return"}
 };
 
 std::map<string, string> registered_services;
@@ -142,15 +140,9 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
                 cout << "[STATUS] Sent an echo reply" << endl;
 
-                // once an initial echo message is received, send the IP and 
-                // port details to the matching service that can then return results 
-                // to client once the whole pipeline is complete
-
+                // forward client details to matching service
                 inet_pton(AF_INET, matching_ip, &(matching_addr.sin_addr));
                 matching_addr.sin_port = htons(matching_port);
-
-                // cout << device_ip << sizeof(device_ip) << endl;
-                // cout << device_port << sizeof(device_port) << endl;
 
                 int client_ip_strlen = strlen(device_ip);
 
@@ -178,8 +170,6 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 continue;
             } else if (curFrame.dataType == MESSAGE_REGISTER) {
                 string service_to_register = service_map_reverse.at(curFrame.frmID);
-                // string service_to_register = distance(service_map.begin(),service_map.find(curFrame.frmID));
-
                 registered_services.insert({service_to_register, device_ip});
 
                 if (service_to_register == "sift") {
@@ -192,8 +182,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 cout << " located on IP " << device_ip << endl; 
                 cout << "[STATUS] Service " << service_to_register << " is now registered" << endl;
 
-                // check whether the service which follows the newly regisetered 
-                // is registered
+                // check whether the service which follows the newly regisetered is actually registered
                 string next_service;
                 if (service_to_register != "matching") {
                     next_service = service_map_reverse.at(curFrame.frmID+1);
@@ -231,7 +220,6 @@ void *ThreadUDPReceiverFunction(void *socket) {
             } else if (curFrame.dataType == IMAGE_DETECT){
                 memcpy(tmp, &(buffer[8]), 4);
                 curFrame.bufferSize = *(int*)tmp;
-                // cout<<"================================================"<<endl;
                 cout << "[STATUS] Frame " << curFrame.frmID << " received, filesize: ";
                 cout << curFrame.bufferSize << " at "<< setprecision(15)<<wallclock();
                 cout << " from device with IP " << device_ip << endl;
@@ -240,7 +228,6 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 memcpy(curFrame.buffer, &(buffer[12]), curFrame.bufferSize);
                 
                 frames.push(curFrame);
-
             }
         } else {
             if (curFrame.dataType == MESSAGE_NEXT_SERVICE_IP) {
@@ -289,7 +276,6 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                 char client_ip_tmp[client_ip_len];
                 memcpy(client_ip_tmp, &(buffer[16]), client_ip_len);
-                cout << client_ip_tmp << endl;
 
                 // creating client object to return data to
                 inet_pton(AF_INET, client_ip_tmp, &(client_addr.sin_addr));
@@ -510,8 +496,8 @@ void *ThreadUDPSenderFunction(void *socket) {
             if(curRes.buffer_size.i != 0)
                 memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.buffer_size.i);
             sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
-            cout<<"Frame "<<curRes.frame_id.i<<" res sent, "<<"marker#: "<<curRes.buffer_size.i;
-            cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
+            cout << "[STATUS] Frame "<<curRes.frame_id.i<<" res sent, marker#: "<<curRes.buffer_size.i;
+            cout << " at " << setprecision(15) << wallclock() << endl<<endl;
         } else {
             inter_service_buffer curr_item = inter_service_data.front();
             inter_service_data.pop();
@@ -563,7 +549,6 @@ void *ThreadUDPSenderFunction(void *socket) {
                 }
 
             }
-
             cout << "[STATUS] Forwarded Frame " << curr_item.frame_id.i << " to ";
             cout << next_service  << " service for processing ";
             cout << "at " << setprecision(15) << wallclock() << " and payload size is ";
@@ -624,7 +609,6 @@ void *ThreadProcessFunction(void *param) {
         } else if (frmDataType == DATA_TRANSMISSION) {
             if (service == "sift") {
                 SiftData tData;
-                // vector<float> sift_array(2);
                 float sift_array[2];
                 int sift_result;
                 float sift_resg;
@@ -632,7 +616,6 @@ void *ThreadProcessFunction(void *param) {
                 vector<float> test;
 
                 Mat detect_image = imdecode(Mat(1, frmSize, CV_8UC1, frmdata), CV_LOAD_IMAGE_UNCHANGED);
-                // imwrite("sift.jpg", detect_image);
 
                 auto sift_results = sift_processing(detect_image, tData, test, true, false);
 

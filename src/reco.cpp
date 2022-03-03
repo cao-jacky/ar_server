@@ -127,14 +127,13 @@ char* export_siftdata(SiftData &data_struct) {
     // allocating memory into char*, taking two array as the last two features
     // are arrays of size 3 and 128 respectively
     int sd_size = num_points*(spf-2+3+128);
-    cout << "STATUS: Exporting SIFT data will require a char array of size " << 4*sd_size << " Bytes." << endl;
+    cout << "[STATUS] Exporting SIFT data will require a char array of size " << 4*sd_size << " Bytes." << endl;
     char* sift_data = (char*)calloc(sd_size, sizeof(float));
     int curr_posn = 0; // current position in char array
 
     // inserting data for num_points and max_points 
     charint sd_num_points;
     sd_num_points.i = num_points;
-    cout << num_points << endl;
     memcpy(&(sift_data[curr_posn]), sd_num_points.b, 4);
     curr_posn += 4;
 
@@ -227,7 +226,6 @@ char* export_siftdata(SiftData &data_struct) {
             memcpy(&(sift_data[curr_posn]), cd_data.b, 4);
             curr_posn += 4;
         }
-        // cout << cd_ypos.i << endl;
     }
     return sift_data;
 }
@@ -259,8 +257,6 @@ tuple<int, char*> sift_gpu(Mat img, float **siftres, float **siftframe, SiftData
     numPts = siftData.numPts;
     *siftres = (float *)malloc(sizeof(float)*128*numPts);
     *siftframe = (float *)malloc(sizeof(float)*2*numPts);
-    //*siftres = (float *)calloc(sizeof(float), sizeof(float)*128*numPts);
-    //*siftframe = (float *)calloc(sizeof(char), sizeof(float)*2*numPts);
     float* curRes = *siftres;
     float* curframe = *siftframe;
     SiftPoint* p = siftData.h_data;
@@ -278,7 +274,7 @@ tuple<int, char*> sift_gpu(Mat img, float **siftres, float **siftframe, SiftData
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    cout << "STATUS: " << numPts << " SIFT points extracted in time: " << durationgmm << endl;
+    cout << "[STATUS] " << numPts << " SIFT points extracted in time: " << durationgmm << endl;
 
     return make_tuple(numPts, final_sift_data);
 }
@@ -297,7 +293,6 @@ tuple<int, char*, char*> sift_processing(Mat image, SiftData &siftData, vector<f
 
     // copying the data to a new variable
     char* buffer = (char*)calloc(siftResult, sizeof(float)*128);
-    // memset(buffer, 0, sizeof(float)*128*siftResult);
     int buffer_count = 0;
     for ( int i = 0; i < siftResult; i++ ) {
         charfloat sift_curr_result;
@@ -324,7 +319,7 @@ tuple<int, char*> encoding(float* sift_resg, int sift_result) {
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    cout << "STATUS: PCA encoding took a time of time " << durationgmm << endl;
+    cout << "[STATUS] PCA encoding took a time of time " << durationgmm << endl;
     
     start = wallclock();
     gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, sift_result, (82/2.0)*log(2.0*VL_PI), enc, NULL, dest);
@@ -355,7 +350,7 @@ tuple<int, char*> encoding(float* sift_resg, int sift_result) {
     finish = wallclock();
 
     durationgmm = (double)(finish - start);
-    cout << "STATUS: Fisher Vector encoding took a time of " << durationgmm << endl;
+    cout << "[STATUS] Fisher Vector encoding took a time of " << durationgmm << endl;
 
     // transforming the vector of floats into a char* 
     float *enc_vec_floats = &(enc_vec[0]);
@@ -389,7 +384,7 @@ tuple<int, char*> lsh_nn(vector<float> enc_vec) {
     table->find_k_nearest_neighbors(t, nn_num, &result);
     finish = wallclock();
     duration_lshnn = (double)(finish - start);
-    cout << "STATUS: LSH NN search took a time of " << duration_lshnn << endl;
+    cout << "[STATUS] LSH NN search took a time of " << duration_lshnn << endl;
 
     int enc_res_size = result.size();
     encoded_results = (char*)calloc(enc_res_size, sizeof(int)*128);
@@ -454,7 +449,7 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker) {
             return true; 
         }
     }
-    // FreeSiftData(tData);
+    FreeSiftData(tData);
 
 }
 
