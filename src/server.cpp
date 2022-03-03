@@ -29,6 +29,7 @@
 #define MESSAGE_REGISTER 1
 #define MESSAGE_NEXT_SERVICE_IP 2
 #define DATA_TRANSMISSION 3
+#define CLIENT_REGISTRATION 4
 
 #define FEATURES 1
 #define IMAGE_DETECT 2 // to change here and in the client
@@ -48,6 +49,8 @@ struct sockaddr_in main_addr;
 struct sockaddr_in next_service_addr;
 struct sockaddr_in sift_rec_addr;
 struct sockaddr_in sift_rec_remote_addr;
+struct sockaddr_in matching_addr;
+struct sockaddr_in client_addr;
 
 socklen_t addrlen = sizeof(remoteAddr);
 bool isClientAlive = false;
@@ -65,6 +68,9 @@ SiftData reconstructed_data;
 string service;
 int service_value;
 queue<inter_service_buffer> inter_service_data;
+
+char* matching_ip = "192.168.137.234";
+int matching_port = 50005;
 
 // hard coding the maps for each service, nothing clever needed about this
 std::map<string, int> service_map = {
@@ -117,6 +123,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
         memset(buffer, 0, sizeof(buffer));
         recvfrom(sock, buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
         char *device_ip = inet_ntoa(remoteAddr.sin_addr);
+        int device_port = htons(remoteAddr.sin_port);
 
         // copy client frames into frames buffer if main 
         frameBuffer curFrame;    
@@ -134,6 +141,40 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 memcpy(echo, echoID.b, 4);
                 sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
                 cout << "[STATUS] Sent an echo reply" << endl;
+
+                // once an initial echo message is received, send the IP and 
+                // port details to the matching service that can then return results 
+                // to client once the whole pipeline is complete
+
+                inet_pton(AF_INET, matching_ip, &(matching_addr.sin_addr));
+                matching_addr.sin_port = htons(matching_port);
+
+                // cout << device_ip << sizeof(device_ip) << endl;
+                // cout << device_port << sizeof(device_port) << endl;
+
+                int client_ip_strlen = strlen(device_ip);
+
+                char client_registration[16+client_ip_strlen];
+
+                charint client_reg_frame_id;
+                client_reg_frame_id.i = 0; // no frame 
+                memcpy(&(client_registration[0]), client_reg_frame_id.b, 4);
+
+                charint client_reg_id;
+                client_reg_id.i = CLIENT_REGISTRATION;
+                memcpy(&(client_registration[4]), client_reg_id.b, 4);
+
+                charint matching_port_char;
+                matching_port_char.i = device_port;
+                memcpy(&(client_registration[8]), matching_port_char.b, 4);
+
+                charint device_ip_len;
+                device_ip_len.i = client_ip_strlen;
+                memcpy(&(client_registration[12]), device_ip_len.b, 4);
+
+                memcpy(&(client_registration[16]), device_ip, client_ip_strlen);
+
+                sendto(sock, client_registration, sizeof(client_registration), 0, (struct sockaddr *)&matching_addr, sizeof(matching_addr));
                 continue;
             } else if (curFrame.dataType == MESSAGE_REGISTER) {
                 string service_to_register = service_map_reverse.at(curFrame.frmID);
@@ -237,6 +278,22 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     frames.push(curFrame);
                 }
                 cout << "[STATUS] Received data from previous service" << endl;
+            } else if (curFrame.dataType == CLIENT_REGISTRATION) {
+                cout << "[STATUS] Received client registration details from main" << endl;
+
+                memcpy(tmp, &(buffer[8]), 4);
+                int client_port = *(int*)tmp;
+
+                memcpy(tmp, &(buffer[12]), 4);
+                int client_ip_len = *(int*)tmp;
+
+                char client_ip_tmp[client_ip_len];
+                memcpy(client_ip_tmp, &(buffer[16]), client_ip_len);
+                cout << client_ip_tmp << endl;
+
+                // creating client object to return data to
+                inet_pton(AF_INET, client_ip_tmp, &(client_addr.sin_addr));
+                client_addr.sin_port = htons(client_port);
             }
         } 
     }
@@ -398,7 +455,7 @@ void *udp_sift_data_listener(void *socket) {
 
 void *ThreadUDPSenderFunction(void *socket) {
     cout << "[STATUS] UDP sender thread created" << endl;
-    // char buffer[RES_SIZE];
+    char buffer[RES_SIZE];
     int sock = *((int*)socket);
     string next_service;
 
@@ -410,7 +467,7 @@ void *ThreadUDPSenderFunction(void *socket) {
 
     if (service == "sift") {
         // assign the address for the matching service and create the remote connection
-        inet_pton(AF_INET, "192.168.137.234", &(sift_rec_remote_addr.sin_addr));
+        inet_pton(AF_INET, matching_ip, &(sift_rec_remote_addr.sin_addr));
         sift_rec_remote_addr.sin_port = htons(51005);
     }
 
@@ -441,6 +498,20 @@ void *ThreadUDPSenderFunction(void *socket) {
             cout << next_service  << " service for processing ";
             cout << "at " << setprecision(15) << wallclock() << " and payload size is ";
             cout << curr_item.buffer_size.i << endl;
+        } else if (service == "matching") {
+            // client_addr
+            inter_service_buffer curRes = inter_service_data.front();
+            inter_service_data.pop();
+
+            memset(buffer, 0, sizeof(buffer));
+            memcpy(buffer, curRes.frame_id.b, 4);
+            memcpy(&(buffer[4]), curRes.previous_service.b, 4);
+            memcpy(&(buffer[8]), curRes.buffer_size.b, 4);
+            if(curRes.buffer_size.i != 0)
+                memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.buffer_size.i);
+            sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
+            cout<<"Frame "<<curRes.frame_id.i<<" res sent, "<<"marker#: "<<curRes.buffer_size.i;
+            cout<<" at "<<setprecision(15)<<wallclock()<<endl<<endl;
         } else {
             inter_service_buffer curr_item = inter_service_data.front();
             inter_service_data.pop();
@@ -727,13 +798,13 @@ void *ThreadProcessFunction(void *param) {
                 }
                 markerDetected = matching(result, reconstructed_data, marker);
 
-                resBuffer curRes;
+                inter_service_buffer curRes;
                 if(markerDetected) {
                     charfloat p;
-                    curRes.resID.i = frmID;
-                    curRes.resType.i = BOUNDARY;
-                    curRes.markerNum.i = 1;
-                    curRes.buffer = new char[100 * curRes.markerNum.i];
+                    curRes.frame_id.i = frmID;
+                    curRes.previous_service.i = BOUNDARY;
+                    curRes.buffer_size.i = 1;
+                    curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
 
                     int pointer = 0;
                     memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
@@ -762,11 +833,11 @@ void *ThreadProcessFunction(void *param) {
                     //     cout << "Added item to cache" << endl;
                 }
                 else {
-                    curRes.resID.i = frmID;
-                    curRes.markerNum.i = 0;
+                    curRes.frame_id.i = frmID;
+                    curRes.buffer_size.i = 0;
                 }
 
-                results.push(curRes);
+                inter_service_data.push(curRes);
             }
         }
     }
