@@ -277,7 +277,8 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                 inet_pton(AF_INET, next_ip, &(next_service_addr.sin_addr)); 
                 next_service_addr.sin_port = htons(MAIN_PORT+service_value+1);
-                cout << "[STATUS: " << service <<  "] Received IP for next service, assigning ";
+                cout << "[STATUS: " << service <<  "] Received IP for next service: " << next_ip; 
+                cout << ", then assigning address object that should have the same IP: ";
                 cout << inet_ntoa(next_service_addr.sin_addr) << endl;
             } else if (curFrame.dataType == DATA_TRANSMISSION) {
                 // performing logic to check that received data is supposed to be sent on
