@@ -3,3 +3,5 @@
 *.tar
 /logs_server/*.txt
 /logs_devices/*.txt
+
+ar_server.tar.gz

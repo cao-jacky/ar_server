@@ -10,6 +10,12 @@ Command for running the Docker image is
 $ sudo docker run -ti --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=0 -p 51717:51717/udp 606eb54233f0
 ```
 
+sudo docker run --entrypoint=/bin/bash --rm --gpus all -p 192.168.137.234:50001:50001/udp ar_server:20220307_1529 -c '/home/ar_server/server main 192.168.137.234'
+
+sudo docker run --entrypoint=/bin/bash --rm --gpus all -p 192.168.137.234:50001:50001/udp --net=host -it ar_server:20220307_1529 -c '/home/ar_server/server main 192.168.137.234'
+
+sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=host -it ar_server:20220307_1529 -c '/home/ar_server/server main 192.168.137.234'
+
 
 ### Dependencies
 

@@ -1,8 +1,4 @@
-FROM ubuntu:18.04
+FROM ghcr.io/cao-jacky/ar_server:20220307_1529
 
 MAINTAINER Jacky Cao <jacky.cao@oulu.fi>
-
-COPY . .
-
-RUN ./gpu_fv l 5 51717
 

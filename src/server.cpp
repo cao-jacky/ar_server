@@ -30,6 +30,7 @@
 #define MESSAGE_NEXT_SERVICE_IP 2
 #define DATA_TRANSMISSION 3
 #define CLIENT_REGISTRATION 4
+#define SIFT_TO_MATCHING 5
 
 #define FEATURES 1
 #define IMAGE_DETECT 2 // to change here and in the client
@@ -69,7 +70,7 @@ string service;
 int service_value;
 queue<inter_service_buffer> inter_service_data;
 
-char* matching_ip = "192.168.137.234";
+char* matching_ip = "0.0.0.0";
 int matching_port = 50005;
 
 // hard coding the maps for each service, nothing clever needed about this
@@ -102,12 +103,12 @@ void registerService(int sock) {
     memcpy(registering, register_id.b, 4);
     memcpy(&(registering[4]), message_type.b, 4);
     sendto(sock, registering, sizeof(registering), 0, (struct sockaddr *)&main_addr, sizeof(main_addr));
-    cout << "[STATUS] Service " << service << " is attempting to register with main module ";
+    cout << "[STATUS: " << service <<  "] Service " << service << " is attempting to register with main module ";
     cout << MAIN_PORT+int(service_map.at("main")) << endl;
 }
 
 void *ThreadUDPReceiverFunction(void *socket) {
-    cout << "[STATUS] UDP receiver thread created" << endl;
+    cout << "[STATUS: " << service <<  "] UDP receiver thread created" << endl;
     char tmp[4];
     char buffer[PACKET_SIZE];
     int sock = *((int*)socket);
@@ -132,13 +133,13 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
         if (service == "main") {
             if(curFrame.dataType == MESSAGE_ECHO) {
-                cout << "[STATUS] Received an echo message" << endl;
+                cout << "[STATUS: " << service <<  "] Received an echo message" << endl;
                 charint echoID;
                 echoID.i = curFrame.frmID;
                 char echo[4];
                 memcpy(echo, echoID.b, 4);
                 sendto(sock, echo, sizeof(echo), 0, (struct sockaddr *)&remoteAddr, addrlen);
-                cout << "[STATUS] Sent an echo reply" << endl;
+                cout << "[STATUS: " << service <<  "] Sent an echo reply" << endl;
 
                 // forward client details to matching service
                 inet_pton(AF_INET, matching_ip, &(matching_addr.sin_addr));
@@ -166,7 +167,12 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                 memcpy(&(client_registration[16]), device_ip, client_ip_strlen);
 
-                sendto(sock, client_registration, sizeof(client_registration), 0, (struct sockaddr *)&matching_addr, sizeof(matching_addr));
+                int main_to_matching = sendto(sock, client_registration, sizeof(client_registration), 0, (struct sockaddr *)&matching_addr, sizeof(matching_addr));
+                cout << "[STATUS: " << service <<  "] Sending client details to matching service " << endl;
+                if(main_to_matching == -1) {
+                    cout << "Error sending: " << strerror(errno) << endl;
+                }
+
                 continue;
             } else if (curFrame.dataType == MESSAGE_REGISTER) {
                 string service_to_register = service_map_reverse.at(curFrame.frmID);
@@ -178,9 +184,13 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     next_service_addr.sin_port = htons(MAIN_PORT+service_map.at(service_to_register));
                 }
 
-                cout << "[STATUS] Received a register request from service " << service_to_register;
+                if (service_to_register == "matching") {
+                    matching_ip = &string(registered_services.at("matching"))[0];           
+                }
+
+                cout << "[STATUS: " << service <<  "] Received a register request from service " << service_to_register;
                 cout << " located on IP " << device_ip << endl; 
-                cout << "[STATUS] Service " << service_to_register << " is now registered" << endl;
+                cout << "[STATUS: " << service <<  "] Service " << service_to_register << " is now registered" << endl;
 
                 // check whether the service which follows the newly regisetered is actually registered
                 string next_service;
@@ -190,7 +200,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                 if (registered_services.find(next_service) == registered_services.end()) {
                     // not registered, telling the newly registered to wait
-                    cout << "[STATUS] Next service " << next_service;
+                    cout << "[STATUS: " << service <<  "] Next service " << next_service;
                     cout << " is not registered, telling " << service_to_register;
                     cout << " to wait"  << endl;
                 } else {
@@ -213,14 +223,39 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     memcpy(&(nsi_array[12]), next_ser_ip, size_next_ip.i);
                     sendto(sock, nsi_array, sizeof(nsi_array), 0, (struct sockaddr *)&remoteAddr, addrlen);
 
-                    cout << "[STATUS] Service " << next_service;
+                    cout << "[STATUS: " << service <<  "] Service " << next_service;
                     cout << " is registered, providing " << service_to_register;
                     cout << " with the IP " << next_ser_ip << endl;   
+
+                    // if the service to register is sift, assumption is that matching is already registered
+                    // therefore provide sift with matching's details
+                    if (service_to_register == "sift") {
+                        // selecting the IPs from the array on main
+                        charint register_id;
+                        register_id.i = 0; // information not needed, will keep value at zero
+
+                        charint message_type;
+                        message_type.i = SIFT_TO_MATCHING;
+
+                        charint size_matching_ip;
+                        size_matching_ip.i = strlen(matching_ip);
+
+                        char mi_array[12+strlen(matching_ip)];
+                        memcpy(mi_array, register_id.b, 4);
+                        memcpy(&(mi_array[4]), message_type.b, 4);
+                        memcpy(&(mi_array[8]), size_matching_ip.b, 4);
+                        memcpy(&(mi_array[12]), matching_ip, size_matching_ip.i);
+                        int sift_ip_status = sendto(sock, mi_array, sizeof(mi_array), 0, (struct sockaddr *)&remoteAddr, sizeof(remoteAddr));
+                        cout << "[STATUS: " << service <<  "] Sent registered IP of matching to sift" << endl;  
+                        if(sift_ip_status == -1) {
+                            cout << "Error sending: " << strerror(errno) << endl;
+                        }
+                    }
                 }
             } else if (curFrame.dataType == IMAGE_DETECT){
                 memcpy(tmp, &(buffer[8]), 4);
                 curFrame.bufferSize = *(int*)tmp;
-                cout << "[STATUS] Frame " << curFrame.frmID << " received, filesize: ";
+                cout << "[STATUS: " << service <<  "] Frame " << curFrame.frmID << " received, filesize: ";
                 cout << curFrame.bufferSize << " at "<< setprecision(15)<<wallclock();
                 cout << " from device with IP " << device_ip << endl;
                 curFrame.buffer = new char[curFrame.bufferSize];
@@ -242,7 +277,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                 inet_pton(AF_INET, next_ip, &(next_service_addr.sin_addr)); 
                 next_service_addr.sin_port = htons(MAIN_PORT+service_value+1);
-                cout << "[STATUS] Received IP for next service, assigning ";
+                cout << "[STATUS: " << service <<  "] Received IP for next service, assigning ";
                 cout << inet_ntoa(next_service_addr.sin_addr) << endl;
             } else if (curFrame.dataType == DATA_TRANSMISSION) {
                 // performing logic to check that received data is supposed to be sent on
@@ -264,9 +299,9 @@ void *ThreadUDPReceiverFunction(void *socket) {
 
                     frames.push(curFrame);
                 }
-                cout << "[STATUS] Received data from previous service" << endl;
+                cout << "[STATUS: " << service <<  "] Received data from previous service" << endl;
             } else if (curFrame.dataType == CLIENT_REGISTRATION) {
-                cout << "[STATUS] Received client registration details from main" << endl;
+                cout << "[STATUS: " << service <<  "] Received client registration details from main" << endl;
 
                 memcpy(tmp, &(buffer[8]), 4);
                 int client_port = *(int*)tmp;
@@ -280,6 +315,17 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 // creating client object to return data to
                 inet_pton(AF_INET, client_ip_tmp, &(client_addr.sin_addr));
                 client_addr.sin_port = htons(client_port);
+            } else if (curFrame.dataType == SIFT_TO_MATCHING) {
+                memcpy(tmp, &(buffer[8]), 4);
+                int matching_ip_len = *(int*)tmp;
+
+                cout << matching_ip_len << endl;
+
+                char matching_ip_tmp[matching_ip_len];
+                memcpy(matching_ip_tmp, &(buffer[12]), matching_ip_len);
+                matching_ip = matching_ip_tmp;
+
+                cout << "[STATUS: " << service <<  "] Received matching details from main, matching has an IP of " << matching_ip << endl;
             }
         } 
     }
@@ -377,12 +423,12 @@ void siftdata_reconstructor(char* sd_char_array) {
 
     // inserting data into reconstructed data structure
     reconstructed_data.h_data = cpu_data;
-    cout << "[STATUS] SiftData has been reconstructed from sift service." << endl;
+    cout << "[STATUS: " << service <<  "] SiftData has been reconstructed from sift service." << endl;
 
 }
 
 void *udp_sift_data_listener(void *socket) {
-    cout << "[STATUS] Created thread to listen for SIFT data packets for the matching service" << endl;
+    cout << "[STATUS: " << service <<  "] Created thread to listen for SIFT data packets for the matching service" << endl;
     int sock = *((int*)socket);
     char packet_buffer[PACKET_SIZE];
     char tmp[4];
@@ -412,7 +458,7 @@ void *udp_sift_data_listener(void *socket) {
             memcpy(tmp, &(packet_buffer[8]), 4);
             total_packets_no =  *(int*)tmp;
 
-            cout << "[STATUS] Receiving SIFT data in packets for Frame " << frame_no;
+            cout << "[STATUS: " << service <<  "] Receiving SIFT data in packets for Frame " << frame_no;
             cout <<  " with an expected total number of packets of ";
             cout << total_packets_no << " and total bytes of " << complete_data_size << endl;
 
@@ -421,7 +467,7 @@ void *udp_sift_data_listener(void *socket) {
         }
 
         memcpy(&(sift_data_buffer[curr_packet_no*MAX_PACKET_SIZE]), &(packet_buffer[16]), MAX_PACKET_SIZE);
-        cout << "[STATUS] For Frame " << frame_no << " received packet with packet number of " << curr_packet_no << endl;
+        cout << "[STATUS: " << service <<  "] For Frame " << frame_no << " received packet with packet number of " << curr_packet_no << endl;
     
         packet_tally++;
 
@@ -430,7 +476,7 @@ void *udp_sift_data_listener(void *socket) {
             // and whether they were in the correct order
 
             if (packet_tally == total_packets_no) {
-                cout << "[STATUS] All packets received for Frame " << frame_no;
+                cout << "[STATUS: " << service <<  "] All packets received for Frame " << frame_no;
                 cout << " will attempt to reconstruct into a SiftData struct" << endl;
                 siftdata_reconstructor(sift_data_buffer);
             }
@@ -440,7 +486,7 @@ void *udp_sift_data_listener(void *socket) {
 }
 
 void *ThreadUDPSenderFunction(void *socket) {
-    cout << "[STATUS] UDP sender thread created" << endl;
+    cout << "[STATUS: " << service <<  "] UDP sender thread created" << endl;
     char buffer[RES_SIZE];
     int sock = *((int*)socket);
     string next_service;
@@ -480,7 +526,7 @@ void *ThreadUDPSenderFunction(void *socket) {
             memcpy(&(buffer[20]), &(curr_item.buffer)[0], curr_item.buffer_size.i+1);
             sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
 
-            cout << "[STATUS] Frame " << curr_item.frame_id.i << " sent to ";
+            cout << "[STATUS: " << service <<  "] Frame " << curr_item.frame_id.i << " sent to ";
             cout << next_service  << " service for processing ";
             cout << "at " << setprecision(15) << wallclock() << " and payload size is ";
             cout << curr_item.buffer_size.i << endl;
@@ -496,7 +542,7 @@ void *ThreadUDPSenderFunction(void *socket) {
             if(curRes.buffer_size.i != 0)
                 memcpy(&(buffer[12]), curRes.buffer, 100 * curRes.buffer_size.i);
             sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
-            cout << "[STATUS] Frame "<<curRes.frame_id.i<<" res sent, marker#: "<<curRes.buffer_size.i;
+            cout << "[STATUS: " << service <<  "] Frame "<<curRes.frame_id.i<<" res sent, marker#: "<<curRes.buffer_size.i;
             cout << " at " << setprecision(15) << wallclock() << endl<<endl;
         } else {
             inter_service_buffer curr_item = inter_service_data.front();
@@ -517,7 +563,7 @@ void *ThreadUDPSenderFunction(void *socket) {
             // unused logic to account for if payload greater than max size of 65kB
             if (item_data_size > MAX_PACKET_SIZE) {
                 int max_packets = ceil(item_data_size / MAX_PACKET_SIZE);
-                cout << "[STATUS] Packet payload will be greater than " << MAX_PACKET_SIZE <<  "B. ";
+                cout << "[STATUS: " << service <<  "] Packet payload will be greater than " << MAX_PACKET_SIZE <<  "B. ";
                 cout << "Therefore the data will be sent in " << max_packets << " parts." << endl;
 
                 // setting index to copy data from for pa
@@ -533,7 +579,7 @@ void *ThreadUDPSenderFunction(void *socket) {
                     int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
 
                     // int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
-                    cout << "[STATUS] Sent packet #" << i << " of " << max_packets;
+                    cout << "[STATUS: " << service <<  "] Sent packet #" << i << " of " << max_packets;
                     cout << ". Sender has status " << udp_status << endl;
                     if(udp_status == -1) {
                         printf("Error sending: %i\n",errno);
@@ -547,9 +593,8 @@ void *ThreadUDPSenderFunction(void *socket) {
                 if(udp_status == -1) {
                     printf("Error sending: %i\n",errno);
                 }
-
             }
-            cout << "[STATUS] Forwarded Frame " << curr_item.frame_id.i << " to ";
+            cout << "[STATUS: " << service <<  "] Forwarded Frame " << curr_item.frame_id.i << " to ";
             cout << next_service  << " service for processing ";
             cout << "at " << setprecision(15) << wallclock() << " and payload size is ";
             cout << curr_item.buffer_size.i << endl;
@@ -558,7 +603,7 @@ void *ThreadUDPSenderFunction(void *socket) {
 }
 
 void *ThreadProcessFunction(void *param) {
-    cout << "[STATUS] Processing thread created" << endl;
+    cout << "[STATUS: " << service <<  "] Processing thread created" << endl;
     recognizedMarker marker;
     inter_service_buffer item;
     bool markerDetected = false;
@@ -594,7 +639,7 @@ void *ThreadProcessFunction(void *param) {
 
                 int detect_size = encoding_buffer.size();
 
-                cout << "[STATUS] Image reduced to a Mat object of size " << detect_size << endl;
+                cout << "[STATUS: " << service <<  "] Image reduced to a Mat object of size " << detect_size << endl;
 
                 item.frame_id.i = frmID;
                 item.previous_service.i = service_value;
@@ -639,11 +684,11 @@ void *ThreadProcessFunction(void *param) {
                 // send SIFT data to the matching service
                 char* sift_data_buffer = get<2>(sift_results);
                 int sift_data_size = 4 * siftresult.i * (15-2+3+128); // taken from export_siftdata
-                cout << "[STATUS] Expected size of SIFT data buffer to send to matching is " << sift_data_size << " Bytes" << endl;
+                cout << "[STATUS: " << service <<  "] Expected size of SIFT data buffer to send to matching is " << sift_data_size << " Bytes" << endl;
 
                 if (sift_data_size > MAX_PACKET_SIZE) {
                     int max_packets = ceil(sift_data_size / MAX_PACKET_SIZE);
-                    cout << "[STATUS] Packet payload will be greater than " << MAX_PACKET_SIZE <<  " Bytes. ";
+                    cout << "[STATUS: " << service <<  "] Packet payload will be greater than " << MAX_PACKET_SIZE <<  " Bytes. ";
                     cout << "Therefore the data will be sent in " << max_packets << " parts." << endl;
 
                     // preparing the buffer of the packets to be sent
@@ -675,7 +720,7 @@ void *ThreadProcessFunction(void *param) {
                         int sock = socket(AF_INET, SOCK_DGRAM, 0);
                         int udp_status = sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
 
-                        cout << "[STATUS] Sent packet #" << i+1 << " of " << max_packets;
+                        cout << "[STATUS: " << service <<  "] Sent packet #" << i+1 << " of " << max_packets;
                         cout << ". Sender has status " << udp_status << endl;
                         if(udp_status == -1) {
                             cout << "Error sending: " << strerror(errno) << endl;
@@ -725,7 +770,7 @@ void *ThreadProcessFunction(void *param) {
 
                 inter_service_data.push(item);
 
-                cout << "[STATUS] Performed encoding on received SIFT data" << endl;
+                cout << "[STATUS: " << service <<  "] Performed encoding on received SIFT data" << endl;
             } else if (service == "lsh") {
                 vector<float> enc_vec;
 
@@ -912,7 +957,7 @@ void runServer(int port, string service) {
         cout << "[ERROR] Unable to bind UDP " << endl;
         exit(1);
     }
-    cout << endl << "[STATUS] Server UDP port for service " << service <<  " is bound to " << port << endl;
+    cout << endl << "[STATUS: " << service <<  "] Server UDP port for service " << service <<  " is bound to " << port << endl;
 
     isClientAlive = true;
     pthread_create(&receiverThread, NULL, ThreadUDPReceiverFunction, (void *)&sockUDP);
@@ -984,8 +1029,8 @@ int main(int argc, char *argv[])
 
     service = string(argv[1]);
 
-    cout << "[STATUS] Selected service is: " << argv[1] << endl;
-    cout << "[STATUS] IP of main module provided is " << argv[2] << endl; 
+    cout << "[STATUS: " << service <<  "] Selected service is: " << argv[1] << endl;
+    cout << "[STATUS: " << service <<  "] IP of main module provided is " << argv[2] << endl; 
 
     service_value = service_map.at(argv[1]);
 
