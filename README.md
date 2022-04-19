@@ -16,9 +16,11 @@ sudo docker run --entrypoint=/bin/bash --rm --gpus all -p 192.168.137.234:50001:
 
 sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=host -it ar_server:20220307_1529 -c '/home/ar_server/server main 192.168.137.234'
 
+sudo docker run --entrypoint=/bin/bash --rm --gpus all -it nvidia/cuda:10.2-cudnn7-devel 
+
 To compile for multiple architectures:
 
-sudo docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ar_server:20220412_1450 --push .
+sudo docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ghcr.io/cao-jacky/ar_server:20220412_1648 --push .
 
 ### Dependencies
 

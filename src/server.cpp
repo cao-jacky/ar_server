@@ -176,7 +176,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 continue;
             } else if (curFrame.dataType == MESSAGE_REGISTER) {
                 string service_to_register = service_map_reverse.at(curFrame.frmID);
-                registered_services.insert({service_to_register, device_ip});
+                cout << service_to_register << endl;
 
                 if (service_to_register == "sift") {
                     // main should assign next service IP from current stage
@@ -184,12 +184,15 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     next_service_addr.sin_port = htons(MAIN_PORT+service_map.at(service_to_register));
                 }
 
-                if (service_to_register == "matching") {
-                    matching_ip = &string(registered_services.at("matching"))[0];           
-                }
+                // if (service_to_register == "matching") {
+                //     matching_ip = &string(registered_services.at("matching"))[0];     
+                //     cout << "break me" << endl;      
+                // }
 
                 cout << "[STATUS: " << service <<  "] Received a register request from service " << service_to_register;
                 cout << " located on IP " << device_ip << endl; 
+
+                registered_services.insert({service_to_register, device_ip});
                 cout << "[STATUS: " << service <<  "] Service " << service_to_register << " is now registered" << endl;
 
                 // check whether the service which follows the newly regisetered is actually registered
@@ -267,17 +270,23 @@ void *ThreadUDPReceiverFunction(void *socket) {
         } else {
             if (curFrame.dataType == MESSAGE_NEXT_SERVICE_IP) {
                 // store the IP for the next service into a specific variable
+                string next_service;
+                if (service != "matching") {
+                    next_service = service_map_reverse.at(service_value+1);
+                }
 
                 memcpy(tmp, &(buffer[8]), 4);
                 int next_ip_data_size = *(int*)tmp;
 
-                char tmp_ip[next_ip_data_size];
-                memcpy(tmp_ip, &(buffer[12]), next_ip_data_size);
-                char* next_ip = tmp_ip;
+                // cout << next_ip_data_size << " " << sizeof(buffer) << endl;
 
-                inet_pton(AF_INET, next_ip, &(next_service_addr.sin_addr)); 
+                char next_tmp_ip[next_ip_data_size];
+                memcpy(next_tmp_ip, &(buffer[12]), next_ip_data_size+1);
+                // cout << next_tmp_ip << endl;
+
+                inet_pton(AF_INET, next_tmp_ip, &(next_service_addr.sin_addr)); 
                 next_service_addr.sin_port = htons(MAIN_PORT+service_value+1);
-                cout << "[STATUS: " << service <<  "] Received IP for next service: " << next_ip; 
+                cout << "[STATUS: " << service <<  "] Received IP for next service " << next_service << ": " << next_tmp_ip; 
                 cout << ", then assigning address object that should have the same IP: ";
                 cout << inet_ntoa(next_service_addr.sin_addr) << endl;
             } else if (curFrame.dataType == DATA_TRANSMISSION) {
@@ -320,7 +329,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 memcpy(tmp, &(buffer[8]), 4);
                 int matching_ip_len = *(int*)tmp;
 
-                cout << matching_ip_len << endl;
+                // cout << matching_ip_len << endl;
 
                 char matching_ip_tmp[matching_ip_len];
                 memcpy(matching_ip_tmp, &(buffer[12]), matching_ip_len);
