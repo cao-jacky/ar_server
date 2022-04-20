@@ -184,16 +184,15 @@ void *ThreadUDPReceiverFunction(void *socket) {
                     next_service_addr.sin_port = htons(MAIN_PORT+service_map.at(service_to_register));
                 }
 
-                // if (service_to_register == "matching") {
-                //     matching_ip = &string(registered_services.at("matching"))[0];     
-                //     cout << "break me" << endl;      
-                // }
-
                 cout << "[STATUS: " << service <<  "] Received a register request from service " << service_to_register;
                 cout << " located on IP " << device_ip << endl; 
 
                 registered_services.insert({service_to_register, device_ip});
                 cout << "[STATUS: " << service <<  "] Service " << service_to_register << " is now registered" << endl;
+
+                if (service_to_register == "matching") {
+                    matching_ip = &string(registered_services.at("matching"))[0];     
+                }
 
                 // check whether the service which follows the newly regisetered is actually registered
                 string next_service;
@@ -249,7 +248,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
                         memcpy(&(mi_array[8]), size_matching_ip.b, 4);
                         memcpy(&(mi_array[12]), matching_ip, size_matching_ip.i);
                         int sift_ip_status = sendto(sock, mi_array, sizeof(mi_array), 0, (struct sockaddr *)&remoteAddr, sizeof(remoteAddr));
-                        cout << "[STATUS: " << service <<  "] Sent registered IP of matching to sift" << endl;  
+                        cout << "[STATUS: " << service <<  "] Sent registered IP of matching (" << matching_ip << ") to sift" << endl;  
                         if(sift_ip_status == -1) {
                             cout << "Error sending: " << strerror(errno) << endl;
                         }
@@ -329,10 +328,10 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 memcpy(tmp, &(buffer[8]), 4);
                 int matching_ip_len = *(int*)tmp;
 
-                // cout << matching_ip_len << endl;
+                cout << matching_ip_len << endl;
 
                 char matching_ip_tmp[matching_ip_len];
-                memcpy(matching_ip_tmp, &(buffer[12]), matching_ip_len);
+                memcpy(matching_ip_tmp, &(buffer[12]), matching_ip_len+1);
                 matching_ip = matching_ip_tmp;
 
                 cout << "[STATUS: " << service <<  "] Received matching details from main, matching has an IP of " << matching_ip << endl;
