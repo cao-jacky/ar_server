@@ -20,7 +20,7 @@ sudo docker run --entrypoint=/bin/bash --rm --gpus all -it nvidia/cuda:10.2-cudn
 
 To compile for multiple architectures:
 
-sudo docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ghcr.io/cao-jacky/ar_server:20220419_1740 --push .
+sudo docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ghcr.io/cao-jacky/ar_server:20220426_1109 --push .
 
 ### Dependencies
 

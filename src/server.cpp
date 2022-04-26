@@ -168,7 +168,7 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 memcpy(&(client_registration[16]), device_ip, client_ip_strlen);
 
                 int main_to_matching = sendto(sock, client_registration, sizeof(client_registration), 0, (struct sockaddr *)&matching_addr, sizeof(matching_addr));
-                cout << "[STATUS: " << service <<  "] Sending client details to matching service " << endl;
+                cout << "[STATUS: " << service <<  "] Sending client details of IP " << device_ip << " and port " << device_port << " to matching service with IP " << matching_ip << endl;
                 if(main_to_matching == -1) {
                     cout << "Error sending: " << strerror(errno) << endl;
                 }
@@ -310,8 +310,6 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 }
                 cout << "[STATUS: " << service <<  "] Received data from previous service" << endl;
             } else if (curFrame.dataType == CLIENT_REGISTRATION) {
-                cout << "[STATUS: " << service <<  "] Received client registration details from main" << endl;
-
                 memcpy(tmp, &(buffer[8]), 4);
                 int client_port = *(int*)tmp;
 
@@ -319,11 +317,13 @@ void *ThreadUDPReceiverFunction(void *socket) {
                 int client_ip_len = *(int*)tmp;
 
                 char client_ip_tmp[client_ip_len];
-                memcpy(client_ip_tmp, &(buffer[16]), client_ip_len);
+                memcpy(client_ip_tmp, &(buffer[16]), client_ip_len+1);
 
                 // creating client object to return data to
                 inet_pton(AF_INET, client_ip_tmp, &(client_addr.sin_addr));
                 client_addr.sin_port = htons(client_port);
+
+                cout << "[STATUS: " << service <<  "] Received client registration details from main of IP " << client_ip_tmp << " and port " << client_port << endl;
             } else if (curFrame.dataType == SIFT_TO_MATCHING) {
                 memcpy(tmp, &(buffer[8]), 4);
                 int matching_ip_len = *(int*)tmp;
