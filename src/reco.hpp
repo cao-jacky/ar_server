@@ -27,9 +27,10 @@ union charfloat {
 };
 
 struct frameBuffer {
-    int frmID;
-    int dataType;
-    int bufferSize;
+    char* client_id;
+    int frame_no;
+    int data_type;
+    int buffer_size;
     char* buffer;
 };
 

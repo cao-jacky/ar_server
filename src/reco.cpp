@@ -258,15 +258,15 @@ tuple<int, char*> sift_gpu(Mat img, float **siftres, float **siftframe, SiftData
     *siftres = (float *)malloc(sizeof(float)*128*numPts);
     *siftframe = (float *)malloc(sizeof(float)*2*numPts);
     float* curRes = *siftres;
-    float* curframe = *siftframe;
+    float* curr_frame = *siftframe;
     SiftPoint* p = siftData.h_data;
 
     for(int i = 0; i < numPts; i++) {
         memcpy(curRes, p->data, (128+1)*sizeof(float));
         curRes+=128;
 
-        *curframe++ = p->xpos/w - 0.5;
-        *curframe++ = p->ypos/h - 0.5;
+        *curr_frame++ = p->xpos/w - 0.5;
+        *curr_frame++ = p->ypos/h - 0.5;
         p++;
     }
 
@@ -706,12 +706,12 @@ bool cacheQuery(Mat queryImage, recognizedMarker &marker)
     }
 }
 
-void addCacheItem(frameBuffer curFrame, resBuffer curRes) 
+void addCacheItem(frameBuffer curr_frame, resBuffer curRes) 
 {
     SiftData tData;
     vector<float> test;
 
-    vector<uchar> imagedata(curFrame.buffer, curFrame.buffer + curFrame.bufferSize);
+    vector<uchar> imagedata(curr_frame.buffer, curr_frame.buffer + curr_frame.buffer_size);
     Mat queryImage = imdecode(imagedata, CV_LOAD_IMAGE_GRAYSCALE);
     Mat cacheQueryImage = queryImage(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
@@ -743,7 +743,7 @@ void addCacheItem(frameBuffer curFrame, resBuffer curRes)
     cacheItem newItem;
     newItem.fv = test;
     newItem.data = tData;
-    newItem.curFrame = curFrame;
+    newItem.curFrame = curr_frame;
     newItem.curMarker = marker;
     cacheItems.push_back(newItem);
     cout << "Cache item inserted at " << wallclock() <<endl <<endl;
