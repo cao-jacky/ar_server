@@ -26,8 +26,10 @@ union charfloat {
     float f;
 };
 
-struct frameBuffer {
+struct frame_buffer {
     char* client_id;
+    char* client_ip;
+    int client_port;
     int frame_no;
     int data_type;
     int buffer_size;
@@ -51,16 +53,29 @@ struct recognizedMarker {
 struct cacheItem {
     std::vector<float> fv;
     SiftData data;
-    frameBuffer curFrame;
+    frame_buffer curFrame;
     recognizedMarker curMarker;
 };
 
 struct inter_service_buffer {
-    charint frame_id;
+    char* client_id;
+    char* client_ip;
+    charint client_port;
+    charint frame_no;
+    charint data_type; 
     charint previous_service;
     charint buffer_size;
     unsigned char* buffer;
 };
+
+struct sift_data_item {
+    char* client_id;
+    charint frame_no;
+    charint sift_data_size;
+    char* sift_data;
+};
+
+void print_log(std::string service_name, std::string client_id, std::string frame_no, std::string message);
 
 double wallclock();
 void loadImages(std::vector<char *> onlineImages); 
@@ -75,7 +90,7 @@ std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
 bool matching(std::vector<int> result, SiftData &tData, recognizedMarker &marker); 
 bool query(cv::Mat queryImage, recognizedMarker &marker);
 bool cacheQuery(cv::Mat queryImage, recognizedMarker &marker);
-void addCacheItem(frameBuffer curFrame, resBuffer curRes);
+void addCacheItem(frame_buffer curFrame, resBuffer curRes);
 void freeParams();
 void scalabilityTest();
 #endif
