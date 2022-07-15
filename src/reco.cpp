@@ -298,7 +298,7 @@ tuple<int, char *> sift_gpu(Mat img, float **siftres, float **siftframe, SiftDat
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    print_log("sift", "0", "0", to_string(numPts) + " SIFT points extracted in " + to_string(durationgmm * 1000) + " ms");
+    print_log("", "0", "0", to_string(numPts) + " SIFT points extracted in " + to_string(durationgmm * 1000) + " ms");
 
     return make_tuple(numPts, final_sift_data);
 }
@@ -444,12 +444,14 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
         float *a, *b;
         sift_gpu(image, &a, &b, sData, w, h, true, true);
 
-        cout << "[STATUS] Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
+        print_log("matching", "0", "0", "Number of feature points: " + to_string(sData.numPts) + " " + to_string(tData.numPts));
+        // cout << "[STATUS] Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
         MatchSiftData(sData, tData);
         FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
         int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
         double ratio = 100.0f * numFit / min(sData.numPts, tData.numPts);
-        cout << "[STATUS] Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
+        print_log("matching", "0", "0", "Matching features: " + to_string(numFit) + " " + to_string(numMatches) + " " + to_string(ratio) + "% ");
+        // cout << "[STATUS] Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
 
         if (ratio > 10)
         {
