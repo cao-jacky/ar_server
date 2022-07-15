@@ -1,8 +1,6 @@
 #include "reco.hpp"
 #include "cuda_files.h"
 
-#include <lz4.h>
-
 #include <map>
 
 #include <opencv2/opencv.hpp>
