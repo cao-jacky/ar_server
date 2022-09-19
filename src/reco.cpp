@@ -264,7 +264,7 @@ tuple<int, char *> sift_gpu(Mat img, float **siftres, float **siftframe, SiftDat
     start = wallclock();
     w = img.cols;
     h = img.rows;
-    // cout << "Image size = (" << w << "," << h << ")" << endl;
+    cout << "Image size = (" << w << "," << h << ")" << endl;
 
     cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float *)img.data);
     cimg.Download();
@@ -279,14 +279,14 @@ tuple<int, char *> sift_gpu(Mat img, float **siftres, float **siftframe, SiftDat
     numPts = siftData.numPts;
     *siftres = (float *)malloc(sizeof(float) * 128 * numPts);
     *siftframe = (float *)malloc(sizeof(float) * 2 * numPts);
-    float *curRes = *siftres;
+    float *curr_res = *siftres;
     float *curr_frame = *siftframe;
     SiftPoint *p = siftData.h_data;
 
     for (int i = 0; i < numPts; i++)
     {
-        memcpy(curRes, p->data, (128 + 1) * sizeof(float));
-        curRes += 128;
+        memcpy(curr_res, p->data, (128 + 1) * sizeof(float));
+        curr_res += 128;
 
         *curr_frame++ = p->xpos / w - 0.5;
         *curr_frame++ = p->ypos / h - 0.5;
@@ -294,7 +294,7 @@ tuple<int, char *> sift_gpu(Mat img, float **siftres, float **siftframe, SiftDat
     }
 
     if (!online)
-        FreeSiftData(siftData); //
+        FreeSiftData(siftData); 
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
@@ -319,12 +319,14 @@ tuple<int, char *, char *> sift_processing(Mat image, SiftData &siftData, vector
     // copying the data to a new variable
     char *buffer = (char *)calloc(siftResult, sizeof(float) * 128);
     int buffer_count = 0;
+    int bytes_count = 0;
     for (int i = 0; i < siftResult; i++)
     {
         charfloat sift_curr_result;
-        sift_curr_result.f = *&siftresg[i];
+        sift_curr_result.f = *&siftresg[bytes_count];
         memcpy(&(buffer[buffer_count]), sift_curr_result.b, 4);
         buffer_count += 4;
+        bytes_count += 128;
     }
 
     free(siftframe);
@@ -347,6 +349,8 @@ tuple<int, char *> encoding(float *sift_resg, int sift_result)
     finish = wallclock();
     durationgmm = (double)(finish - start);
     print_log("encoding", "0", "0", "PCA encoding took a time of " + to_string(durationgmm * 1000) + " ms");
+
+    cout << sift_result << endl;
 
     start = wallclock();
     gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, sift_result, (82 / 2.0) * log(2.0 * VL_PI), enc, NULL, dest);
@@ -381,7 +385,7 @@ tuple<int, char *> encoding(float *sift_resg, int sift_result)
 
     // transforming the vector of floats into a char*
     float *enc_vec_floats = &(enc_vec[0]);
-    encoded_vector = (char *)calloc(SIZE, sizeof(float) * 128);
+    encoded_vector = (char *)calloc(SIZE, sizeof(float));
     int buffer_count = 0;
     for (float x : enc_vec)
     {
@@ -417,9 +421,9 @@ tuple<int, char *> lsh_nn(vector<float> enc_vec)
     print_log("lsh", "0", "0", "LSH NN search took a time of " + to_string(duration_lshnn * 1000) + " ms");
 
     int enc_res_size = result.size();
-    encoded_results = (char *)calloc(enc_res_size, sizeof(int) * 128);
+    encoded_results = (char *)calloc(enc_res_size, sizeof(int));
     int buffer_count = 0;
-    for (float x : result)
+    for (int x : result)
     {
         charint enc_res;
         enc_res.i = x;
@@ -434,6 +438,8 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
     float homography[9];
     int numMatches;
 
+    cout << tData.numPts << " " << tData.maxPts << endl;
+
     for (int idx = 0; idx < result.size(); idx++)
     {
         // cout << "Testing " << result[idx] << endl;
@@ -445,13 +451,11 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
         sift_gpu(image, &a, &b, sData, w, h, true, true);
 
         print_log("matching", "0", "0", "Number of feature points: " + to_string(sData.numPts) + " " + to_string(tData.numPts));
-        // cout << "[STATUS] Number of feature points: " << sData.numPts << " " << tData.numPts << endl;
         MatchSiftData(sData, tData);
         FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
         int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
         double ratio = 100.0f * numFit / min(sData.numPts, tData.numPts);
         print_log("matching", "0", "0", "Matching features: " + to_string(numFit) + " " + to_string(numMatches) + " " + to_string(ratio) + "% ");
-        // cout << "[STATUS] Matching features: " << numFit << " " << numMatches << " " << ratio << "% " << endl;
 
         if (ratio > 10)
         {

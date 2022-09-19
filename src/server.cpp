@@ -583,6 +583,8 @@ void siftdata_reconstructor(char *sd_char_array)
     reconstructed_data.maxPts = *(int *)tmp;
     curr_posn += 4;
 
+    // cout << reconstructed_data.numPts << " " << reconstructed_data.maxPts << endl;
+
     // reconstructed_data.h_data = cpu_data;
     SiftPoint *cpu_data = (SiftPoint *)calloc(sd_num_pts, sizeof(SiftPoint));
 
@@ -888,7 +890,7 @@ void *ThreadProcessFunction(void *param)
                 vector<uchar> encoding_buffer;
                 vector<int> param(2);
                 param[0] = IMWRITE_JPEG_QUALITY;
-                param[1] = 95; // default(95) 0-100
+                param[1] = 100; // default(95) 0-100
                 imencode(".jpg", detect, encoding_buffer, param);
 
                 int detect_size = encoding_buffer.size();
@@ -1049,6 +1051,7 @@ void *ThreadProcessFunction(void *param)
                 {
                     memcpy(tmp, &(enc_vec_char[data_index]), 4);
                     float *curr_float = (float *)tmp;
+                    // cout << i << " " << *curr_float << endl;
                     enc_vec.push_back(*curr_float);
 
                     data_index += 4;
@@ -1381,7 +1384,7 @@ int main(int argc, char *argv[])
     print_log(service, "0", "0", "Selected service is: " + string(argv[1]));
     print_log(service, "0", "0", "IP of the primary module provided is " + string(argv[2]));
 
-    int pp_req[3]{3, 4, 5}; // pre-processing required
+    int pp_req[4]{2, 3, 4, 5}; // pre-processing required
 
     if (find(begin(pp_req), end(pp_req), service_value) != end(pp_req))
     {
@@ -1393,10 +1396,11 @@ int main(int argc, char *argv[])
         // arbitrarily encoding the above variables
         querysizefactor = 3;
         nn_num = 5;
-        if (service_value != 5)
-        {
-            encodeDatabase(querysizefactor, nn_num);
-        }
+        // if (service_value != 5)
+        // {
+        //     encodeDatabase(querysizefactor, nn_num);
+        // }
+        encodeDatabase(querysizefactor, nn_num);
     }
 
     // cout << service_value << endl;
