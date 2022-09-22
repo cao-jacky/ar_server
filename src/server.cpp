@@ -44,6 +44,7 @@
 #define MSG_PRIMARY_SERVICE 12
 #define MSG_DATA_TRANSMISSION 13
 #define MSG_MATCHING_SIFT 14
+#define MSG_SIFT_TO_ENCODING 15
 #define MSG_CLIENT_FRAME_DETECT 2
 
 #define PACKET_SIZE 60000
@@ -208,8 +209,16 @@ void *ThreadUDPReceiverFunction(void *socket)
     print_log(service, "0", "0", "UDP receiver thread created");
 
     char tmp[4];
-    char buffer[PACKET_SIZE];
+    char buffer[48+PACKET_SIZE];
     int sock = *((int *)socket);
+
+    char *sift_res_buffer;
+    int curr_recv_packet_no;
+    int prev_recv_packet_no = 0;
+    int total_packets_no;
+
+    int packet_tally;
+    int sift_data_count;
 
     if (service != "primary")
     {
@@ -447,9 +456,69 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                 cout << "[STATUS: " << service << "] Received client registration details from main of IP " << client_ip_tmp << " and port " << client_port << endl;
             }
+            else if (curr_frame.data_type == MSG_SIFT_TO_ENCODING)
+            {
+                char tmp_ip[16];
+                memcpy(tmp_ip, &(buffer[16]), 16);
+                curr_frame.client_ip = (char *)tmp_ip;
+
+                memcpy(tmp, &(buffer[32]), 4);
+                curr_frame.client_port = *(int *)tmp;
+
+                memcpy(tmp, &(buffer[44]), 4);
+                int curr_packet_no = *(int*)tmp;
+
+                memcpy(tmp, &(buffer[40]), 4);
+                total_packets_no = *(int*)tmp;
+
+                if (curr_packet_no == 0)
+                {
+                    // if the first packet received
+                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                          "Receiving SIFT data in packets for Frame " + to_string(curr_frame.frame_no) + 
+                          " with an expected total number of packets of " + to_string(total_packets_no) + 
+                          " and total bytes of " + to_string(curr_frame.buffer_size));
+
+                    sift_res_buffer = new char[curr_frame.buffer_size];
+                    memset(sift_res_buffer, 0, curr_frame.buffer_size);
+                    packet_tally = 0;
+                    sift_data_count = 0;
+                }
+
+                int to_copy = MAX_PACKET_SIZE;
+                if (curr_packet_no+1 == total_packets_no)
+                {
+                    to_copy = (int)curr_frame.buffer_size - sift_data_count;
+                }
+                memcpy(&(sift_res_buffer[sift_data_count]), &(buffer[48]), to_copy);
+                print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                    "For Frame " + to_string(curr_frame.frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
+                packet_tally++;
+                sift_data_count += MAX_PACKET_SIZE;
+
+                if (curr_packet_no + 1 == total_packets_no)
+                {
+                    // need to add logic to check whether all of the packets were received,
+                    // and whether they were in the correct order
+
+                    if (packet_tally == total_packets_no)
+                    {
+                        curr_frame.buffer = new char[curr_frame.buffer_size];
+                        memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                        memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
+                        // free(sift_data_buffer);
+                    
+                        frames.push(curr_frame);
+                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                          "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
+                    }
+                }
+                
+
+            }
             else if (curr_frame.data_type == MSG_MATCHING_SIFT)
             {
-                // request to retrieve sift data from matching
+                // request to retrieve sift data sent from matching
                 print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                           "Received request from 'matching' for sift data for frame " +
                               to_string(curr_frame.frame_no) + " and client " + string(curr_frame.client_id));
@@ -472,19 +541,19 @@ void *ThreadUDPReceiverFunction(void *socket)
                 sift_data_item msd = sift_items[sbd_loc];
                 char *msd_client_id = msd.client_id;
                 int msd_frame_no = msd.frame_no.i;
-                int msd_data_size = msd.sift_data_size.i;
+                float msd_data_size = (float)msd.sift_data_size.i;
                 char *msd_data_buffer = msd.sift_data;
 
-                int max_packets = ceil(msd_data_size / MAX_PACKET_SIZE);
+                double max_packets = ceil(msd_data_size / MAX_PACKET_SIZE);
                 if (max_packets > 1)
                 {
                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                              "Packet payload of " + to_string(msd_data_size) + " will be greater than " + to_string(MAX_PACKET_SIZE) +
-                                  " B, therefore, the data will be sent in " + to_string(max_packets) + " packets");
+                              "Packet payload of " + to_string((int)msd_data_size) + " will be greater than " + to_string(MAX_PACKET_SIZE) +
+                                  " B, therefore, the data will be sent in " + to_string((int)max_packets) + " packets");
 
                     // preparing the buffer of the packets to be sent
                     char to_m_buffer[16 + MAX_PACKET_SIZE];
-                    memset(to_m_buffer, 0, sizeof(buffer));
+                    memset(to_m_buffer, 0, 16+MAX_PACKET_SIZE);
 
                     charint curr_frame_no;
                     curr_frame_no.i = msd_frame_no;
@@ -511,9 +580,9 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                         int matching_sock = ::socket(AF_INET, SOCK_DGRAM, 0);
                         int udp_status = sendto(matching_sock, to_m_buffer, sizeof(to_m_buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
-
-                        cout << "[STATUS: " << service << "] Sent packet #" << i + 1 << " of " << max_packets;
-                        cout << ". Sender has status " << udp_status << endl;
+                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                              "Sent packet #" + to_string(i+1) + " of " + to_string((int)max_packets) + " to matching" +
+                              ". Sender has status of " + to_string(udp_status));
                         if (udp_status == -1)
                         {
                             cout << "Error sending: " << strerror(errno) << endl;
@@ -678,6 +747,8 @@ void *udp_sift_data_listener(void *socket)
     int total_packets_no;
 
     int packet_tally;
+    int sift_data_count;
+    int complete_data_size;
 
     while (1)
     {
@@ -694,23 +765,34 @@ void *udp_sift_data_listener(void *socket)
         {
             // if the first packet received
             memcpy(tmp, &(packet_buffer[12]), 4);
-            int complete_data_size = *(int *)tmp;
+            complete_data_size = *(int *)tmp;
 
             memcpy(tmp, &(packet_buffer[8]), 4);
             total_packets_no = *(int *)tmp;
 
-            cout << "[STATUS: " << service << "] Receiving SIFT data in packets for Frame " << frame_no;
-            cout << " with an expected total number of packets of ";
-            cout << total_packets_no << " and total bytes of " << complete_data_size << endl;
+            print_log(service, "0", to_string(frame_no),
+                "Receiving SIFT data in packets for Frame " + to_string(frame_no) + 
+                " with an expected total number of packets of " + to_string(total_packets_no) + 
+                " and total bytes of " + to_string(complete_data_size));
 
-            sift_data_buffer = (char *)calloc(complete_data_size, sizeof(char));
+
+            sift_data_buffer = new char[complete_data_size];
+            memset(sift_data_buffer, 0, complete_data_size);
             packet_tally = 0;
+            sift_data_count = 0;
+        }
+        int to_copy = MAX_PACKET_SIZE;
+        if (curr_packet_no+1 == total_packets_no)
+        {
+            to_copy = complete_data_size - sift_data_count;
         }
 
-        memcpy(&(sift_data_buffer[curr_packet_no * MAX_PACKET_SIZE]), &(packet_buffer[16]), MAX_PACKET_SIZE);
-        cout << "[STATUS: " << service << "] For Frame " << frame_no << " received packet with packet number of " << curr_packet_no << endl;
-
+        memcpy(&(sift_data_buffer[sift_data_count]), &(packet_buffer[16]), to_copy);
+        print_log(service, "0", to_string(frame_no), "For Frame " + to_string(frame_no) + 
+            " received packet with packet number of " + to_string(curr_packet_no));
+                
         packet_tally++;
+        sift_data_count += MAX_PACKET_SIZE;
 
         if (curr_packet_no + 1 == total_packets_no)
         {
@@ -719,8 +801,8 @@ void *udp_sift_data_listener(void *socket)
 
             if (packet_tally == total_packets_no)
             {
-                cout << "[STATUS: " << service << "] All packets received for Frame " << frame_no;
-                cout << " will attempt to reconstruct into a SiftData struct" << endl;
+                print_log(service, "0", to_string(frame_no),
+                          "All packets received for Frame " + to_string(frame_no) + " and will attempt to reconstruct into a SiftData struct");
                 siftdata_reconstructor(sift_data_buffer);
             }
         }
@@ -765,12 +847,61 @@ void *ThreadUDPSenderFunction(void *socket)
             memcpy(&(buffer[16]), curr_item.client_ip, 16);
             memcpy(&(buffer[32]), curr_item.client_port.b, 4);
             memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
-            memcpy(&(buffer[40]), &(curr_item.buffer)[0], curr_item.buffer_size.i + 1);
+            memcpy(&(buffer[40]), &(curr_item.image_buffer)[0], curr_item.buffer_size.i + 1);
             sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
 
             print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
                       "Frame " + to_string(curr_item.frame_no.i) + " sent to " + next_service +
                           " service for processing with a payload size of " + to_string(curr_item.buffer_size.i));
+        }
+        else if (service == "sift")
+        {
+            // client_addr
+            inter_service_buffer curr_item = inter_service_data.front();
+            inter_service_data.pop();
+
+            char sift_buffer[48 + MAX_PACKET_SIZE];
+            memset(sift_buffer, 0, sizeof(sift_buffer));
+
+            memcpy(sift_buffer, curr_item.client_id, 4);
+            memcpy(&(sift_buffer[4]), curr_item.frame_no.b, 4);
+            memcpy(&(sift_buffer[8]), curr_item.data_type.b, 4);
+            memcpy(&(sift_buffer[12]), curr_item.buffer_size.b, 4);
+            memcpy(&(sift_buffer[16]), curr_item.client_ip, 16);
+            memcpy(&(sift_buffer[32]), curr_item.client_port.b, 4);
+            memcpy(&(sift_buffer[36]), curr_item.previous_service.b, 4);
+
+            float total_packet_size = (float)curr_item.buffer_size.i;
+            double max_packets = ceil(total_packet_size/MAX_PACKET_SIZE);
+            if (max_packets > 1)
+            {
+                print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
+                            "Packet payload of " + to_string(curr_item.buffer_size.i) + " will be greater than " + to_string(MAX_PACKET_SIZE) +
+                                " B, therefore, the data will be sent in " + to_string(max_packets) + " packets");
+            
+                // preparing the payload buffer of the packets to be sent
+                charint total_packets;
+                total_packets.i = (int)max_packets;
+                memcpy(&(sift_buffer[40]), total_packets.b, 4);
+
+                int initial_index = 0;
+                for (int i = 0; i < max_packets; i++) {
+                    charint curr_packet;
+                    curr_packet.i = (int)(i);
+                    memcpy(&(sift_buffer[44]), curr_packet.b, 4);
+                    memcpy(&(sift_buffer[48]), &(curr_item.buffer)[initial_index], MAX_PACKET_SIZE);
+
+                    int udp_status = sendto(sock, sift_buffer, sizeof(sift_buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
+                    print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
+                              "Sent packet #" + to_string(i+1) + " of " + to_string((int)max_packets) + " to encoding." +
+                              " Sender has status of " + to_string(udp_status));
+                    if (udp_status == -1)
+                    {
+                        cout << "Error sending: " << strerror(errno) << endl;
+                    }
+                    initial_index += MAX_PACKET_SIZE;
+                } 
+            }
         }
         else if (service == "matching")
         {
@@ -808,7 +939,6 @@ void *ThreadUDPSenderFunction(void *socket)
             char buffer[40 + item_data_size];
 
             memset(buffer, 0, sizeof(buffer));
-
             memcpy(buffer, curr_item.client_id, 4);
             memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
             memcpy(&(buffer[8]), curr_item.data_type.b, 4);
@@ -881,40 +1011,45 @@ void *ThreadProcessFunction(void *param)
             if (service == "primary")
             {
                 // perform pre-processing if main service
-                vector<uchar> image_data(frame_data, frame_data + frame_size);
-                Mat img_scene = imdecode(image_data, CV_LOAD_IMAGE_GRAYSCALE);
-                imwrite("query.jpg", img_scene);
-                Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
+                // vector<uchar> image_data(frame_data, frame_data + frame_size);
+                // Mat img_scene = imdecode(image_data, CV_LOAD_IMAGE_GRAYSCALE);
+                // imwrite("query.jpg", img_scene);
+                // Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
-                // encoding into JPG and copying into buffer
-                vector<uchar> encoding_buffer;
-                vector<int> param(2);
-                param[0] = IMWRITE_JPEG_QUALITY;
-                param[1] = 100; // default(95) 0-100
-                imencode(".jpg", detect, encoding_buffer, param);
+                // // encoding into JPG and copying into buffer
+                // vector<uchar> encoding_buffer;
+                // vector<int> param(2);
+                // param[0] = IMWRITE_JPEG_QUALITY;
+                // param[1] = 100; // default(95) 0-100
+                // imencode(".jpg", detect, encoding_buffer, param);
 
-                int detect_size = encoding_buffer.size();
+                // int detect_size = encoding_buffer.size();
 
                 print_log(service, string(client_id), to_string(frame_no),
                           "Image from frame has been reduced from size " + to_string(frame_size) +
-                              " to a Mat object of size " + to_string(detect_size));
+                              " to a Mat object of size " + to_string(frame_size));
 
                 item.client_id = client_id;
                 item.frame_no.i = frame_no;
                 item.data_type.i = MSG_DATA_TRANSMISSION;
-                item.buffer_size.i = detect_size;
+                item.buffer_size.i = frame_size;
                 item.client_ip = client_ip;
                 item.client_port.i = client_port;
                 item.previous_service.i = service_value;
-                item.buffer = new unsigned char[detect_size];
-                copy(encoding_buffer.begin(), encoding_buffer.end(), item.buffer);
+
+                // memcpy(item.buffer, frame_data, frame_size);
+                item.image_buffer = frame_data;
+
+                // item.buffer = frame_data;
+                // item.buffer = new unsigned char[detect_size];
+                // copy(encoding_buffer.begin(), encoding_buffer.end(), item.buffer);
 
                 inter_service_data.push(item);
             }
 
             // markerDetected = query(detect, marker);
         }
-        else if (frame_data_type == MSG_DATA_TRANSMISSION)
+        else if (frame_data_type == MSG_DATA_TRANSMISSION || frame_data_type == MSG_SIFT_TO_ENCODING)
         {
             if (service == "sift")
             {
@@ -924,21 +1059,33 @@ void *ThreadProcessFunction(void *param)
                 float sift_resg;
                 int height, width;
                 vector<float> test;
+                
+                vector<uchar> imgdata(frame_data, frame_data + frame_size);
+                Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
+                imwrite("query.jpg", img_scene);
+                Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
-                Mat detect_image = imdecode(Mat(1, frame_size, CV_8UC1, frame_data), CV_LOAD_IMAGE_UNCHANGED);
+                // Mat detect_image = imdecode(Mat(1, frame_size, CV_8UC1, frame_data), CV_LOAD_IMAGE_UNCHANGED);
+                // Mat detect_image = imread(image_path, IMREAD_COLOR);
 
-                auto sift_results = sift_processing(detect_image, tData, test, true, false);
+                // recognizedMarker marker;
+                // markerDetected = query(detect, marker);
+
+                // recognizedMarker marker;
+                // markerDetected = query_sift(detect, marker);
+
+                auto sift_results = sift_processing(detect, tData);
 
                 charint siftresult;
                 siftresult.i = get<0>(sift_results);
 
                 char *sift_buffer = get<1>(sift_results);
-                int sift_buffer_size = 4 * siftresult.i; // size of char values
+                int sift_buffer_size = 128*4*siftresult.i; // size of char values
 
                 // push data required for next service
                 item.client_id = client_id;
                 item.frame_no.i = frame_no;
-                item.data_type.i = MSG_DATA_TRANSMISSION;
+                item.data_type.i = MSG_SIFT_TO_ENCODING;
                 item.buffer_size.i = 4 + sift_buffer_size;
                 item.client_ip = client_ip;
                 item.client_port.i = client_port;
@@ -987,30 +1134,32 @@ void *ThreadProcessFunction(void *param)
             }
             else if (service == "encoding")
             {
-                float *siftres;
+                vector<float> test;
 
                 memcpy(tmp, &(frame_data[0]), 4);
                 int sift_result = *(int *)tmp;
+                
+                char *sift_resg = new char[frame_size];
+                memset(sift_resg, 0, frame_size);
+                memcpy(sift_resg, &(frame_data[4]), frame_size);
 
-                char *sift_resg = (char *)calloc(sift_result, 4);
-                memcpy(sift_resg, &(frame_data[4]), 4 * sift_result);
-
-                siftres = (float *)calloc(sizeof(float), sizeof(float) * 128 * sift_result);
-
-                // looping through char array to convert data back into floats
-                // at i = 0, index should begin at 4
+                float *siftres = new float[128*sift_result];
+                // siftres = (float *)malloc(sizeof(float)*128*sift_result);
+           
                 int data_index = 0;
-                for (int i = 0; i < sift_result; i++)
+                for (int i = 0; i < sift_result*128; i++)
                 {
                     memcpy(tmp, &(sift_resg[data_index]), 4);
-                    float *curr_float = (float *)tmp;
+                    float curr_float = *(float*)tmp;
+                    siftres[i] = curr_float;
 
-                    memcpy(siftres, curr_float, (128 + 1) * sizeof(float));
-                    siftres += 128;
+                    // cout << i << " " << curr_float << endl;
+
+                    // memcpy(siftres, tmp, sizeof(float));
                     data_index += 4;
                 }
 
-                auto encoding_results = encoding(siftres, sift_result);
+                auto encoding_results = encoding(siftres, sift_result, test, false);
 
                 charint encoded_size;
                 encoded_size.i = get<0>(encoding_results);
@@ -1031,7 +1180,6 @@ void *ThreadProcessFunction(void *param)
                 memcpy(&(item.buffer[4]), encoded_vector, encoding_buffer_size);
 
                 inter_service_data.push(item);
-
                 print_log(service, string(client_id), to_string(frame_no), "Performed encoding on received 'sift' data");
             }
             else if (service == "lsh")

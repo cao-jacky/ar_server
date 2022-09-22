@@ -12,7 +12,6 @@ SIFT_ROOT = ../lib/cudasift
 EIGEN_ROOT = ../lib/eigen
 FALCONN_ROOT = ../lib/falconn
 VL_ROOT = ../lib/vlfeat
-LZ4_ROOT = ../lib/lz4
 
 INC += -I$(SIFT_ROOT) -I$(EIGEN_ROOT) -I$(FALCONN_ROOT)/src/include -I$(VL_ROOT) -I/usr/include/opencv
 
@@ -20,8 +19,7 @@ LIB = -lm -lrt -lpthread -ldl -pipe -L$(SIFT_ROOT) -lcudasift -std=c++0x -pthrea
 LIB += -lcudart -lcufft 
 LIB += `pkg-config --cflags --libs opencv`
 LIB += -fopenmp -lcublas
-LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio 
-LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
+LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio
 
 NVCC	= /usr/local/cuda/bin/nvcc -arch=sm_75 -m 64 $(INC) 
 

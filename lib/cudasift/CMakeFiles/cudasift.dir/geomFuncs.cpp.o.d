@@ -154,14 +154,7 @@ CMakeFiles/cudasift.dir/geomFuncs.cpp.o: \
  /usr/local/include/opencv2/core/core.hpp \
  /usr/local/include/opencv2/core.hpp \
  /usr/local/include/opencv2/core/cvdef.h \
- /usr/lib/gcc/x86_64-linux-gnu/8/include/limits.h \
- /usr/lib/gcc/x86_64-linux-gnu/8/include/syslimits.h \
- /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
- /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
- /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+ /usr/local/include/opencv2/core/version.hpp /usr/include/c++/8/limits \
  /usr/local/include/opencv2/core/hal/interface.h \
  /usr/include/c++/8/cstddef \
  /usr/local/include/opencv2/core/cv_cpu_dispatch.h \
@@ -171,14 +164,21 @@ CMakeFiles/cudasift.dir/geomFuncs.cpp.o: \
  /usr/lib/gcc/x86_64-linux-gnu/8/include/mm_malloc.h \
  /usr/include/c++/8/stdlib.h /usr/include/c++/8/array \
  /usr/include/c++/8/utility /usr/include/c++/8/bits/stl_relops.h \
- /usr/local/include/opencv2/core/version.hpp \
  /usr/local/include/opencv2/core/base.hpp \
  /usr/local/include/opencv2/opencv_modules.hpp /usr/include/c++/8/climits \
+ /usr/lib/gcc/x86_64-linux-gnu/8/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/8/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/include/c++/8/algorithm /usr/include/c++/8/bits/stl_algo.h \
  /usr/include/c++/8/bits/algorithmfwd.h \
  /usr/include/c++/8/bits/stl_heap.h /usr/include/c++/8/bits/stl_tempbuf.h \
  /usr/include/c++/8/bits/stl_construct.h \
- /usr/include/c++/8/bits/uniform_int_dist.h /usr/include/c++/8/limits \
+ /usr/include/c++/8/bits/uniform_int_dist.h \
  /usr/local/include/opencv2/core/cvstd.hpp /usr/include/c++/8/cstring \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \

@@ -251,22 +251,21 @@ char *export_siftdata(SiftData &data_struct)
     return sift_data;
 }
 
-tuple<int, char *> sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, int &w, int &h, bool online, bool isColorImage)
+tuple<int, char*, float*> sift_gpu(Mat img, float **siftres, float **siftframe, SiftData &siftData, int &w, int &h, bool online, bool isColorImage)
 {
     CudaImage cimg;
     int numPts;
     double start, finish, durationgmm;
 
-    // if(online) resize(img, img, Size(), 0.5, 0.5);
-    if (isColorImage)
-        cvtColor(img, img, CV_BGR2GRAY);
+    //if(online) resize(img, img, Size(), 0.5, 0.5);
+    if(isColorImage) cvtColor(img, img, CV_BGR2GRAY);
     img.convertTo(img, CV_32FC1);
     start = wallclock();
     w = img.cols;
     h = img.rows;
     cout << "Image size = (" << w << "," << h << ")" << endl;
 
-    cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float *)img.data);
+    cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float*)img.data);
     cimg.Download();
 
     float initBlur = 1.0f;
@@ -274,86 +273,99 @@ tuple<int, char *> sift_gpu(Mat img, float **siftres, float **siftframe, SiftDat
     InitSiftData(siftData, 1000, true, true);
     ExtractSift(siftData, cimg, 5, initBlur, thresh, 0.0f, false);
 
-    char *final_sift_data = export_siftdata(siftData);
-
     numPts = siftData.numPts;
-    *siftres = (float *)malloc(sizeof(float) * 128 * numPts);
-    *siftframe = (float *)malloc(sizeof(float) * 2 * numPts);
-    float *curr_res = *siftres;
-    float *curr_frame = *siftframe;
-    SiftPoint *p = siftData.h_data;
+    *siftres = (float *)malloc(sizeof(float)*128*numPts);
+    *siftframe = (float *)malloc(sizeof(float)*2*numPts);
+    float* curRes = *siftres;
+    float* curframe = *siftframe;
+    SiftPoint* p = siftData.h_data;
 
-    for (int i = 0; i < numPts; i++)
-    {
-        memcpy(curr_res, p->data, (128 + 1) * sizeof(float));
-        curr_res += 128;
+    for(int i = 0; i < numPts; i++) {
+        memcpy(curRes, p->data, (128+1)*sizeof(float));
+        curRes+=128;
 
-        *curr_frame++ = p->xpos / w - 0.5;
-        *curr_frame++ = p->ypos / h - 0.5;
+        *curframe++ = p->xpos/w - 0.5;
+        *curframe++ = p->ypos/h - 0.5;
         p++;
     }
 
-    if (!online)
-        FreeSiftData(siftData); 
+    char *final_sift_data = export_siftdata(siftData);
+
+    if(!online) FreeSiftData(siftData); //
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
     print_log("", "0", "0", to_string(numPts) + " SIFT points extracted in " + to_string(durationgmm * 1000) + " ms");
 
-    return make_tuple(numPts, final_sift_data);
+    return make_tuple(numPts, final_sift_data, curRes);
 }
 
-tuple<int, char *, char *> sift_processing(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage)
+tuple<int, char *, char *> sift_processing(Mat image, SiftData &siftData)
 {
     int siftResult;
-    char *sift_data;
     float *siftresg;
     float *siftframe;
     int height, width;
-
-    auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+    char *sift_data;
+    float *curr_res;
+    
+    // auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, tData, width, height, true, false);
+    auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, true, false);
 
     siftResult = get<0>(sift_gpu_results);
     sift_data = get<1>(sift_gpu_results);
+    curr_res = get<2>(sift_gpu_results);
 
     // copying the data to a new variable
-    char *buffer = (char *)calloc(siftResult, sizeof(float) * 128);
+    char *buffer = (char *)calloc(siftResult*128, sizeof(float));
     int buffer_count = 0;
     int bytes_count = 0;
-    for (int i = 0; i < siftResult; i++)
+    for (int i = 0; i < siftResult*128; i++)
     {
+        // if (i < 128) {
+        //     cout << "sift new " << i << " " << *&siftresg[i] << endl;
+        // }
         charfloat sift_curr_result;
-        sift_curr_result.f = *&siftresg[bytes_count];
+        sift_curr_result.f = *&siftresg[i];
         memcpy(&(buffer[buffer_count]), sift_curr_result.b, 4);
         buffer_count += 4;
-        bytes_count += 128;
     }
 
+    free(siftresg);
     free(siftframe);
     return make_tuple(siftResult, buffer, sift_data);
 }
 
-tuple<int, char *> encoding(float *sift_resg, int sift_result)
+tuple<int, char *> encoding(float *siftresg, int siftResult, vector<float> &enc_vec, bool cache)
 {
     double start, finish;
     double durationsift, durationgmm;
-    vector<float> enc_vec;
     char *encoded_vector;
 
     float enc[SIZE] = {0};
 
+    // for (int i = 0; i < siftResult*128; i++)
+    // {
+    //     cout << "encoding fn " << i << " " << *&siftresg[i] << endl;
+    // }
+
     start = wallclock();
-    float *dest = (float *)malloc(sift_result * 82 * sizeof(float));
-    gpu_pca_mm(projection, projectionCenter, sift_resg, dest, sift_result, DST_DIM);
+    float *dest = (float *)malloc(siftResult * 82 * sizeof(float));
+    gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
+
+    // for (int i = 0; i < siftResult*82; i++)
+    // {
+    //     cout << i << " " << *&dest[i] << endl;
+    // }
 
     finish = wallclock();
     durationgmm = (double)(finish - start);
-    print_log("encoding", "0", "0", "PCA encoding took a time of " + to_string(durationgmm * 1000) + " ms");
-
-    cout << sift_result << endl;
+    cout << "PCA encoding time: " << durationgmm << endl;
 
     start = wallclock();
-    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, sift_result, (82 / 2.0) * log(2.0 * VL_PI), enc, NULL, dest);
+    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82 / 2.0) * log(2.0 * VL_PI), enc, NULL, dest);    
+    cout << *covariances << " " << *priors << " " << *means << endl;
+    cout << enc[0] << endl;
 
     ///////////WARNING: add the other NOOP
     float sum = 0.0;
@@ -385,10 +397,13 @@ tuple<int, char *> encoding(float *sift_resg, int sift_result)
 
     // transforming the vector of floats into a char*
     float *enc_vec_floats = &(enc_vec[0]);
-    encoded_vector = (char *)calloc(SIZE, sizeof(float));
+    // encoded_vector = (char *)calloc(SIZE, sizeof(float));
+    encoded_vector = new char[4*SIZE];
+    memset(encoded_vector, 0, 4*SIZE);
     int buffer_count = 0;
     for (float x : enc_vec)
     {
+        // cout << x << endl;
         charfloat enc_vec_result;
         enc_vec_result.f = x;
         memcpy(&(encoded_vector[buffer_count]), enc_vec_result.b, 4);
@@ -421,10 +436,12 @@ tuple<int, char *> lsh_nn(vector<float> enc_vec)
     print_log("lsh", "0", "0", "LSH NN search took a time of " + to_string(duration_lshnn * 1000) + " ms");
 
     int enc_res_size = result.size();
+    cout << "size " << enc_res_size << endl;
     encoded_results = (char *)calloc(enc_res_size, sizeof(int));
     int buffer_count = 0;
     for (int x : result)
     {
+        cout << x << endl;
         charint enc_res;
         enc_res.i = x;
         memcpy(&(encoded_results[buffer_count]), enc_res.b, 4);
@@ -442,7 +459,7 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
 
     for (int idx = 0; idx < result.size(); idx++)
     {
-        // cout << "Testing " << result[idx] << endl;
+        cout << "Testing " << result[idx] << " " << whole_list[result[idx]] << endl;
 
         Mat image = imread(whole_list[result[idx]], CV_LOAD_IMAGE_COLOR);
         SiftData sData;
@@ -454,7 +471,7 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
         MatchSiftData(sData, tData);
         FindHomography(sData, homography, &numMatches, 10000, 0.00f, 0.85f, 5.0);
         int numFit = ImproveHomography(sData, homography, 5, 0.00f, 0.80f, 2.0);
-        double ratio = 100.0f * numFit / min(sData.numPts, tData.numPts);
+        double ratio = 100.0f*numFit/min(sData.numPts, tData.numPts);
         print_log("matching", "0", "0", "Matching features: " + to_string(numFit) + " " + to_string(numMatches) + " " + to_string(ratio) + "% ");
 
         if (ratio > 10)
@@ -490,7 +507,10 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
 
             // FreeSiftData(tData);
             // cout<<"after matching "<<wallclock()<<endl;
+            print_log("matching", "0", "0", "Recognised object(s)");
             return true;
+        } else {
+            print_log("matching", "0", "0", "No matching objects");
         }
     }
     FreeSiftData(tData);
@@ -509,6 +529,8 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     int numMatches;
 
     float *dest;
+
+    // siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
 
     auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
     siftResult = get<0>(sift_gpu_results);
@@ -622,8 +644,9 @@ bool query(Mat queryImage, recognizedMarker &marker)
 
     onlineProcessing(queryImage, tData, test, true, false, false);
 
-    for (int j = 0; j < SIZE; j++)
+    for (int j = 0; j < SIZE; j++) {
         t[j] = test[j];
+        }
     start = wallclock();
     table->find_k_nearest_neighbors(t, nn_num, &result);
     finish = wallclock();
@@ -1344,4 +1367,111 @@ void scalabilityTest()
         cout << "===================================================================" << endl
              << endl;
     }
+}
+
+// TEST NEW FUNCTIONS
+
+void onlineProcessing_sift(Mat image, SiftData &siftData, vector<float> &enc_vec, bool online, bool isColorImage, bool cache)
+{
+    double start, finish;
+    double durationsift, durationgmm;
+    int siftResult;
+    float *siftresg;
+    float *siftframe;
+    int height, width;
+
+    float homography[9];
+    int numMatches;
+
+    // siftResult = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+
+    auto sift_gpu_results = sift_gpu(image, &siftresg, &siftframe, siftData, width, height, online, isColorImage);
+    siftResult = get<0>(sift_gpu_results);
+
+    for (int i = 0; i < 128; i++)
+    {
+        cout << "sift original " << i << " " << *&siftresg[i] << endl;
+    }
+
+    float enc[SIZE] = {0};
+
+    start = wallclock();
+    float *dest = (float *)malloc(siftResult * 82 * sizeof(float));
+    gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
+    cout << *dest << endl;
+
+    finish = wallclock();
+    durationgmm = (double)(finish - start);
+    cout << "PCA encoding time: " << durationgmm << endl;
+
+    start = wallclock();
+    gpu_gmm_1(covariances, priors, means, NULL, NUM_CLUSTERS, 82, siftResult, (82 / 2.0) * log(2.0 * VL_PI), enc, NULL, dest);
+    cout << enc[0] << endl;
+
+    ///////////WARNING: add the other NOOP
+    float sum = 0.0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        sum += enc[i] * enc[i];
+    }
+    for (int i = 0; i < SIZE; i++)
+    {
+        // WARNING: didn't use the max operation
+        enc[i] /= sqrt(sum);
+    }
+    sum = 0.0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        sum += enc[i] * enc[i];
+    }
+    for (int i = 0; i < SIZE; i++)
+    {
+        // WARNING: didn't use the max operation
+        enc[i] /= sqrt(sum);
+    }
+
+    enc_vec = vector<float>(enc, enc + SIZE);
+    
+
+    finish = wallclock();
+    durationgmm = (double)(finish - start);
+    cout << "Fisher Vector encoding time: " << durationgmm << endl;
+
+    free(dest);
+    free(siftresg);
+    free(siftframe);
+}
+
+bool query_sift(Mat queryImage, recognizedMarker &marker)
+{
+    SiftData tData;
+    vector<float> test;
+    vector<int> result;
+    DenseVector<float> t(SIZE);
+    float homography[9];
+    int numMatches;
+
+    double start, finish;
+    double duration_lshnn;
+
+    onlineProcessing_sift(queryImage, tData, test, true, false, false);
+
+    for (int j = 0; j < SIZE; j++) {
+        t[j] = test[j];
+        }
+
+    start = wallclock();
+    table->find_k_nearest_neighbors(t, nn_num, &result);
+    finish = wallclock();
+    duration_lshnn = (double)(finish - start);
+    cout << "LSH NN searching time: " << duration_lshnn << endl;
+    cout << "Query - time before matching: " << wallclock() << endl;
+
+    for (int idx = 0; idx < result.size(); idx++)
+    {
+        cout << "Testing " << result[idx] << " " << whole_list[result[idx]] << endl;
+    }
+
+    FreeSiftData(tData);
+    return false;
 }

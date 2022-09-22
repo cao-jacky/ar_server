@@ -66,6 +66,7 @@ struct inter_service_buffer {
     charint previous_service;
     charint buffer_size;
     unsigned char* buffer;
+    char* image_buffer;
 };
 
 struct sift_data_item {
@@ -84,8 +85,8 @@ void trainCacheParams();
 void loadParams();
 void encodeDatabase(int factor, int nn);
 void test();
-std::tuple<int, char*, char*> sift_processing(cv::Mat image, SiftData &siftData, std::vector<float> &enc_vec, bool online, bool isColorImage);
-std::tuple<int, char*> encoding(float* sift_resg, int sift_result);
+std::tuple<int, char*, char*> sift_processing(cv::Mat image, SiftData &siftData);
+std::tuple<int, char*> encoding(float* siftresg, int siftResult, std::vector<float> &enc_vec, bool cache);
 std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
 bool matching(std::vector<int> result, SiftData &tData, recognizedMarker &marker); 
 bool query(cv::Mat queryImage, recognizedMarker &marker);
@@ -93,4 +94,7 @@ bool cacheQuery(cv::Mat queryImage, recognizedMarker &marker);
 void addCacheItem(frame_buffer curFrame, resBuffer curRes);
 void freeParams();
 void scalabilityTest();
+
+bool query_sift(cv::Mat queryImage, recognizedMarker &marker);
+
 #endif
