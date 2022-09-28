@@ -144,8 +144,12 @@ char *export_siftdata(SiftData &data_struct)
 
     // allocating memory into char*, taking two array as the last two features
     // are arrays of size 3 and 128 respectively
-    int sd_size = num_points * (spf - 2 + 3 + 128);
-    char *sift_data = (char *)calloc(sd_size, sizeof(float));
+    // int sd_size = num_points * (spf - 2 + 3 + 128);
+    int sd_size = num_points * (4*(spf + 3 + 128));
+    // char *sift_data = (char *)calloc(sd_size, sizeof(float));
+    char *sift_data = new char[sd_size];
+    memset(sift_data, 0, sd_size);
+
     int curr_posn = 0; // current position in char array
 
     // inserting data for num_points and max_points

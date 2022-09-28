@@ -472,8 +472,6 @@ void *ThreadUDPReceiverFunction(void *socket)
                           "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
                     }
                 }
-                
-
             }
             else if (curr_frame.data_type == MSG_MATCHING_SIFT)
             {
@@ -825,7 +823,7 @@ void *ThreadUDPSenderFunction(void *socket)
             {
                 print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
                             "Packet payload of " + to_string(curr_item.buffer_size.i) + " will be greater than " + to_string(MAX_PACKET_SIZE) +
-                                " B, therefore, the data will be sent in " + to_string(max_packets) + " packets");
+                                " B, therefore, the data will be sent in " + to_string((int)max_packets) + " packets");
             
                 // preparing the payload buffer of the packets to be sent
                 charint total_packets;
@@ -834,11 +832,9 @@ void *ThreadUDPSenderFunction(void *socket)
 
                 int initial_index = 0;
                 for (int i = 0; i < max_packets; i++) {
-                    cout << "BREAKPOINT 1" << endl;
                     charint curr_packet;
                     curr_packet.i = (int)(i);
                     memcpy(&(sift_buffer[44]), curr_packet.b, 4);
-                    cout << "BREAKPOINT 2 " << initial_index << " " << MAX_PACKET_SIZE << endl;
                     
                     // int to_copy = MAX_PACKET_SIZE;
                     // if (i+1 == max_packets)
@@ -846,7 +842,6 @@ void *ThreadUDPSenderFunction(void *socket)
                     //     to_copy = total_packet_size - initial_index;
                     // }
                     memcpy(&(sift_buffer[48]), &(curr_item.buffer)[initial_index], MAX_PACKET_SIZE);
-                    cout << "BREAKPOINT 3" << endl;
                     int udp_status = sendto(sock, sift_buffer, sizeof(sift_buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
                     print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
                               "Sent packet #" + to_string(i+1) + " of " + to_string((int)max_packets) + " to encoding" +
@@ -913,7 +908,7 @@ void *ThreadUDPSenderFunction(void *socket)
 
             print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
                       "Forwarded frame " + to_string(curr_item.frame_no.i) + " for client " +
-                          string(curr_item.client_id) + " to '" + next_service + "' service for processing " +
+                          string(curr_item.client_id) + " to '" + next_service + "' service for processing" +
                           " with a payload size of " + to_string(curr_item.buffer_size.i));
         }
     }

@@ -1,3 +1,3 @@
-FROM ghcr.io/cao-jacky/ar_server:20220715_1430
+FROM ghcr.io/cao-jacky/ar_server_distributed:20220922_1707
 
 MAINTAINER Jacky Cao <jacky.cao@oulu.fi>
