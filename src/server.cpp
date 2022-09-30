@@ -80,6 +80,8 @@ vector<char *> onlineImages;
 vector<char *> onlineAnnotations;
 
 SiftData reconstructed_data;
+matchingSiftItem receivedSiftData;
+bool isSiftReconstructed = false;
 
 // declaring variables needed for distributed operation
 string service;
@@ -215,6 +217,8 @@ void *ThreadUDPReceiverFunction(void *socket)
     int packet_tally;
     int sift_data_count;
 
+    char* results_buffer;
+
     if (service != "primary")
     {
         registerService(sock); // when first called, try to register with primary service
@@ -313,7 +317,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                               to_string(curr_frame.buffer_size) + " Bytes");
 
                 // copy frame image data into buffer
-                curr_frame.buffer = new char[curr_frame.buffer_size];
+                // curr_frame.buffer = new char[curr_frame.buffer_size];
+                curr_frame.buffer = (char*)malloc(curr_frame.buffer_size);
                 memset(curr_frame.buffer, 0, curr_frame.buffer_size);
                 memcpy(curr_frame.buffer, &(buffer[16]), curr_frame.buffer_size);
 
@@ -399,7 +404,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                         int udp_status = sendto(sock, ms_buffer, sizeof(ms_buffer), 0, (struct sockaddr *)&sift_rec_addr, sizeof(sift_rec_addr));
                     }
 
-                    curr_frame.buffer = new char[curr_frame.buffer_size];
+                    // curr_frame.buffer = new char[curr_frame.buffer_size];
+                    curr_frame.buffer = (char*)malloc(curr_frame.buffer_size);
                     memset(curr_frame.buffer, 0, curr_frame.buffer_size);
                     memcpy(curr_frame.buffer, &(buffer[40]), curr_frame.buffer_size);
 
@@ -448,7 +454,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                                   " with an expected total number of packets of " + to_string(total_packets_no) +
                                   " and total bytes of " + to_string(curr_frame.buffer_size));
 
-                    sift_res_buffer = new char[curr_frame.buffer_size];
+                    // sift_res_buffer = new char[curr_frame.buffer_size];
+                    sift_res_buffer = (char*)malloc(curr_frame.buffer_size);
                     memset(sift_res_buffer, 0, curr_frame.buffer_size);
                     packet_tally = 0;
                     sift_data_count = 0;
@@ -472,7 +479,8 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                     if (packet_tally == total_packets_no)
                     {
-                        curr_frame.buffer = new char[curr_frame.buffer_size];
+                        // curr_frame.buffer = new char[curr_frame.buffer_size];
+                        curr_frame.buffer = (char*)malloc(curr_frame.buffer_size);
                         memset(curr_frame.buffer, 0, curr_frame.buffer_size);
                         memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
                         // free(sift_data_buffer);
@@ -555,7 +563,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                             cout << "Error sending: " << strerror(errno) << endl;
                         }
                         initial_index = i * MAX_PACKET_SIZE;
-                        sleep_for(nanoseconds(5000000));
+                        sleep_for(nanoseconds(10000000));
                     }
                 }
                 else
@@ -598,7 +606,7 @@ void *ThreadUDPReceiverFunction(void *socket)
     }
 }
 
-void siftdata_reconstructor(char *sd_char_array)
+void siftdata_reconstructor(char *sd_char_array, matchingSiftItem receivedSiftData)
 {
     char tmp[4];
     int curr_posn = 0;
@@ -687,12 +695,14 @@ void siftdata_reconstructor(char *sd_char_array)
     }
 
     reconstructed_data.h_data = cpu_data; // inserting data into reconstructed data structure
-    cout << "[STATUS: " << service << "] SiftData has been reconstructed from sift service." << endl;
+    receivedSiftData.data = reconstructed_data;
+    print_log(service, "0", "0", "SiftData has been reconstructed from sift service");
 }
 
 void *udp_sift_data_listener(void *socket)
 {
-    cout << "[STATUS: " << service << "] Created thread to listen for SIFT data packets for the matching service" << endl;
+    print_log(service, "0", "0", "Created thread to listen for SIFT data packets for the matching service");
+
     int sock = *((int *)socket);
     char packet_buffer[16 + MAX_PACKET_SIZE];
     char tmp[4];
@@ -705,6 +715,8 @@ void *udp_sift_data_listener(void *socket)
     int packet_tally;
     int sift_data_count;
     int complete_data_size;
+
+    int last_packet_frame_no;
 
     while (1)
     {
@@ -732,9 +744,13 @@ void *udp_sift_data_listener(void *socket)
                           " and total bytes of " + to_string(complete_data_size));
 
             sift_data_buffer = new char[complete_data_size];
+            // sift_data_buffer = (char*)malloc(complete_data_size);
+
             memset(sift_data_buffer, 0, complete_data_size);
             packet_tally = 0;
             sift_data_count = 0;
+
+            last_packet_frame_no = frame_no;
         }
 
         int to_copy = MAX_PACKET_SIZE;
@@ -742,6 +758,7 @@ void *udp_sift_data_listener(void *socket)
         {
             to_copy = complete_data_size - sift_data_count;
         }
+
         memcpy(&(sift_data_buffer[sift_data_count]), &(packet_buffer[16]), to_copy);
         print_log(service, "0", to_string(frame_no), "For Frame " + to_string(frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
 
@@ -757,9 +774,13 @@ void *udp_sift_data_listener(void *socket)
             {
                 print_log(service, "0", to_string(frame_no),
                           "All packets received for Frame " + to_string(frame_no) + " and will attempt to reconstruct into a SiftData struct");
-                siftdata_reconstructor(sift_data_buffer);
+                receivedSiftData.frame_no;
+                siftdata_reconstructor(sift_data_buffer, receivedSiftData);
+                isSiftReconstructed = true;
+                // free(sift_data_buffer);
             }
         }
+        
     }
 }
 
@@ -807,6 +828,8 @@ void *ThreadUDPSenderFunction(void *socket)
             print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
                       "Frame " + to_string(curr_item.frame_no.i) + " sent to " + next_service +
                           " service for processing with a payload size of " + to_string(curr_item.buffer_size.i));
+
+            free(curr_item.buffer);
         }
         else if (service == "sift")
         {
@@ -866,6 +889,7 @@ void *ThreadUDPSenderFunction(void *socket)
                     // sleep_until(system_clock::now() + seconds(1));
                 }
             }
+            free(curr_item.buffer);
         }
         else if (service == "matching")
         {
@@ -893,6 +917,8 @@ void *ThreadUDPSenderFunction(void *socket)
             print_log(service, string(curr_res.client_id), to_string(curr_res.frame_no.i),
                       "Results for Frame " + to_string(curr_res.frame_no.i) +
                           " sent to client with number of markers of " + to_string(curr_res.buffer_size.i));
+            
+            free(curr_res.buffer);
         }
         else
         {
@@ -922,6 +948,8 @@ void *ThreadUDPSenderFunction(void *socket)
                       "Forwarded frame " + to_string(curr_item.frame_no.i) + " for client " +
                           string(curr_item.client_id) + " to '" + next_service + "' service for processing" +
                           " with a payload size of " + to_string(curr_item.buffer_size.i));
+            
+            free(curr_item.buffer);
         }
     }
 }
@@ -988,6 +1016,7 @@ void *ThreadProcessFunction(void *param)
                 item.image_buffer = frame_data;
 
                 inter_service_data.push(item);
+
             }
         }
         else if (frame_data_type == MSG_DATA_TRANSMISSION || frame_data_type == MSG_SIFT_TO_ENCODING)
@@ -1022,7 +1051,9 @@ void *ThreadProcessFunction(void *param)
                 item.client_ip = client_ip;
                 item.client_port.i = client_port;
                 item.previous_service.i = service_value;
-                item.buffer = new unsigned char[4 + sift_buffer_size];
+
+                // item.buffer = new unsigned char[4 + sift_buffer_size];
+                item.buffer = (unsigned char*)malloc(4 + sift_buffer_size);
                 memset(item.buffer, 0, 4 + sift_buffer_size);
                 memcpy(&(item.buffer[0]), siftresult.b, 4);
                 memcpy(&(item.buffer[4]), sift_buffer, sift_buffer_size);
@@ -1031,7 +1062,7 @@ void *ThreadProcessFunction(void *param)
 
                 // storing SIFT data for retrieval by the matching service
                 char *sift_data_buffer = get<2>(sift_results);
-                int sift_data_size = 4 * siftresult.i * (15 - 2 + 3 + 128); // taken from export_siftdata
+                int sift_data_size = 4 * siftresult.i * (15 + 3 + 128); // taken from export_siftdata
                 print_log(service, string(client_id), to_string(frame_no),
                           "Expected size of SIFT data buffer to store for frame " + to_string(frame_no) +
                               " is " + to_string(sift_data_size) + " Bytes");
@@ -1063,6 +1094,12 @@ void *ThreadProcessFunction(void *param)
                 print_log(service, string(client_id), to_string(frame_no),
                           "Storing SIFT data for client " + string(item.client_id) + " and frame " +
                               to_string(frame_no) + " in SIFT data buffer for collection by matching");
+            
+                free(curr_frame.buffer);
+                free(sift_buffer);
+                // free(sift_data_buffer);
+                // free(item.buffer);
+                
             }
             else if (service == "encoding")
             {
@@ -1071,11 +1108,13 @@ void *ThreadProcessFunction(void *param)
                 memcpy(tmp, &(frame_data[0]), 4);
                 int sift_result = *(int *)tmp;
 
-                char *sift_resg = new char[frame_size];
+                // char *sift_resg = new char[frame_size];
+                char *sift_resg = (char*)malloc(frame_size);
                 memset(sift_resg, 0, frame_size);
                 memcpy(sift_resg, &(frame_data[4]), frame_size);
 
                 float *siftres = new float[128 * sift_result];
+                // float *siftres = (float*)malloc(128*sift_result);
 
                 int data_index = 0;
                 for (int i = 0; i < sift_result * 128; i++)
@@ -1109,6 +1148,9 @@ void *ThreadProcessFunction(void *param)
 
                 inter_service_data.push(item);
                 print_log(service, string(client_id), to_string(frame_no), "Performed encoding on received 'sift' data");
+            
+                free(sift_resg);
+                free(siftres);
             }
             else if (service == "lsh")
             {
@@ -1117,7 +1159,7 @@ void *ThreadProcessFunction(void *param)
                 memcpy(tmp, &(frame_data[0]), 4);
                 int enc_size = *(int *)tmp;
 
-                char *enc_vec_char = (char *)calloc(enc_size, 4);
+                char *enc_vec_char = (char *)malloc(enc_size*4);
                 memcpy(enc_vec_char, &(frame_data[4]), 4 * enc_size);
 
                 // looping through char array to convert data back into floats
@@ -1146,13 +1188,18 @@ void *ThreadProcessFunction(void *param)
                 item.client_ip = client_ip;
                 item.client_port.i = client_port;
                 item.previous_service.i = service_value;
-                item.buffer = new unsigned char[4 + results_buffer_size];
+
+                // item.buffer = new unsigned char[4 + results_buffer_size];
+                item.buffer = (unsigned char*)malloc(4 + results_buffer_size);
                 memset(item.buffer, 0, 4 + results_buffer_size);
                 memcpy(&(item.buffer[0]), results_size.b, 4);
                 memcpy(&(item.buffer[4]), results_vector, results_buffer_size);
 
                 inter_service_data.push(item);
                 print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'matching' data");
+
+                free(results_vector);
+                free(enc_vec_char);
             }
             else if (service == "matching")
             {
@@ -1173,7 +1220,29 @@ void *ThreadProcessFunction(void *param)
 
                     data_index += 4;
                 }
+                
+                // while (receivedSiftData.frame_no != frame_no) {
+                //     cout << "AHHH " << receivedSiftData.frame_no << endl;
+                // }
+                // cout << receivedSiftData.frame_no << endl;
+
+                // if (isSiftReconstructed) {
+                //     cout << "eeee " << receivedSiftData.frame_no << endl;
+                // }
+
                 markerDetected = matching(result, reconstructed_data, marker);
+
+                // bool waitReconstruction = true;
+                // while (waitReconstruction) {
+                //     // cout << "waiting for reconstructed sift data" << endl;
+                //     if (isSiftReconstructed) {
+                //         cout << "RECONSTRUCTED" << endl;
+                //         markerDetected = matching(result, reconstructed_data, marker);
+                //         isSiftReconstructed = false;
+                //         waitReconstruction = false;
+                //         break;
+                //     }
+                // }
 
                 inter_service_buffer curRes;
                 if (markerDetected)
@@ -1186,7 +1255,9 @@ void *ThreadProcessFunction(void *param)
                     curRes.client_ip = client_ip;
                     curRes.client_port.i = client_port;
                     curRes.previous_service.i = BOUNDARY;
+
                     curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
+                    // curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
 
                     int pointer = 0;
                     memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
@@ -1209,6 +1280,8 @@ void *ThreadProcessFunction(void *param)
                     memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
 
                     recognizedMarkerID = marker.markerID.i;
+                    inter_service_data.push(curRes);
+
                     // cout << recognizedMarkerID << endl;
 
                     // if(curRes.markerNum.i > 0)
@@ -1221,7 +1294,8 @@ void *ThreadProcessFunction(void *param)
                     curRes.buffer_size.i = 0;
                 }
 
-                inter_service_data.push(curRes);
+
+                free(results_char);
             }
         }
     }

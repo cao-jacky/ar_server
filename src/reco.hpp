@@ -57,6 +57,17 @@ struct cacheItem {
     recognizedMarker curMarker;
 };
 
+struct matchingSiftItem {
+    char* client_id;
+    int frame_no;
+    SiftData data;
+};
+
+struct matching_args {
+    int udp_socket;
+    matchingSiftItem sift_data;
+};
+
 struct inter_service_buffer {
     char* client_id;
     char* client_ip;

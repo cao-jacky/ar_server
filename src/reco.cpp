@@ -148,6 +148,7 @@ char *export_siftdata(SiftData &data_struct)
     int sd_size = num_points * (4*(spf + 3 + 128));
     // char *sift_data = (char *)calloc(sd_size, sizeof(float));
     char *sift_data = new char[sd_size];
+    // char *sift_data = (char*)malloc(sd_size);
     memset(sift_data, 0, sd_size);
 
     int curr_posn = 0; // current position in char array
@@ -319,7 +320,9 @@ tuple<int, char *, char *> sift_processing(Mat image, SiftData &siftData)
     curr_res = get<2>(sift_gpu_results);
 
     // copying the data to a new variable
-    char *buffer = (char *)calloc(siftResult*128, sizeof(float));
+    // char *buffer = (char *)calloc(siftResult*128, sizeof(float));
+    char *buffer = (char*)malloc(siftResult*128*4);
+
     int buffer_count = 0;
     int bytes_count = 0;
     for (int i = 0; i < siftResult*128; i++)
@@ -422,7 +425,7 @@ tuple<int, char *> lsh_nn(vector<float> enc_vec)
     print_log("lsh", "0", "0", "LSH NN search took a time of " + to_string(duration_lshnn * 1000) + " ms");
 
     int enc_res_size = result.size();
-    encoded_results = (char *)calloc(enc_res_size, sizeof(int));
+    encoded_results = (char *)malloc(enc_res_size*sizeof(int));
     int buffer_count = 0;
     for (int x : result)
     {
@@ -525,7 +528,7 @@ void onlineProcessing(Mat image, SiftData &siftData, vector<float> &enc_vec, boo
     else
     {
         start = wallclock();
-        float *dest = (float *)malloc(siftResult * 82 * sizeof(float));
+        dest = (float *)malloc(siftResult * 82 * sizeof(float));
         gpu_pca_mm(projection, projectionCenter, siftresg, dest, siftResult, DST_DIM);
 
         finish = wallclock();
