@@ -87,6 +87,14 @@ struct sift_data_item {
     char* sift_data;
 };
 
+struct matching_item {
+    char* client_id;
+    char* client_ip;
+    int client_port;
+    int frame_no;
+    std::vector<int> lsh_result;
+};
+
 void print_log(std::string service_name, std::string client_id, std::string frame_no, std::string message);
 
 double wallclock();

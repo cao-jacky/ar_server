@@ -67,6 +67,7 @@ struct sockaddr_in sift_rec_remote_addr;
 struct sockaddr_in matching_rec_addr;
 struct sockaddr_in matching_addr;
 struct sockaddr_in client_addr;
+struct sockaddr_in sift_to_matching_addr;
 
 socklen_t addrlen = sizeof(remoteAddr);
 socklen_t mrd_len = sizeof(matching_rec_addr);
@@ -96,6 +97,10 @@ string next_service;
 json sift_buffer_details;
 deque<sift_data_item> sift_items;
 int sbd_max = 10;
+
+json matching_buffer_details;
+deque<matching_item> matching_items;
+int mbd_max = 10;
 
 // hard coding the maps for each service, nothing clever needed about this
 std::map<string, int> service_map = {
@@ -388,9 +393,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     if (service_value == 5)
                     {
                         char ms_buffer[12];
-
                         memset(ms_buffer, 0, sizeof(ms_buffer));
-
                         memcpy(ms_buffer, curr_frame.client_id, 4);
 
                         charint matching_sift_fno;
@@ -527,20 +530,21 @@ void *ThreadUDPReceiverFunction(void *socket)
                                   " B, therefore, the data will be sent in " + to_string((int)max_packets) + " packets");
 
                     // preparing the buffer of the packets to be sent
-                    char to_m_buffer[16 + MAX_PACKET_SIZE];
-                    memset(to_m_buffer, 0, 16 + MAX_PACKET_SIZE);
+                    char to_m_buffer[20 + MAX_PACKET_SIZE];
+                    memset(to_m_buffer, 0, 20 + MAX_PACKET_SIZE);
+                    memcpy(to_m_buffer, curr_frame.client_id, 4);
 
                     charint curr_frame_no;
                     curr_frame_no.i = msd_frame_no;
-                    memcpy(&(to_m_buffer[0]), curr_frame_no.b, 4);
+                    memcpy(&(to_m_buffer[4]), curr_frame_no.b, 4);
 
                     charint total_packets;
                     total_packets.i = max_packets;
-                    memcpy(&(to_m_buffer[8]), total_packets.b, 4);
+                    memcpy(&(to_m_buffer[12]), total_packets.b, 4);
 
                     charint total_size;
                     total_size.i = msd_data_size;
-                    memcpy(&(to_m_buffer[12]), total_size.b, 4);
+                    memcpy(&(to_m_buffer[16]), total_size.b, 4);
 
                     // setting index to copy data from
                     int initial_index = 0;
@@ -550,55 +554,21 @@ void *ThreadUDPReceiverFunction(void *socket)
                         charint curr_packet;
                         curr_packet.i = i;
 
-                        memcpy(&(to_m_buffer[4]), curr_packet.b, 4);
-                        memcpy(&(to_m_buffer[16]), &(msd_data_buffer)[initial_index], MAX_PACKET_SIZE);
-
-                        int matching_sock = ::socket(AF_INET, SOCK_DGRAM, 0);
-                        int udp_status = sendto(matching_sock, to_m_buffer, sizeof(to_m_buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
+                        memcpy(&(to_m_buffer[8]), curr_packet.b, 4);
+                        memcpy(&(to_m_buffer[20]), &(msd_data_buffer)[initial_index], MAX_PACKET_SIZE);
+         
+                        int udp_status = sendto(sock, to_m_buffer, sizeof(to_m_buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
                         print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                                   "Sent packet #" + to_string(i + 1) + " of " + to_string((int)max_packets) + " to matching" +
                                       " with the following number of characters " + to_string(udp_status));
                         if (udp_status == -1)
                         {
                             cout << "Error sending: " << strerror(errno) << endl;
+                        } else {
+                            close(udp_status);
                         }
                         initial_index = i * MAX_PACKET_SIZE;
                         sleep_for(nanoseconds(10000000));
-                    }
-                }
-                else
-                {
-                    // preparing the single packet to be sent
-                    char to_m_buffer[16 + MAX_PACKET_SIZE];
-                    memset(to_m_buffer, 0, sizeof(buffer));
-
-                    charint curr_frame_no;
-                    curr_frame_no.i = msd_frame_no;
-                    memcpy(&(to_m_buffer[0]), curr_frame_no.b, 4);
-
-                    charint total_packets;
-                    total_packets.i = 1;
-                    memcpy(&(to_m_buffer[8]), total_packets.b, 4);
-
-                    charint total_size;
-                    total_size.i = msd_data_size;
-                    memcpy(&(to_m_buffer[12]), total_size.b, 4);
-
-                    // setting packet number to be read to account for out-of-order delivery
-                    charint curr_packet;
-                    curr_packet.i = 0;
-
-                    memcpy(&(to_m_buffer[4]), curr_packet.b, 4);
-                    memcpy(&(to_m_buffer[16]), &(msd_data_buffer), MAX_PACKET_SIZE);
-
-                    int matching_sock = ::socket(AF_INET, SOCK_DGRAM, 0);
-                    int udp_status = sendto(matching_sock, to_m_buffer, sizeof(to_m_buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
-
-                    // cout << "[STATUS: " << service << "] Sent packet #" << i + 1 << " of " << max_packets;
-                    // cout << ". Sender has status " << udp_status << endl;
-                    if (udp_status == -1)
-                    {
-                        cout << "Error sending: " << strerror(errno) << endl;
                     }
                 }
             }
@@ -704,8 +674,9 @@ void *udp_sift_data_listener(void *socket)
     print_log(service, "0", "0", "Created thread to listen for SIFT data packets for the matching service");
 
     int sock = *((int *)socket);
-    char packet_buffer[16 + MAX_PACKET_SIZE];
+    char packet_buffer[20 + MAX_PACKET_SIZE];
     char tmp[4];
+    char client_id[4];
 
     char *sift_data_buffer;
     int curr_recv_packet_no;
@@ -716,26 +687,31 @@ void *udp_sift_data_listener(void *socket)
     int sift_data_count;
     int complete_data_size;
 
+    recognizedMarker marker;
+    bool markerDetected = false;
+
     int last_packet_frame_no;
 
     while (1)
     {
         memset(packet_buffer, 0, sizeof(packet_buffer));
-        recvfrom(sock, packet_buffer, PACKET_SIZE + 16, 0, (struct sockaddr *)&matching_rec_addr, &mrd_len);
+        recvfrom(sock, packet_buffer, PACKET_SIZE + 20, 0, (struct sockaddr *)&matching_rec_addr, &mrd_len);
 
-        memcpy(tmp, packet_buffer, 4);
-        int frame_no = *(int *)tmp;
+        memcpy(client_id, packet_buffer, 4);
 
         memcpy(tmp, &(packet_buffer[4]), 4);
+        int frame_no = *(int *)tmp;
+
+        memcpy(tmp, &(packet_buffer[8]), 4);
         int curr_packet_no = *(int *)tmp;
 
         if (curr_packet_no == 0)
         {
             // if the first packet received
-            memcpy(tmp, &(packet_buffer[12]), 4);
+            memcpy(tmp, &(packet_buffer[16]), 4);
             complete_data_size = *(int *)tmp;
 
-            memcpy(tmp, &(packet_buffer[8]), 4);
+            memcpy(tmp, &(packet_buffer[12]), 4);
             total_packets_no = *(int *)tmp;
 
             print_log(service, "0", to_string(frame_no),
@@ -759,8 +735,10 @@ void *udp_sift_data_listener(void *socket)
             to_copy = complete_data_size - sift_data_count;
         }
 
-        memcpy(&(sift_data_buffer[sift_data_count]), &(packet_buffer[16]), to_copy);
-        print_log(service, "0", to_string(frame_no), "For Frame " + to_string(frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
+        memcpy(&(sift_data_buffer[sift_data_count]), &(packet_buffer[20]), to_copy);
+        print_log(service, string(client_id), to_string(frame_no), "For Frame " + to_string(frame_no) + 
+            " received packet with packet number of " + to_string(curr_packet_no) + 
+            " out of " + to_string(total_packets_no) + " packets");
 
         packet_tally++;
         sift_data_count += MAX_PACKET_SIZE;
@@ -772,12 +750,87 @@ void *udp_sift_data_listener(void *socket)
 
             if (packet_tally == total_packets_no)
             {
-                print_log(service, "0", to_string(frame_no),
+                print_log(service, string(client_id), to_string(frame_no),
                           "All packets received for Frame " + to_string(frame_no) + " and will attempt to reconstruct into a SiftData struct");
-                receivedSiftData.frame_no;
                 siftdata_reconstructor(sift_data_buffer, receivedSiftData);
-                isSiftReconstructed = true;
-                // free(sift_data_buffer);
+                receivedSiftData.frame_no = frame_no;  
+
+                // find where in the JSON array is the matching frame
+                string frame_to_find = string(client_id) + "_" + to_string(frame_no);
+                int mbd_val = 0;
+                int mbd_loc;
+                for (auto mbd_it : matching_buffer_details)
+                {
+                    // "it" is of type json::reference and has no key() member
+                    if (mbd_it == frame_to_find)
+                    {
+                        mbd_loc = mbd_val;
+                    }
+                    mbd_val++;
+                }
+
+                // copy out the matching data from the deque
+                matching_item md = matching_items[mbd_loc];
+                char *md_client_id = md.client_id;
+                char *md_client_ip = md.client_ip;
+                int md_client_port = md.client_port;
+                int md_frame_no = md.frame_no;
+                vector<int> result = md.lsh_result;
+
+                recognizedMarker marker;
+                markerDetected = matching(result, reconstructed_data, marker);
+
+                inter_service_buffer curRes;
+                if (markerDetected)
+                {
+                    charfloat p;
+                    curRes.client_id = md_client_id;
+                    curRes.frame_no.i = md_frame_no;
+                    curRes.data_type.i = MSG_DATA_TRANSMISSION;
+                    curRes.buffer_size.i = 1;
+                    curRes.client_ip = md_client_ip;
+                    curRes.client_port.i = md_client_port;
+                    curRes.previous_service.i = BOUNDARY;
+
+                    curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
+                    // curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
+
+                    int pointer = 0;
+                    memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
+                    pointer += 4;
+                    memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
+                    pointer += 4;
+                    memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
+                    pointer += 4;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        p.f = marker.corners[j].x;
+                        memcpy(&(curRes.buffer[pointer]), p.b, 4);
+                        pointer += 4;
+                        p.f = marker.corners[j].y;
+                        memcpy(&(curRes.buffer[pointer]), p.b, 4);
+                        pointer += 4;
+                    }
+
+                    memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
+
+                    recognizedMarkerID = marker.markerID.i;
+                    inter_service_data.push(curRes);
+
+                    // cout << recognizedMarkerID << endl;
+
+                    // if(curRes.markerNum.i > 0)
+                    //     addCacheItem(curr_frame, curRes);
+                    //     cout << "Added item to cache" << endl;
+                }
+                else
+                {
+                    curRes.frame_no.i = frame_no;
+                    curRes.buffer_size.i = 0;
+                }
+
+                free(sift_data_buffer);
             }
         }
         
@@ -958,9 +1011,7 @@ void *ThreadProcessFunction(void *param)
 {
     print_log(service, "0", "0", "Processing thread created");
 
-    recognizedMarker marker;
     inter_service_buffer item;
-    bool markerDetected = false;
     char tmp[4];
 
     while (1)
@@ -1220,80 +1271,37 @@ void *ThreadProcessFunction(void *param)
 
                     data_index += 4;
                 }
-                
-                // while (receivedSiftData.frame_no != frame_no) {
-                //     cout << "AHHH " << receivedSiftData.frame_no << endl;
-                // }
-                // cout << receivedSiftData.frame_no << endl;
 
-                // if (isSiftReconstructed) {
-                //     cout << "eeee " << receivedSiftData.frame_no << endl;
+                // sleep_until(system_clock::now() + nanoseconds(100000000));
+                // cout << "Last reconstructed data was " << receivedSiftData.frame_no << " and current is " << frame_no << endl;
+                // if (receivedSiftData.frame_no == frame_no) {
+                //     markerDetected = matching(result, reconstructed_data, marker);
                 // }
 
-                markerDetected = matching(result, reconstructed_data, marker);
+                // create buffer to store for when sift data is reconstructed
+                matching_item curr_mi;
+                curr_mi.client_id = client_id;
+                curr_mi.client_ip = client_ip;
+                curr_mi.client_port = client_port;
+                curr_mi.frame_no = frame_no;
+                curr_mi.lsh_result = result;
 
-                // bool waitReconstruction = true;
-                // while (waitReconstruction) {
-                //     // cout << "waiting for reconstructed sift data" << endl;
-                //     if (isSiftReconstructed) {
-                //         cout << "RECONSTRUCTED" << endl;
-                //         markerDetected = matching(result, reconstructed_data, marker);
-                //         isSiftReconstructed = false;
-                //         waitReconstruction = false;
-                //         break;
-                //     }
-                // }
-
-                inter_service_buffer curRes;
-                if (markerDetected)
+                int mi_count = matching_items.size();
+                if (mi_count == mbd_max)
                 {
-                    charfloat p;
-                    curRes.client_id = client_id;
-                    curRes.frame_no.i = frame_no;
-                    curRes.data_type.i = MSG_DATA_TRANSMISSION;
-                    curRes.buffer_size.i = 1;
-                    curRes.client_ip = client_ip;
-                    curRes.client_port.i = client_port;
-                    curRes.previous_service.i = BOUNDARY;
-
-                    curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
-                    // curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
-
-                    int pointer = 0;
-                    memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
-                    pointer += 4;
-                    memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
-                    pointer += 4;
-                    memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
-                    pointer += 4;
-
-                    for (int j = 0; j < 4; j++)
-                    {
-                        p.f = marker.corners[j].x;
-                        memcpy(&(curRes.buffer[pointer]), p.b, 4);
-                        pointer += 4;
-                        p.f = marker.corners[j].y;
-                        memcpy(&(curRes.buffer[pointer]), p.b, 4);
-                        pointer += 4;
-                    }
-
-                    memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
-
-                    recognizedMarkerID = marker.markerID.i;
-                    inter_service_data.push(curRes);
-
-                    // cout << recognizedMarkerID << endl;
-
-                    // if(curRes.markerNum.i > 0)
-                    //     addCacheItem(curr_frame, curRes);
-                    //     cout << "Added item to cache" << endl;
+                    matching_items.pop_front(); // pop front item if 10 items
                 }
-                else
+                matching_items.push_back(curr_mi); // append to end of the 10 items
+                deque<matching_item>::iterator it;
+                for (it = matching_items.begin(); it != matching_items.end(); ++it)
                 {
-                    curRes.frame_no.i = frame_no;
-                    curRes.buffer_size.i = 0;
+                    matching_item curr_item = *it;
                 }
-
+                if (int(matching_buffer_details.size()) == mbd_max)
+                {
+                    matching_buffer_details.erase(0);
+                }
+                matching_buffer_details.push_back(string(client_id) + "_" + to_string(frame_no));
 
                 free(results_char);
             }
