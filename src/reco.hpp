@@ -104,7 +104,7 @@ void trainCacheParams();
 void loadParams();
 void encodeDatabase(int factor, int nn);
 void test();
-std::tuple<int, char*, char*> sift_processing(cv::Mat image, SiftData &siftData);
+void sift_processing(int &sift_points, char **sift_data_buffer, char **raw_sift_data, cv::Mat image, SiftData &siftData);
 std::tuple<int, char*> encoding(float* siftresg, int siftResult, std::vector<float> &enc_vec, bool cache);
 std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
 bool matching(std::vector<int> result, SiftData &tData, recognizedMarker &marker); 

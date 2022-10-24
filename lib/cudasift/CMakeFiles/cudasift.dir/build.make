@@ -69,9 +69,9 @@ include CMakeFiles/cudasift.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/cudasift.dir/flags.make
 
-CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaImage.cu
-CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaImage.h
-CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudautils.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: cudaImage.cu
+CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: cudaImage.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: cudautils.h
 CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: /usr/include/alloca.h
 CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: /usr/include/asm-generic/errno-base.h
 CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: /usr/include/asm-generic/errno.h
@@ -332,13 +332,13 @@ CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o: cudaImage.cu
 	cd /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/bin/cmake -E make_directory /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.
 	cd /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o -D generated_cubin_file:STRING=/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaImage.cu.o.cubin.txt -P /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaImage.cu.o.Release.cmake
 
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaImage.h
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSift.h
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSiftD.cu
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSiftD.h
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSiftH.cu
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSiftH.h
-CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudautils.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaImage.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSift.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSiftD.cu
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSiftD.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSiftH.cu
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSiftH.h
+CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudautils.h
 CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /usr/include/alloca.h
 CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /usr/include/asm-generic/errno-base.h
 CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: /usr/include/asm-generic/errno.h
@@ -610,10 +610,10 @@ CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o: cudaSiftH.cu
 	cd /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/bin/cmake -E make_directory /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.
 	cd /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir && /home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/bin/cmake -D verbose:BOOL=$(VERBOSE) -D build_configuration:STRING=Release -D generated_file:STRING=/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o -D generated_cubin_file:STRING=/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o.cubin.txt -P /home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.Release.cmake
 
-CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaImage.h
-CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSift.h
-CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/cudautils.h
-CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /home/jacky/research/single_process/ar_server/lib/cudasift/matching.cu
+CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: cudaImage.h
+CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: cudaSift.h
+CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: cudautils.h
+CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: matching.cu
 CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /usr/include/alloca.h
 CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /usr/include/asm-generic/errno-base.h
 CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o: /usr/include/asm-generic/errno.h

@@ -3,7 +3,6 @@
 
 CMakeFiles/cudasift.dir/geomFuncs.cpp.o
  /home/jacky/research/ar_server/lib/cudasift/geomFuncs.cpp
- /home/jacky/research/single_process/ar_server/lib/cudasift/geomFuncs.cpp
  /usr/include/stdc-predef.h
  /usr/include/c++/8/iostream
  /usr/include/x86_64-linux-gnu/c++/8/bits/c++config.h
@@ -271,12 +270,11 @@ CMakeFiles/cudasift.dir/geomFuncs.cpp.o
  /usr/local/include/opencv2/core/optim.hpp
  /usr/local/include/opencv2/core/ovx.hpp
  /usr/local/include/opencv2/core/cvdef.h
- /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSift.h
- /home/jacky/research/single_process/ar_server/lib/cudasift/cudaImage.h
+ /home/jacky/research/ar_server/lib/cudasift/cudaSift.h
+ /home/jacky/research/ar_server/lib/cudasift/cudaImage.h
 
 CMakeFiles/cudasift.dir/mainSift.cpp.o
  /home/jacky/research/ar_server/lib/cudasift/mainSift.cpp
- /home/jacky/research/single_process/ar_server/lib/cudasift/mainSift.cpp
  /usr/include/stdc-predef.h
  /usr/include/c++/8/iostream
  /usr/include/x86_64-linux-gnu/c++/8/bits/c++config.h
@@ -567,6 +565,6 @@ CMakeFiles/cudasift.dir/mainSift.cpp.o
  /usr/local/include/opencv2/videoio/videoio_c.h
  /usr/local/include/opencv2/imgproc/imgproc.hpp
  /usr/local/include/opencv2/imgproc.hpp
- /home/jacky/research/single_process/ar_server/lib/cudasift/cudaImage.h
- /home/jacky/research/single_process/ar_server/lib/cudasift/cudaSift.h
+ /home/jacky/research/ar_server/lib/cudasift/cudaImage.h
+ /home/jacky/research/ar_server/lib/cudasift/cudaSift.h
 
