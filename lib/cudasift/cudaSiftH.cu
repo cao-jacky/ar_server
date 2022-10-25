@@ -512,4 +512,3 @@ double FindPointsMulti(CudaImage *sources, SiftData &siftData, float thresh, flo
   checkMsg("FindPointsMulti() execution failed\n");
   return 0.0;
 }
-

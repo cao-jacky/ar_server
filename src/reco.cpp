@@ -147,8 +147,8 @@ char *export_siftdata(SiftData &data_struct)
     // int sd_size = num_points * (spf - 2 + 3 + 128);
     int sd_size = num_points * (4 * (spf + 3 + 128));
     // char *sift_data = (char *)calloc(sd_size, sizeof(float));
-    char *sift_data = new char[sd_size];
-    // char *sift_data = (char*)malloc(sd_size);
+    // char *sift_data = new char[sd_size];
+    char *sift_data = (char*)malloc(sd_size);
     memset(sift_data, 0, sd_size);
 
     int curr_posn = 0; // current position in char array
@@ -313,8 +313,12 @@ tuple<float *> sift_gpu_new(Mat img, float **siftres, float **siftframe, SiftDat
     CudaImage cimg;
     double start, finish, durationgmm;
 
-    // if(online) resize(img, img, Size(), 0.5, 0.5);
-    if (isColorImage)            // free(curr_res.buffer);
+    if (isColorImage)
+        cvtColor(img, img, CV_BGR2GRAY);
+    img.convertTo(img, CV_32FC1);
+    start = wallclock();
+    w = img.cols;
+    h = img.rows;
 
     cimg.Allocate(w, h, iAlignUp(w, 128), false, NULL, (float *)img.data);
     cimg.Download();
@@ -354,7 +358,6 @@ tuple<float *> sift_gpu_new(Mat img, float **siftres, float **siftframe, SiftDat
     return make_tuple(curRes);
 }
 
-
 void sift_processing(int &sift_points, char **sift_data_buffer, char **raw_sift_data, Mat image, SiftData &siftData)
 {
     float *siftresg;
@@ -363,13 +366,6 @@ void sift_processing(int &sift_points, char **sift_data_buffer, char **raw_sift_
     float *curr_res;
 
     auto sift_gpu_results = sift_gpu_new(image, &siftresg, &siftframe, siftData, width, height, true, false, sift_points, raw_sift_data);
-
-    // sift_points = get<0>(sift_gpu_results);
-
-    // *raw_sift_data = get<0>(sift_gpu_results);
-    // char *rsd_tmp = *raw_sift_data;
-    // *rsd_tmp = *sift_data;
-
     curr_res = get<0>(sift_gpu_results);
 
     // copying the data to the function-passed variable
@@ -384,9 +380,6 @@ void sift_processing(int &sift_points, char **sift_data_buffer, char **raw_sift_
         sift_curr_result.f = *&siftresg[i];
         memcpy(&sdb_tmp[buffer_count], sift_curr_result.b, 4);
 
-        // char tmp[4];
-        // memcpy(tmp, &sift_data_buffer[buffer_count], 4);
-        // cout << *(float*)tmp << endl;
         buffer_count += 4;
     }
 
