@@ -344,33 +344,6 @@ void *ThreadUDPReceiverFunction(void *socket)
                 }
 
                 print_log(service, "0", "0", "Received confirmation from primary that this service is now logged as online and active");
-
-                // check if there is a following service, and attempt to contact
-                json val_names = (services_outline["val_name"]);
-                int next_service_val = service_value + 1;
-                auto nsv = val_names.find(to_string(next_service_val));
-                if ((nsv != val_names.end()) == true)
-                {
-                    // if there is a following service, set the details of it
-                    string next_service = *nsv;
-                    json next_service_details = services[next_service];
-
-                    string next_service_ip = next_service_details[0];
-                    string next_service_port_string = next_service_details[1];
-                    int next_service_port = stoi(next_service_port_string);
-
-                    if (local_operation == "false")
-                    {
-                        inet_pton(AF_INET, next_service_ip.c_str(), &(next_service_addr.sin_addr));
-                        print_log(service, "0", "0", "Setting the details of the next service '" + next_service + "' to have an IP of " + next_service_ip + " and port " + to_string(next_service_port));
-                    }
-                    else if (local_operation == "true")
-                    {
-                        inet_pton(AF_INET, local_ip.c_str(), &(next_service_addr.sin_addr));
-                        print_log(service, "0", "0", "Setting the details of the next service '" + next_service + "' to have an IP of " + local_ip + " and port " + to_string(next_service_port));
-                    }
-                    next_service_addr.sin_port = htons(next_service_port);
-                }
             }
             else if (curr_frame.data_type == MSG_DATA_TRANSMISSION)
             {
@@ -1482,6 +1455,33 @@ void runServer(int port, string service)
             inet_pton(AF_INET, local_ip.c_str(), &(sift_rec_remote_addr.sin_addr));
         }
         sift_rec_remote_addr.sin_port = htons(51005);
+    }
+
+    // check if there is a following service, and attempt to contact
+    json val_names = (services_outline["val_name"]);
+    int next_service_val = service_value + 1;
+    auto nsv = val_names.find(to_string(next_service_val));
+    if ((nsv != val_names.end()) == true)
+    {
+        // if there is a following service, set the details of it
+        string next_service = *nsv;
+        json next_service_details = services[next_service];
+
+        string next_service_ip = next_service_details[0];
+        string next_service_port_string = next_service_details[1];
+        int next_service_port = stoi(next_service_port_string);
+
+        if (local_operation == "false")
+        {
+            inet_pton(AF_INET, next_service_ip.c_str(), &(next_service_addr.sin_addr));
+            print_log(service, "0", "0", "Setting the details of the next service '" + next_service + "' to have an IP of " + next_service_ip + " and port " + to_string(next_service_port));
+        }
+        else if (local_operation == "true")
+        {
+            inet_pton(AF_INET, local_ip.c_str(), &(next_service_addr.sin_addr));
+            print_log(service, "0", "0", "Setting the details of the next service '" + next_service + "' to have an IP of " + local_ip + " and port " + to_string(next_service_port));
+        }
+        next_service_addr.sin_port = htons(next_service_port);
     }
 
     pthread_join(receiverThread, NULL);
