@@ -34,6 +34,8 @@ struct frame_buffer {
     int data_type;
     int buffer_size;
     char* buffer;
+    char* sift_ip;
+    int sift_port;
 };
 
 struct resBuffer {
@@ -78,6 +80,8 @@ struct inter_service_buffer {
     charint buffer_size;
     unsigned char* buffer;
     char* image_buffer;
+    char* sift_ip;
+    charint sift_port;
 };
 
 struct sift_data_item {

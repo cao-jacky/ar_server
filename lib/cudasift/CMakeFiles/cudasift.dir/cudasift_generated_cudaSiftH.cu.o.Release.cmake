@@ -57,29 +57,29 @@ if(NOT generated_file)
 endif()
 
 # Set these up as variables to make reading the generated file easier
-set(CMAKE_COMMAND "/home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/bin/cmake") # path
-set(source_file "/home/jacky/research/ar_server/lib/cudasift/cudaSiftH.cu") # path
-set(NVCC_generated_dependency_file "/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.NVCC-depend") # path
-set(cmake_dependency_file "/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.depend") # path
-set(CUDA_make2cmake "/home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/share/cmake-3.20/Modules/FindCUDA/make2cmake.cmake") # path
-set(CUDA_parse_cubin "/home/jacky/anaconda3/lib/python3.8/site-packages/cmake/data/share/cmake-3.20/Modules/FindCUDA/parse_cubin.cmake") # path
+set(CMAKE_COMMAND "/usr/bin/cmake") # path
+set(source_file "/home/ubuntu/ar_server/lib/cudasift/cudaSiftH.cu") # path
+set(NVCC_generated_dependency_file "/home/ubuntu/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.NVCC-depend") # path
+set(cmake_dependency_file "/home/ubuntu/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//cudasift_generated_cudaSiftH.cu.o.depend") # path
+set(CUDA_make2cmake "/usr/share/cmake-3.16/Modules/FindCUDA/make2cmake.cmake") # path
+set(CUDA_parse_cubin "/usr/share/cmake-3.16/Modules/FindCUDA/parse_cubin.cmake") # path
 set(build_cubin OFF) # bool
 set(CUDA_HOST_COMPILER "/usr/bin/cc") # path
 # We won't actually use these variables for now, but we need to set this, in
 # order to force this file to be run again if it changes.
-set(generated_file_path "/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.") # path
-set(generated_file_internal "/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o") # path
-set(generated_cubin_file_internal "/home/jacky/research/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o.cubin.txt") # path
+set(generated_file_path "/home/ubuntu/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//.") # path
+set(generated_file_internal "/home/ubuntu/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o") # path
+set(generated_cubin_file_internal "/home/ubuntu/ar_server/lib/cudasift/CMakeFiles/cudasift.dir//./cudasift_generated_cudaSiftH.cu.o.cubin.txt") # path
 
 set(CUDA_NVCC_EXECUTABLE "/usr/local/cuda-10.1/bin/nvcc") # path
-set(CUDA_NVCC_FLAGS -lineinfo;-ccbin;/usr/bin/gcc-7;--compiler-options;-O2;-D_FORCE_INLINES;-DVERBOSE_NOT ;; -arch=sm_75) # list
+set(CUDA_NVCC_FLAGS -lineinfo;-ccbin;/usr/bin/gcc-7;--compiler-options;-O2;-D_FORCE_INLINES;-DVERBOSE_NOT ;; -arch=sm_35) # list
 # Build specific configuration flags
 set(CUDA_NVCC_FLAGS_RELEASE  ; )
 set(CUDA_NVCC_FLAGS_DEBUG  ; )
 set(CUDA_NVCC_FLAGS_MINSIZEREL  ; )
 set(CUDA_NVCC_FLAGS_RELWITHDEBINFO  ; )
 set(nvcc_flags -m64) # list
-set(CUDA_NVCC_INCLUDE_DIRS [==[/usr/local/cuda-10.1/include;/home/jacky/research/ar_server/lib/cudasift;/usr/local/cuda-10.1/include;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv;/usr/local/include;/usr/local/include/opencv]==]) # list (needs to be in lua quotes to address backslashes)
+set(CUDA_NVCC_INCLUDE_DIRS [==[/usr/local/cuda-10.1/include;/home/ubuntu/ar_server/lib/cudasift;/usr/local/cuda-10.1/include;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4;/usr/local/include/opencv4]==]) # list (needs to be in lua quotes to address backslashes)
 string(REPLACE "\\" "/" CUDA_NVCC_INCLUDE_DIRS "${CUDA_NVCC_INCLUDE_DIRS}")
 set(CUDA_NVCC_COMPILE_DEFINITIONS [==[]==]) # list (needs to be in lua quotes see #16510 ).
 set(format_flag "-c") # string
@@ -163,7 +163,7 @@ macro(cuda_execute_process status command)
     # copy and paste a runnable command line.
     set(cuda_execute_process_string)
     foreach(arg ${ARGN})
-      # If there are quotes, escape them, so they come through.
+      # If there are quotes, excape them, so they come through.
       string(REPLACE "\"" "\\\"" arg ${arg})
       # Args with spaces need quotes around them to get them to be parsed as a single argument.
       if(arg MATCHES " ")
@@ -182,7 +182,7 @@ endmacro()
 # Delete the target file
 cuda_execute_process(
   "Removing ${generated_file}"
-  COMMAND "${CMAKE_COMMAND}" -E rm -f "${generated_file}"
+  COMMAND "${CMAKE_COMMAND}" -E remove "${generated_file}"
   )
 
 # For CUDA 2.3 and below, -G -M doesn't work, so remove the -G flag
@@ -249,7 +249,7 @@ endif()
 # Delete the temporary file
 cuda_execute_process(
   "Removing ${cmake_dependency_file}.tmp and ${NVCC_generated_dependency_file}"
-  COMMAND "${CMAKE_COMMAND}" -E rm -f "${cmake_dependency_file}.tmp" "${NVCC_generated_dependency_file}"
+  COMMAND "${CMAKE_COMMAND}" -E remove "${cmake_dependency_file}.tmp" "${NVCC_generated_dependency_file}"
   )
 
 if(CUDA_result)
@@ -275,7 +275,7 @@ if(CUDA_result)
   # Since nvcc can sometimes leave half done files make sure that we delete the output file.
   cuda_execute_process(
     "Removing ${generated_file}"
-    COMMAND "${CMAKE_COMMAND}" -E rm -f "${generated_file}"
+    COMMAND "${CMAKE_COMMAND}" -E remove "${generated_file}"
     )
   message(FATAL_ERROR "Error generating file ${generated_file}")
 else()

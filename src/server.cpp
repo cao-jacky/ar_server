@@ -211,7 +211,7 @@ void *ThreadUDPReceiverFunction(void *socket)
     print_log(service, "0", "0", "UDP receiver thread created");
 
     char tmp[4];
-    char buffer[48 + PACKET_SIZE];
+    char buffer[56 + PACKET_SIZE];
     int sock = *((int *)socket);
 
     char *sift_res_buffer;
@@ -361,6 +361,13 @@ void *ThreadUDPReceiverFunction(void *socket)
                     memcpy(tmp, &(buffer[32]), 4);
                     curr_frame.client_port = *(int *)tmp;
 
+                    // copy sift details out
+                    memcpy(tmp_ip, &(buffer[40]), 16);
+                    curr_frame.sift_ip = (char *)tmp_ip;
+
+                    memcpy(tmp, &(buffer[44]), 4);
+                    curr_frame.sift_port = *(int *)tmp;
+
                     // if matching service, proceed to request the corresponding data from sift
                     if (service_value == 5)
                     {
@@ -382,7 +389,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     // curr_frame.buffer = new char[curr_frame.buffer_size];
                     curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
                     memset(curr_frame.buffer, 0, curr_frame.buffer_size);
-                    memcpy(curr_frame.buffer, &(buffer[40]), curr_frame.buffer_size);
+                    memcpy(curr_frame.buffer, &(buffer[48]), curr_frame.buffer_size);
 
                     frames.push(curr_frame);
                 }
@@ -420,6 +427,10 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                 memcpy(tmp, &(buffer[40]), 4);
                 total_packets_no = *(int *)tmp;
+
+                // store the sift IP and port details 
+                curr_frame.sift_ip = device_ip;
+                curr_frame.sift_port = device_port;
 
                 if (curr_packet_no == 0)
                 {
@@ -968,7 +979,7 @@ void *ThreadUDPSenderFunction(void *socket)
             inter_service_data.pop();
 
             int item_data_size = curr_item.buffer_size.i;
-            char buffer[40 + item_data_size];
+            char buffer[48 + item_data_size];
 
             memset(buffer, 0, sizeof(buffer));
             memcpy(buffer, curr_item.client_id, 4);
@@ -978,7 +989,9 @@ void *ThreadUDPSenderFunction(void *socket)
             memcpy(&(buffer[16]), curr_item.client_ip, 16);
             memcpy(&(buffer[32]), curr_item.client_port.b, 4);
             memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
-            memcpy(&(buffer[40]), &(curr_item.buffer)[0], curr_item.buffer_size.i);
+            memcpy(&(buffer[40]), curr_item.sift_ip, 4);
+            memcpy(&(buffer[44]), curr_item.sift_port.b, 4);
+            memcpy(&(buffer[48]), &(curr_item.buffer)[0], curr_item.buffer_size.i);
 
             int udp_status = sendto(next_service_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
             close(next_service_socket);
@@ -1178,6 +1191,9 @@ void *ThreadProcessFunction(void *param)
                 memcpy(&(item.buffer[0]), encoded_size.b, 4);
                 memcpy(&(item.buffer[4]), encoded_vector, encoding_buffer_size);
 
+                item.sift_ip = curr_frame.sift_ip;
+                item.sift_port.i = curr_frame.sift_port;
+
                 inter_service_data.push(item);
                 print_log(service, string(client_id), to_string(frame_no), "Performed encoding on received 'sift' data");
 
@@ -1225,11 +1241,26 @@ void *ThreadProcessFunction(void *param)
                 memcpy(&(item.buffer[0]), results_size.b, 4);
                 memcpy(&(item.buffer[4]), results_vector, results_buffer_size);
 
+                cout << "BREAKPOINT1" << endl;
+
+                char* sift_ip = curr_frame.sift_ip;
+                int sift_port = curr_frame.sift_port;
+
+                cout << "SIFT DETAILS ARE " << sift_ip << " " << sift_port << endl;
+
+                item.sift_ip = sift_ip;
+                item.sift_port.i = sift_port;
+
                 inter_service_data.push(item);
                 print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'matching' data");
             }
             else if (service == "matching")
             {
+                //item.sift_ip = curr_frame.sift_ip;
+                //item.sift_port = curr_frame.sift_port;
+
+                cout << "SIFT DETAILS ARE " << curr_frame.sift_ip << " " << curr_frame.sift_port << endl;
+
                 vector<int> result;
 
                 memcpy(tmp, &(frame_data[0]), 4);
@@ -1560,7 +1591,7 @@ int main(int argc, char *argv[])
         encodeDatabase(querysizefactor, nn_num);
     }
 
-    // cout << service_value << endl;
+    //cout << service_value << endl;
 
     // setting the specified host IP address and the hardcoded port
     inet_pton(AF_INET, argv[2], &(main_addr.sin_addr));
