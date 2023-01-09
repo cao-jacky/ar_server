@@ -96,11 +96,11 @@ string next_service;
 
 json sift_buffer_details;
 deque<sift_data_item> sift_items;
-int sbd_max = 10;
+int sbd_max = 50;
 
 json matching_buffer_details;
 deque<matching_item> matching_items;
-int mbd_max = 10;
+int mbd_max = 50;
 
 // hard coding the maps for each service, nothing clever needed about this
 std::map<string, int> service_map = {
@@ -224,6 +224,8 @@ void *ThreadUDPReceiverFunction(void *socket)
 
     char *results_buffer;
 
+    char *previous_client;
+
     if (service != "primary")
     {
         registerService(sock); // when first called, try to register with primary service
@@ -242,6 +244,7 @@ void *ThreadUDPReceiverFunction(void *socket)
         frame_buffer curr_frame;
         memcpy(device_id, buffer, 4);
         curr_frame.client_id = (char *)device_id;
+        char *curr_client = (char*)device_id;
 
         memcpy(tmp, &(buffer[4]), 4);
         curr_frame.frame_no = *(int *)tmp;
@@ -450,7 +453,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                 curr_frame.sift_ip = device_ip;
                 curr_frame.sift_port = device_port;
 
-                if (curr_packet_no == 0)
+                // logic to check for if first packet from a client or if the client does not match the previous
+                if (curr_packet_no == 0 || curr_client != previous_client)
                 {
                     // if the first packet received
                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
@@ -458,41 +462,45 @@ void *ThreadUDPReceiverFunction(void *socket)
                                   " with an expected total number of packets of " + to_string(total_packets_no) +
                                   " and total bytes of " + to_string(curr_frame.buffer_size));
 
-                    // sift_res_buffer = new char[curr_frame.buffer_size];
+                    //sift_res_buffer = new char[curr_frame.buffer_size];
                     sift_res_buffer = (char *)malloc(curr_frame.buffer_size);
                     memset(sift_res_buffer, 0, curr_frame.buffer_size);
                     packet_tally = 0;
                     sift_data_count = 0;
                 }
 
-                int to_copy = MAX_PACKET_SIZE;
-                if (curr_packet_no + 1 == total_packets_no)
-                {
-                    to_copy = (int)curr_frame.buffer_size - sift_data_count;
-                }
-                memcpy(&(sift_res_buffer[sift_data_count]), &(buffer[48]), to_copy);
-                print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                          "For Frame " + to_string(curr_frame.frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
-                packet_tally++;
-                sift_data_count += MAX_PACKET_SIZE;
-
-                if (curr_packet_no + 1 == total_packets_no)
-                {
-                    // need to add logic to check whether all of the packets were received,
-                    // and whether they were in the correct order
-
-                    if (packet_tally == total_packets_no)
+                if (curr_client == previous_client) {
+                    int to_copy = MAX_PACKET_SIZE;
+                    int copy_index = curr_packet_no * MAX_PACKET_SIZE;
+                    if (curr_packet_no + 1 == total_packets_no)
                     {
-                        // curr_frame.buffer = new char[curr_frame.buffer_size];
-                        curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                        memset(curr_frame.buffer, 0, curr_frame.buffer_size);
-                        memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
+                        to_copy = (int)curr_frame.buffer_size - sift_data_count;
+                    }
+                    memcpy(&(sift_res_buffer[copy_index]), &(buffer[48]), to_copy);
+                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                                "For Frame " + to_string(curr_frame.frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
+                    packet_tally++;
+                    sift_data_count += MAX_PACKET_SIZE;
 
-                        frames.push(curr_frame);
-                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                                  "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
+                    if (curr_packet_no + 1 == total_packets_no)
+                    {
+                        // need to add logic to check whether all of the packets were received,
+                        // and whether they were in the correct order
+
+                        if (packet_tally == total_packets_no)
+                        {
+                            // curr_frame.buffer = new char[curr_frame.buffer_size];
+                            curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
+                            memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                            memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
+
+                            frames.push(curr_frame);
+                            print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                                        "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
+                        }
                     }
                 }
+                previous_client = curr_client;
             }
             else if (curr_frame.data_type == MSG_MATCHING_SIFT)
             {
@@ -800,8 +808,8 @@ void *udp_sift_data_listener(void *socket)
                     curRes.client_port.i = md_client_port;
                     curRes.previous_service.i = BOUNDARY;
 
-                    curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
-                    // curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
+                    //curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
+                    curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
 
                     int pointer = 0;
                     memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
@@ -1273,10 +1281,11 @@ void *ThreadProcessFunction(void *param)
 
                 memcpy(tmp, &(frame_data[0]), 4);
                 int result_size = *(int *)tmp;
-
-                char *results_char = new char[result_size * 4];
-                memset(results_char, 0, result_size * 4);
-                memcpy(results_char, &(frame_data[4]), 4 * result_size);
+                    
+                //char *results_char = new char[result_size * 4];
+                char *results_char = (char*)malloc(result_size*4);
+                memset(results_char, 0, result_size*4);
+                memcpy(results_char, &(frame_data[4]), result_size*4);
 
                 int data_index = 0;
                 for (int i = 0; i < result_size; i++)
@@ -1303,9 +1312,9 @@ void *ThreadProcessFunction(void *param)
                 curr_mi.lsh_result = result;
 
                 int mi_count = matching_items.size();
-                if (mi_count == mbd_max)
+                if ((mi_count-mbd_max)==0)
                 {
-                    matching_items.pop_front(); // pop front item if 10 items
+                    matching_items.pop_front();
                 }
                 matching_items.push_back(curr_mi); // append to end of the 10 items
                 deque<matching_item>::iterator it;
@@ -1318,8 +1327,7 @@ void *ThreadProcessFunction(void *param)
                     matching_buffer_details.erase(0);
                 }
                 matching_buffer_details.push_back(string(client_id) + "_" + to_string(frame_no));
-
-                delete[] results_char;
+                //delete[] results_char;
             }
         }
     }
