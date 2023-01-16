@@ -96,11 +96,11 @@ string next_service;
 
 json sift_buffer_details;
 deque<sift_data_item> sift_items;
-int sbd_max = 50;
+int sbd_max = 100;
 
 json matching_buffer_details;
 deque<matching_item> matching_items;
-int mbd_max = 50;
+int mbd_max = 100;
 
 // hard coding the maps for each service, nothing clever needed about this
 std::map<string, int> service_map = {
@@ -793,6 +793,8 @@ void *udp_sift_data_listener(void *socket)
                 int md_frame_no = md.frame_no;
                 vector<int> result = md.lsh_result;
 
+                cout << mbd_loc << " " << md_frame_no << " " << matching_items.size()<< endl;
+
                 recognizedMarker marker;
                 markerDetected = matching(result, reconstructed_data, marker);
 
@@ -845,6 +847,9 @@ void *udp_sift_data_listener(void *socket)
                     curRes.frame_no.i = frame_no;
                     curRes.buffer_size.i = 0;
                 }
+
+                //matching_items.erase(matching_items.begin()+mbd_loc);
+                //matching_buffer_details.erase(mbd_loc);
             }
         }
 
@@ -1312,20 +1317,20 @@ void *ThreadProcessFunction(void *param)
                 curr_mi.lsh_result = result;
 
                 int mi_count = matching_items.size();
-                if ((mi_count-mbd_max)==0)
-                {
-                    matching_items.pop_front();
-                }
+                // if ((mi_count-mbd_max)==0)
+                // {
+                //     matching_items.pop_front();
+                // }
                 matching_items.push_back(curr_mi); // append to end of the 10 items
                 deque<matching_item>::iterator it;
                 for (it = matching_items.begin(); it != matching_items.end(); ++it)
                 {
                     matching_item curr_item = *it;
                 }
-                if (int(matching_buffer_details.size()) == mbd_max)
-                {
-                    matching_buffer_details.erase(0);
-                }
+                // if (int(matching_buffer_details.size()) == mbd_max)
+                // {
+                //     matching_buffer_details.erase(0);
+                // }
                 matching_buffer_details.push_back(string(client_id) + "_" + to_string(frame_no));
                 //delete[] results_char;
             }
