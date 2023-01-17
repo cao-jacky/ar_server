@@ -21,7 +21,7 @@ LIB += `pkg-config --cflags --libs opencv`
 LIB += -fopenmp -lcublas
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio
 
-NVCC	= /usr/local/cuda/bin/nvcc -arch=sm_70 -m 64 $(INC) 
+NVCC	= /usr/local/cuda/bin/nvcc -arch=sm_30 -m 64 $(INC) 
 
 CXX = g++ -pipe
 CC = gcc -pipe

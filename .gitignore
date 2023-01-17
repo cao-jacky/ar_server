@@ -3,5 +3,7 @@
 *.tar
 /logs_server/*.txt
 /logs_devices/*.txt
+/lib/cudasift/CMakeCache.txt
+
 
 ar_server.tar.gz
