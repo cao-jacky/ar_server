@@ -237,13 +237,19 @@ void *ThreadUDPReceiverFunction(void *socket)
         recvfrom(sock, buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
 
         char device_id[4];
+        char client_id[4];
         char *device_ip = inet_ntoa(remoteAddr.sin_addr);
         int device_port = htons(remoteAddr.sin_port);
 
         // copy client frames into frames buffer if main service
         frame_buffer curr_frame;
+        memcpy(client_id, buffer, 4);
         memcpy(device_id, buffer, 4);
+
         curr_frame.client_id = (char *)device_id;
+
+        //char curr_client[4];
+        //memcpy(&(curr_client[0]), device_id, 4);
         char *curr_client = (char*)device_id;
 
         memcpy(tmp, &(buffer[4]), 4);
@@ -260,7 +266,8 @@ void *ThreadUDPReceiverFunction(void *socket)
             if (curr_frame.data_type == MSG_ECHO)
             {
                 // if an echo message from the client
-                print_log(service, string(curr_frame.client_id), "0", "Received an echo message");
+                string device_ip_print = device_ip;
+                print_log(service, string(curr_frame.client_id), "0", "Received an echo message from client with IP " + device_ip_print + " and port " + to_string(device_port));
                 charint echoID;
                 echoID.i = curr_frame.frame_no;
                 char echo[4];
@@ -283,7 +290,6 @@ void *ThreadUDPReceiverFunction(void *socket)
                 charint device_ip_len;
                 device_ip_len.i = client_ip_strlen;
                 memcpy(&(client_registration[12]), device_ip_len.b, 4);
-
                 memcpy(&(client_registration[16]), device_ip, client_ip_strlen);
 
                 continue;
@@ -360,7 +366,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     char tmp_ip[16];
                     memcpy(tmp_ip, &(buffer[16]), 16);
                     curr_frame.client_ip = (char *)tmp_ip;
-
+                    
                     memcpy(tmp, &(buffer[32]), 4);
                     curr_frame.client_port = *(int *)tmp;
 
@@ -378,10 +384,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                     if (service_value == 5)
                     {
                         char* sift_ip = curr_frame.sift_ip;
-                        //int sift_port = curr_frame.sift_port;
 
                         json sift_ns = services["sift"];
-                        //string sift_ip = sift_ns[0];
                         string sift_port_string = sift_ns[1];
                         int sift_port = stoi(sift_port_string);
 
@@ -389,7 +393,8 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                         char ms_buffer[12];
                         memset(ms_buffer, 0, sizeof(ms_buffer));
-                        memcpy(ms_buffer, curr_frame.client_id, 4);
+                        //memcpy(ms_buffer, client_id, 4);
+                        //memcpy(&(ms_buffer[0]), client_id, sizeof(client_id));
 
                         charint matching_sift_fno;
                         matching_sift_fno.i = curr_frame.frame_no;
@@ -406,7 +411,6 @@ void *ThreadUDPReceiverFunction(void *socket)
                         
                         print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Requested data from sift service with details " +  sift_ip_string + " " + to_string(sift_port) + ", request packet has size " + to_string(udp_status));
                     }
-
                     // curr_frame.buffer = new char[curr_frame.buffer_size];
                     curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
                     memset(curr_frame.buffer, 0, curr_frame.buffer_size);
@@ -414,6 +418,7 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                     frames.push(curr_frame);
                 }
+                string client_id_test = curr_frame.client_id;
                 print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                           "Received data from '" + services_outline["val_name"][to_string(previous_service_val)] + "' service and will now proceed with analysis");
             }
@@ -991,7 +996,8 @@ void *ThreadUDPSenderFunction(void *socket)
 
             string client_return_ip = curr_res.client_ip;
             inet_pton(AF_INET, client_return_ip.c_str(), &(client_addr.sin_addr));
-            client_addr.sin_port = htons(curr_res.client_port.i);
+            int client_return_port = curr_res.client_port.i;
+            client_addr.sin_port = htons(client_return_port);
 
             int udp_status = sendto(next_service_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
             close(next_service_socket);
@@ -1278,7 +1284,7 @@ void *ThreadProcessFunction(void *param)
                 item.sift_port.i = sift_port;
 
                 inter_service_data.push(item);
-                print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'matching' data");
+                print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'encoding' data");
             }
             else if (service == "matching")
             {
