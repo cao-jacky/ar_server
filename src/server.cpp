@@ -1093,7 +1093,7 @@ void *ThreadProcessFunction(void *param)
         else if (service == "matching")
         {
             // re-package client IP into single char string
-            client_ip = bytes_to_ip(curr_frame.client_ip);
+            client_ip = curr_frame.client_ip;
         }
         else
         {
@@ -1634,8 +1634,6 @@ int main(int argc, char *argv[])
         nn_num = 5;
         encodeDatabase(querysizefactor, nn_num);
     }
-
-    //cout << service_value << endl;
 
     // setting the specified host IP address and the hardcoded port
     inet_pton(AF_INET, argv[2], &(main_addr.sin_addr));
