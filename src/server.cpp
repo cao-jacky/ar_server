@@ -373,8 +373,9 @@ void *ThreadUDPReceiverFunction(void *socket)
                     // only copy if not sift
                     if (service_value != 2) {
                         // copy sift details out
-                        memcpy(tmp_ip, &(buffer[40]), 16);
-                        curr_frame.sift_ip = (char *)tmp_ip;
+                        char sift_tmp_ip[16];
+                        memcpy(sift_tmp_ip, &(buffer[40]), 16);
+                        curr_frame.sift_ip = (char *)sift_tmp_ip;
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -384,7 +385,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     if (service_value == 5)
                     {
                         char* sift_ip = curr_frame.sift_ip;
-
+       
                         json sift_ns = services["sift"];
                         string sift_port_string = sift_ns[1];
                         int sift_port = stoi(sift_port_string);
@@ -423,7 +424,6 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                     frames.push(curr_frame);
                 }
-                string client_id_test = curr_frame.client_id;
                 print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                           "Received data from '" + services_outline["val_name"][to_string(previous_service_val)] + "' service and will now proceed with analysis");
             }
@@ -460,7 +460,10 @@ void *ThreadUDPReceiverFunction(void *socket)
                 total_packets_no = *(int *)tmp;
 
                 // store the sift IP and port details 
+                cout << "SIFT HAS IP OF1 " << device_ip << endl;
                 curr_frame.sift_ip = device_ip;
+                cout << "SIFT HAS IP OF2 " << curr_frame.sift_ip << endl;
+
                 curr_frame.sift_port = device_port;
 
                 // logic to check for if first packet from a client or if the client does not match the previous
@@ -1084,22 +1087,7 @@ void *ThreadProcessFunction(void *param)
         int frame_data_type = curr_frame.data_type;
         int frame_size = curr_frame.buffer_size;
 
-        char *client_ip;
-        if (service == "primary")
-        {
-            // package client IP into bytes only on primary
-            client_ip = ip_to_bytes(curr_frame.client_ip);
-        }
-        else if (service == "matching")
-        {
-            // re-package client IP into single char string
-            client_ip = curr_frame.client_ip;
-        }
-        else
-        {
-            client_ip = curr_frame.client_ip;
-        }
-
+        char *client_ip = curr_frame.client_ip;
         int client_port = curr_frame.client_port;
         char *frame_data = curr_frame.buffer;
 
