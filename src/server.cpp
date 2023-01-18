@@ -994,14 +994,16 @@ void *ThreadUDPSenderFunction(void *socket)
             inter_service_buffer curr_res = inter_service_data.front();
             inter_service_data.pop();
 
-            char buffer[16 + curr_res.buffer_size.i];
+            int buffer_size = curr_res.buffer_size.i;
+
+            char buffer[16 + buffer_size];
             memset(buffer, 0, sizeof(buffer));
 
             memcpy(buffer, curr_res.client_id, 4);
             memcpy(&(buffer[4]), curr_res.frame_no.b, 4);
             memcpy(&(buffer[12]), curr_res.buffer_size.b, 4);
-            if (curr_res.buffer_size.i != 0)
-                memcpy(&(buffer[16]), curr_res.buffer, 100 * curr_res.buffer_size.i);
+            if (buffer_size != 0)
+                memcpy(&(buffer[16]), curr_res.buffer, 100 * buffer_size);
 
             string client_return_ip = curr_res.client_ip;
             inet_pton(AF_INET, client_return_ip.c_str(), &(client_addr.sin_addr));
@@ -1014,9 +1016,15 @@ void *ThreadUDPSenderFunction(void *socket)
             {
                 printf("Error sending: %i\n", errno);
             }
+            char *client_device_ip = inet_ntoa(client_addr.sin_addr);
+            //string client_device_ip_string = client_device_ip;
+            int client_device_port = htons(client_addr.sin_port);
+
             print_log(service, string(curr_res.client_id), to_string(curr_res.frame_no.i),
                       "Results for Frame " + to_string(curr_res.frame_no.i) +
-                          " sent to client with number of markers of " + to_string(curr_res.buffer_size.i));
+                          " sent to client with number of markers of " + to_string(buffer_size));
+
+            cout << "[DEBUG] client has IP of " << client_device_ip << " and port " << to_string(client_device_port) << endl;
         }
         else
         {
