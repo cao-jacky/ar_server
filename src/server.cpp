@@ -393,7 +393,12 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                         char ms_buffer[12];
                         memset(ms_buffer, 0, sizeof(ms_buffer));
-                        //memcpy(ms_buffer, client_id, 4);
+                        memcpy(ms_buffer, curr_frame.client_id, 4);
+                        
+                        string client_id_string = curr_frame.client_id;
+                        string client_id_corr = client_id_string.substr(0, 4);
+                        curr_frame.client_id = &client_id_corr[0];
+
                         //memcpy(&(ms_buffer[0]), client_id, sizeof(client_id));
 
                         charint matching_sift_fno;
@@ -700,6 +705,8 @@ void *udp_sift_data_listener(void *socket)
     char tmp[4];
     char client_id[4];
 
+    char *client_id_ptr = client_id;
+
     char *sift_data_buffer;
     int curr_recv_packet_no;
     int prev_recv_packet_no = 0;
@@ -723,6 +730,10 @@ void *udp_sift_data_listener(void *socket)
         recvfrom(sock, packet_buffer, PACKET_SIZE + 20, 0, (struct sockaddr *)&matching_rec_addr, &mrd_len);
 
         memcpy(client_id, packet_buffer, 4);
+        
+        string client_id_string = client_id;
+        string client_id_corr = client_id_string.substr(0, 4);
+        client_id_ptr = &client_id_corr[0];
 
         memcpy(tmp, &(packet_buffer[4]), 4);
         int frame_no = *(int *)tmp;
@@ -739,7 +750,7 @@ void *udp_sift_data_listener(void *socket)
             memcpy(tmp, &(packet_buffer[12]), 4);
             total_packets_no = *(int *)tmp;
 
-            print_log(service, "0", to_string(frame_no),
+            print_log(service, string(client_id_ptr), to_string(frame_no),
                       "Receiving SIFT data in packets for Frame " + to_string(frame_no) +
                           " with an expected total number of packets of " + to_string(total_packets_no) +
                           " and total bytes of " + to_string(complete_data_size));
@@ -759,7 +770,7 @@ void *udp_sift_data_listener(void *socket)
             to_copy = complete_data_size - copy_index;
         }
         memcpy(&(sift_data_buffer[copy_index]), &(packet_buffer[20]), to_copy);
-        print_log(service, string(client_id), to_string(frame_no), "For Frame " + to_string(frame_no) + " received " + to_string(curr_packet_no + 1) + " out of " + to_string(total_packets_no) + " packets");
+        print_log(service, string(client_id_ptr), to_string(frame_no), "For Frame " + to_string(frame_no) + " received " + to_string(curr_packet_no + 1) + " out of " + to_string(total_packets_no) + " packets");
 
         packet_tally++;
         sift_data_count += MAX_PACKET_SIZE;
@@ -771,13 +782,13 @@ void *udp_sift_data_listener(void *socket)
 
             if (packet_tally == total_packets_no)
             {
-                print_log(service, string(client_id), to_string(frame_no),
+                print_log(service, string(client_id_ptr), to_string(frame_no),
                           "All packets received for Frame " + to_string(frame_no) + " and will attempt to reconstruct into a SiftData struct");
                 siftdata_reconstructor(sift_data_buffer, receivedSiftData);
                 receivedSiftData.frame_no = frame_no;
 
                 // find where in the JSON array is the matching frame
-                string frame_to_find = string(client_id) + "_" + to_string(frame_no);
+                string frame_to_find = string(client_id_ptr) + "_" + to_string(frame_no);
                 int mbd_val = 0;
                 int mbd_loc;
                 for (auto mbd_it : matching_buffer_details)
@@ -797,8 +808,6 @@ void *udp_sift_data_listener(void *socket)
                 int md_client_port = md.client_port;
                 int md_frame_no = md.frame_no;
                 vector<int> result = md.lsh_result;
-
-                cout << mbd_loc << " " << md_frame_no << " " << matching_items.size()<< endl;
 
                 recognizedMarker marker;
                 markerDetected = matching(result, reconstructed_data, marker);
