@@ -397,9 +397,9 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
-                        string sift_ip_string = sift_ip;
 
-                        char* sift_ip = curr_frame.sift_ip;    
+                        char* sift_ip = curr_frame.sift_ip;  
+                        string sift_ip_string = sift_ip;  
 
                         json sift_ns = services["sift"];
                         string sift_port_string = sift_ns[1];
