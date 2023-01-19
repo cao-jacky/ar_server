@@ -119,19 +119,19 @@ std::map<int, string> service_map_reverse = {
 
 std::map<string, string> registered_services;
 
-json services = {
-    {"primary", {"10.30.100.1", "50001"}},
-    {"sift", {"10.30.101.1", "50002"}},
-    {"encoding", {"10.30.102.1", "50003"}},
-    {"lsh", {"10.30.103.1", "50004"}},
-    {"matching", {"10.30.104.1", "50005"}}};
-
 // json services = {
-//     {"primary", {"192.168.1.102", "50001"}},
-//     {"sift", {"192.168.1.102", "50002"}},
-//     {"encoding", {"192.168.1.102", "50003"}},
-//     {"lsh", {"192.168.1.102", "50004"}},
-//     {"matching", {"192.168.1.102", "50005"}}};
+//     {"primary", {"10.30.100.1", "50001"}},
+//     {"sift", {"10.30.101.1", "50002"}},
+//     {"encoding", {"10.30.102.1", "50003"}},
+//     {"lsh", {"10.30.103.1", "50004"}},
+//     {"matching", {"10.30.104.1", "50005"}}};
+
+json services = {
+    {"primary", {"172.31.28.206 ", "50001"}},
+    {"sift", {"172.31.28.206 ", "50002"}},
+    {"encoding", {"172.31.28.206 ", "50003"}},
+    {"lsh", {"172.31.28.206 ", "50004"}},
+    {"matching", {"172.31.28.206 ", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -239,6 +239,8 @@ void *ThreadUDPReceiverFunction(void *socket)
         char device_id[4];
         char client_id[4];
         char *device_ip = inet_ntoa(remoteAddr.sin_addr);
+        string device_ip_test = device_ip;
+        cout << "PACKET ADDRESS REC ANYTHING " << device_ip_test << endl;
         int device_port = htons(remoteAddr.sin_port);
 
         // copy client frames into frames buffer if main service
@@ -376,6 +378,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
+                        cout << "SIFT DATA TRANSMISSION "<< sift_tmp_ip << endl;
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -385,6 +388,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     if (service_value == 5)
                     {
                         char* sift_ip = curr_frame.sift_ip;
+                        cout << "SIFT HAS IP OF1 " << sift_ip << endl;
        
                         json sift_ns = services["sift"];
                         string sift_port_string = sift_ns[1];
@@ -910,6 +914,14 @@ void *ThreadUDPSenderFunction(void *socket)
         next_service_sock.sin_port = htons(0);
         next_service_sock.sin_addr.s_addr = INADDR_ANY;
 
+        // Forcefully attaching socket to the port 8080
+        if (bind(next_service_socket, (struct sockaddr*)&next_service_sock,
+                sizeof(next_service_sock))
+            < 0) {
+            print_log(service, "0", "0", "ERROR: Unable to bind UDP");
+            exit(1);
+        }
+
         if (service == "primary")
         {
             inter_service_buffer curr_item = inter_service_data.front();
@@ -979,6 +991,9 @@ void *ThreadUDPSenderFunction(void *socket)
                     print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
                               "Sent packet #" + to_string(i + 1) + " of " + to_string((int)max_packets) + " to encoding" +
                                   " with the following number of characters " + to_string(udp_status));
+                    char *ip = inet_ntoa(next_service_sock.sin_addr);
+                    string ip_string = ip;
+                    cout << "SENDER SIFT USING IP OF " << ip_string << endl;
                     if (udp_status == -1)
                     {
                         cout << "Error sending: " << strerror(errno) << endl;
