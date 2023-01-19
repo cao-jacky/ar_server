@@ -7,13 +7,6 @@
 
 #include <nlohmann/json.hpp>
 
-#define _GNU_SOURCE     /* To get defns of NI_MAXSERV and NI_MAXHOST */
-#include <sys/socket.h>
-#include <netdb.h>
-#include <ifaddrs.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <linux/if_link.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -255,8 +248,6 @@ void *ThreadUDPReceiverFunction(void *socket)
         char device_id[4];
         char client_id[4];
         char *device_ip = inet_ntoa(remoteAddr.sin_addr);
-        string device_ip_test = device_ip;
-        cout << "PACKET ADDRESS REC ANYTHING " << device_ip_test << endl;
         int device_port = htons(remoteAddr.sin_port);
 
         // copy client frames into frames buffer if main service
@@ -394,7 +385,6 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
-                        cout << "SIFT DATA TRANSMISSION "<< sift_tmp_ip << endl;
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -403,9 +393,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     // if matching service, proceed to request the corresponding data from sift
                     if (service_value == 5)
                     {
-                        char* sift_ip = curr_frame.sift_ip;
-                        cout << "SIFT HAS IP OF1 " << sift_ip << endl;
-       
+                        char* sift_ip = curr_frame.sift_ip;       
                         json sift_ns = services["sift"];
                         string sift_port_string = sift_ns[1];
                         int sift_port = stoi(sift_port_string);
@@ -461,8 +449,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                 // creating client object to return data to
                 inet_pton(AF_INET, client_ip_tmp, &(client_addr.sin_addr));
                 client_addr.sin_port = htons(client_port);
-
-                cout << "[STATUS: " << service << "] Received client registration details from main of IP " << client_ip_tmp << " and port " << client_port << endl;
+                print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                          "Received client registration details from main of IP '" + string(client_ip_tmp) + "' and port " + to_string(client_port));
             }
             else if (curr_frame.data_type == MSG_SIFT_TO_ENCODING)
             {
@@ -480,10 +468,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                 total_packets_no = *(int *)tmp;
 
                 // store the sift IP and port details 
-                cout << "SIFT HAS IP OF1 " << device_ip << endl;
                 curr_frame.sift_ip = device_ip;
-                cout << "SIFT HAS IP OF2 " << curr_frame.sift_ip << endl;
-
                 curr_frame.sift_port = device_port;
 
                 // logic to check for if first packet from a client or if the client does not match the previous
@@ -1009,7 +994,6 @@ void *ThreadUDPSenderFunction(void *socket)
                                   " with the following number of characters " + to_string(udp_status));
                     char *ip = inet_ntoa(next_service_sock.sin_addr);
                     string ip_string = ip;
-                    cout << "SENDER SIFT USING IP OF " << ip_string << endl;
                     if (udp_status == -1)
                     {
                         cout << "Error sending: " << strerror(errno) << endl;
