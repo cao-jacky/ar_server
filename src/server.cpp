@@ -125,11 +125,11 @@ std::map<string, string> registered_services;
 //     {"matching", {"10.30.104.1", "50005"}}};
 
 json services = {
-    {"primary", {"172.31.28.206", "50001"}},
-    {"sift", {"172.31.28.206", "50002"}},
-    {"encoding", {"172.31.28.206", "50003"}},
-    {"lsh", {"172.31.28.206", "50004"}},
-    {"matching", {"172.31.28.206", "50005"}}};
+    {"primary", {"18.156.168.251", "50001"}},
+    {"sift", {"18.156.168.251", "50002"}},
+    {"encoding", {"18.156.168.251", "50003"}},
+    {"lsh", {"18.156.168.251", "50004"}},
+    {"matching", {"35.158.141.131", "50005"}}};
 
 // json services = {
 //     {"primary", {"0.0.0.0", "50001"}},
@@ -393,12 +393,17 @@ void *ThreadUDPReceiverFunction(void *socket)
                     // if matching service, proceed to request the corresponding data from sift
                     if (service_value == 5)
                     {
-                        char* sift_ip = curr_frame.sift_ip;       
+                        // copy sift details out
+                        char sift_tmp_ip[16];
+                        memcpy(sift_tmp_ip, &(buffer[40]), 16);
+                        curr_frame.sift_ip = (char *)sift_tmp_ip;
+                        string sift_ip_string = sift_ip;
+
+                        char* sift_ip = curr_frame.sift_ip;    
+
                         json sift_ns = services["sift"];
                         string sift_port_string = sift_ns[1];
                         int sift_port = stoi(sift_port_string);
-
-                        string sift_ip_string = sift_ip;
 
                         char ms_buffer[12];
                         memset(ms_buffer, 0, sizeof(ms_buffer));
@@ -859,10 +864,6 @@ void *udp_sift_data_listener(void *socket)
                     inter_service_data.push(curRes);
 
                     // cout << recognizedMarkerID << endl;
-
-                    // if(curRes.markerNum.i > 0)
-                    //     addCacheItem(curr_frame, curRes);
-                    //     cout << "Added item to cache" << endl;
                 }
                 else
                 {
