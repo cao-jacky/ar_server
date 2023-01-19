@@ -97,9 +97,6 @@ string service;
 int service_value;
 queue<inter_service_buffer> inter_service_data;
 
-string local_operation = "false";
-string local_ip;
-
 string next_service;
 
 json sift_buffer_details;
@@ -134,19 +131,19 @@ std::map<string, string> registered_services;
 //     {"lsh", {"10.30.103.1", "50004"}},
 //     {"matching", {"10.30.104.1", "50005"}}};
 
-// json services = {
-//     {"primary", {"172.31.28.206", "50001"}},
-//     {"sift", {"172.31.28.206", "50002"}},
-//     {"encoding", {"172.31.28.206", "50003"}},
-//     {"lsh", {"172.31.28.206", "50004"}},
-//     {"matching", {"172.31.28.206", "50005"}}};
-
 json services = {
-    {"primary", {"0.0.0.0", "50001"}},
-    {"sift", {"0.0.0.0", "50002"}},
-    {"encoding", {"0.0.0.0", "50003"}},
-    {"lsh", {"0.0.0.0", "50004"}},
-    {"matching", {"0.0.0.0", "50005"}}};
+    {"primary", {"172.31.28.206", "50001"}},
+    {"sift", {"172.31.28.206", "50002"}},
+    {"encoding", {"172.31.28.206", "50003"}},
+    {"lsh", {"172.31.28.206", "50004"}},
+    {"matching", {"172.31.28.206", "50005"}}};
+
+// json services = {
+//     {"primary", {"0.0.0.0", "50001"}},
+//     {"sift", {"0.0.0.0", "50002"}},
+//     {"encoding", {"0.0.0.0", "50003"}},
+//     {"lsh", {"0.0.0.0", "50004"}},
+//     {"matching", {"0.0.0.0", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -217,7 +214,11 @@ void registerService(int sock)
     memcpy(&(registering[8]), message_type.b, 4);
     memcpy(&(registering[12]), register_id.b, 4);
 
-    sendto(sock, registering, sizeof(registering), 0, (struct sockaddr *)&main_addr, sizeof(main_addr));
+    int udp_status = sendto(sock, registering, sizeof(registering), 0, (struct sockaddr *)&main_addr, sizeof(main_addr));
+    if (udp_status == -1)
+    {
+        cout << "Error sending: " << strerror(errno) << endl;
+    }
     print_log(service, "0", "0", "Service " + string(service) + " is attempting to register with the primary service");
 }
 
@@ -914,22 +915,6 @@ void *ThreadUDPSenderFunction(void *socket)
             continue;
         }
 
-        // search through the network interfaces available and their associated IP
-        struct ifaddrs *ifap, *ifa; 
-        struct sockaddr_in *sa;
-        char *addr;
-
-        getifaddrs (&ifap);
-        for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-            if (ifa->ifa_addr && ifa->ifa_addr->sa_family==AF_INET) {
-                sa = (struct sockaddr_in *) ifa->ifa_addr;
-                addr = inet_ntoa(sa->sin_addr);
-                printf("Interface: %s\tAddress: %s\n", ifa->ifa_name, addr);
-            }
-        }
-
-        freeifaddrs(ifap);
-
         // generate new socket everytime data is needed to be sent
         int next_service_socket;
         struct sockaddr_in next_service_sock;
@@ -1395,78 +1380,6 @@ void *ThreadProcessFunction(void *param)
     }
 }
 
-void *ThreadCacheSearchFunction(void *param)
-{
-    cout << "Cache searcher thread created" << endl;
-    recognizedMarker marker;
-    bool markerDetected = false;
-
-    while (1)
-    {
-        if (frames.empty())
-        {
-            this_thread::sleep_for(chrono::milliseconds(1));
-            continue;
-        }
-
-        frame_buffer curr_frame = frames.front();
-        frames.pop();
-
-        int frame_no = curr_frame.frame_no;
-        int frmdata_type = curr_frame.data_type;
-        int frmSize = curr_frame.buffer_size;
-        char *frmdata = curr_frame.buffer;
-
-        if (frmdata_type == MSG_CLIENT_FRAME_DETECT)
-        {
-            cout << "Searching the cache" << endl;
-            vector<uchar> imgdata(frmdata, frmdata + frmSize);
-            Mat img_scene = imdecode(imgdata, CV_LOAD_IMAGE_GRAYSCALE);
-            imwrite("cacheQuery.jpg", img_scene);
-            Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
-            markerDetected = cacheQuery(detect, marker);
-        }
-
-        if (markerDetected)
-        {
-            resBuffer curRes;
-
-            charfloat p;
-            curRes.resID.i = frame_no;
-            curRes.resType.i = BOUNDARY;
-            curRes.markerNum.i = 1;
-            curRes.buffer = new char[100 * curRes.markerNum.i];
-
-            int pointer = 0;
-            memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
-            pointer += 4;
-            memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
-            pointer += 4;
-            memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
-            pointer += 4;
-
-            for (int j = 0; j < 4; j++)
-            {
-                p.f = marker.corners[j].x;
-                memcpy(&(curRes.buffer[pointer]), p.b, 4);
-                pointer += 4;
-                p.f = marker.corners[j].y;
-                memcpy(&(curRes.buffer[pointer]), p.b, 4);
-                pointer += 4;
-            }
-
-            memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
-
-            recognizedMarkerID = marker.markerID.i;
-            results.push(curRes);
-        }
-        else
-        {
-            offloadframes.push(curr_frame);
-        }
-    }
-}
-
 void runServer(int port, string service)
 {
     pthread_t senderThread, receiverThread, imageProcessThread, processThread;
@@ -1498,7 +1411,6 @@ void runServer(int port, string service)
     pthread_create(&receiverThread, NULL, ThreadUDPReceiverFunction, (void *)&sockUDP);
     pthread_create(&senderThread, NULL, ThreadUDPSenderFunction, (void *)&sockUDP);
     pthread_create(&imageProcessThread, NULL, ThreadProcessFunction, NULL);
-    // pthread_create(&processThread, NULL, ThreadCacheSearchFunction, NULL);
 
     // if primary service, set the details of the next service
     if (service == "primary" || service == "matching")
@@ -1509,28 +1421,13 @@ void runServer(int port, string service)
         int sift_port = stoi(sift_port_string);
         if (service == "primary")
         {
-            if (local_operation == "false")
-            {
-                inet_pton(AF_INET, sift_ip.c_str(), &(next_service_addr.sin_addr));
-            }
-            else if (local_operation == "true")
-            {
-                inet_pton(AF_INET, local_ip.c_str(), &(next_service_addr.sin_addr));
-            }
+            //inet_pton(AF_INET, sift_ip.c_str(), &(next_service_addr.sin_addr));
+            next_service_addr.sin_family = AF_INET;
+            next_service_addr.sin_addr.s_addr = inet_addr(sift_ip.c_str());
             next_service_addr.sin_port = htons(sift_port);
         }
         else if (service == "matching")
         {
-            // if (local_operation == "false")
-            // {
-            //     inet_pton(AF_INET, sift_ip.c_str(), &(sift_rec_addr.sin_addr));
-            // }
-            // else if (local_operation == "true")
-            // {
-            //     inet_pton(AF_INET, local_ip.c_str(), &(sift_rec_addr.sin_addr));
-            // }
-            // sift_rec_addr.sin_port = htons(sift_port);
-
             memset((char *)&matching_rec_addr, 0, sizeof(matching_rec_addr));
             matching_rec_addr.sin_family = AF_INET;
             matching_rec_addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -1554,15 +1451,7 @@ void runServer(int port, string service)
     {
         json matching_ns = services["matching"];
         string matching_ip = matching_ns[0];
-
-        if (local_operation == "false")
-        {
-            inet_pton(AF_INET, matching_ip.c_str(), &(sift_rec_remote_addr.sin_addr));
-        }
-        else if (local_operation == "true")
-        {
-            inet_pton(AF_INET, local_ip.c_str(), &(sift_rec_remote_addr.sin_addr));
-        }
+        inet_pton(AF_INET, matching_ip.c_str(), &(sift_rec_remote_addr.sin_addr));
         sift_rec_remote_addr.sin_port = htons(51005);
     }
 
@@ -1579,24 +1468,15 @@ void runServer(int port, string service)
         string next_service_ip = next_service_details[0];
         string next_service_port_string = next_service_details[1];
         int next_service_port = stoi(next_service_port_string);
-
-        if (local_operation == "false")
-        {
-            inet_pton(AF_INET, next_service_ip.c_str(), &(next_service_addr.sin_addr));
+        
+        inet_pton(AF_INET, next_service_ip.c_str(), &(next_service_addr.sin_addr));
             print_log(service, "0", "0", "Setting the details of the next service '" + next_service + "' to have an IP of " + next_service_ip + " and port " + to_string(next_service_port));
-        }
-        else if (local_operation == "true")
-        {
-            inet_pton(AF_INET, local_ip.c_str(), &(next_service_addr.sin_addr));
-            print_log(service, "0", "0", "Setting the details of the next service '" + next_service + "' to have an IP of " + local_ip + " and port " + to_string(next_service_port));
-        }
         next_service_addr.sin_port = htons(next_service_port);
     }
 
     pthread_join(receiverThread, NULL);
     pthread_join(senderThread, NULL);
     pthread_join(imageProcessThread, NULL);
-    // pthread_join(processThread, NULL);
 
     if (service == "matching")
     {
@@ -1643,13 +1523,6 @@ int main(int argc, char *argv[])
     // current service name and value in the service map
     service = string(argv[1]);
     service_value = service_map.at(argv[1]);
-    local_operation = argv[3];
-
-    if (local_operation == "true")
-    {
-        local_ip = argv[2];
-        print_log(service, "0", "0", "Local operation of pipeline selected, system will use the IP " + string(argv[2]) + " for all services");
-    }
 
     print_log(service, "0", "0", "Selected service is: " + string(argv[1]));
     print_log(service, "0", "0", "IP of the primary module provided is " + string(argv[2]));
@@ -1676,36 +1549,6 @@ int main(int argc, char *argv[])
     int port = MAIN_PORT + service_value; // hardcoding the initial port
 
     runServer(port, service);
-
-    // int querysizefactor, nn_num, port;
-    // if(argc < 4) {
-    //     cout << "Usage: " << argv[0] << " size[s/m/l] NN#[1/2/3/4/5] port" << endl;
-    //     return 1;
-    // } else {
-    //     if (argv[1][0] == 's') querysizefactor = 4;
-    //     else if (argv[2][0] == 'm') querysizefactor = 2;
-    //     else querysizefactor = 1;
-    //     nn_num = argv[2][0] - '0';
-    //     if (nn_num < 1 || nn_num > 5) nn_num = 5;
-    //     port = strtol(argv[3], NULL, 10);
-    // }
-
-    //     //trainCacheParams();
-    // #ifdef TRAIN
-    //     trainParams();
-    // #else
-    //     loadParams();
-    // #endif
-    //     encodeDatabase(querysizefactor, nn_num);
-
-    // outputting terminal outputs into dated log files
-    // using namespace std;
-    // string log_file = "logs_server/logs/log_" + getCurrentDateTime("now") + ".txt";
-    // string error_file = "logs_server/errors/error_" + getCurrentDateTime("now") + ".txt";
-
-    // freopen( log_file.c_str(), "w", stdout );
-    // freopen( error_file.c_str(), "w", stderr );
-    // scalabilityTest();
 
     freeParams();
     return 0;
