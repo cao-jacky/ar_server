@@ -117,26 +117,19 @@ std::map<int, string> service_map_reverse = {
 
 std::map<string, string> registered_services;
 
+// json services = {
+//     {"primary", {"10.30.100.1", "50001"}},
+//     {"sift", {"10.30.101.1", "50002"}},
+//     {"encoding", {"10.30.102.1", "50003"}},
+//     {"lsh", {"10.30.103.1", "50004"}},
+//     {"matching", {"10.30.104.1", "50005"}}};
+
 json services = {
-    {"primary", {"10.30.100.1", "50001"}},
-    {"sift", {"10.30.101.1", "50002"}},
-    {"encoding", {"10.30.102.1", "50003"}},
-    {"lsh", {"10.30.103.1", "50004"}},
-    {"matching", {"10.30.104.1", "50005"}}};
-
-// json services = {
-//     {"primary", {"18.156.168.251", "50001"}},
-//     {"sift", {"18.156.168.251", "50002"}},
-//     {"encoding", {"18.156.168.251", "50003"}},
-//     {"lsh", {"18.156.168.251", "50004"}},
-//     {"matching", {"35.158.141.131", "50005"}}};
-
-// json services = {
-//     {"primary", {"0.0.0.0", "50001"}},
-//     {"sift", {"0.0.0.0", "50002"}},
-//     {"encoding", {"0.0.0.0", "50003"}},
-//     {"lsh", {"0.0.0.0", "50004"}},
-//     {"matching", {"0.0.0.0", "50005"}}};
+    {"primary", {"35.157.216.194", "50001"}},
+    {"sift", {"35.157.216.194", "50002"}},
+    {"encoding", {"35.157.216.194", "50003"}},
+    {"lsh", {"35.157.216.194", "50004"}},
+    {"matching", {"35.157.216.194", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -224,6 +217,8 @@ void *ThreadUDPReceiverFunction(void *socket)
     int sock = *((int *)socket);
 
     char *sift_res_buffer;
+    int sift_res_buffer_size;
+
     int curr_recv_packet_no;
     int prev_recv_packet_no = 0;
     int total_packets_no;
@@ -477,6 +472,9 @@ void *ThreadUDPReceiverFunction(void *socket)
                 curr_frame.sift_ip = device_ip;
                 curr_frame.sift_port = device_port;
 
+                memcpy(tmp, &(buffer[12]), 4);
+                sift_res_buffer_size = *(int *)tmp;
+
                 // logic to check for if first packet from a client or if the client does not match the previous
                 if (curr_packet_no == 0 || curr_client != previous_client)
                 {
@@ -484,11 +482,10 @@ void *ThreadUDPReceiverFunction(void *socket)
                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                               "Receiving SIFT data in packets for Frame " + to_string(curr_frame.frame_no) +
                                   " with an expected total number of packets of " + to_string(total_packets_no) +
-                                  " and total bytes of " + to_string(curr_frame.buffer_size));
+                                  " and total bytes of " + to_string(sift_res_buffer_size));
 
-                    //sift_res_buffer = new char[curr_frame.buffer_size];
-                    sift_res_buffer = (char *)malloc(curr_frame.buffer_size);
-                    memset(sift_res_buffer, 0, curr_frame.buffer_size);
+                    sift_res_buffer = new char[sift_res_buffer_size];
+                    memset(sift_res_buffer, 0, sift_res_buffer_size);
                     packet_tally = 0;
                     sift_data_count = 0;
                 }
@@ -498,7 +495,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     int copy_index = curr_packet_no * MAX_PACKET_SIZE;
                     if (curr_packet_no + 1 == total_packets_no)
                     {
-                        to_copy = (int)curr_frame.buffer_size - sift_data_count;
+                        to_copy = sift_res_buffer_size - sift_data_count;
                     }
                     memcpy(&(sift_res_buffer[copy_index]), &(buffer[48]), to_copy);
                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
