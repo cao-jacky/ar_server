@@ -7,6 +7,14 @@
 
 #include <nlohmann/json.hpp>
 
+#define _GNU_SOURCE     /* To get defns of NI_MAXSERV and NI_MAXHOST */
+#include <sys/socket.h>
+#include <netdb.h>
+#include <ifaddrs.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <linux/if_link.h>
+#include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -126,12 +134,19 @@ std::map<string, string> registered_services;
 //     {"lsh", {"10.30.103.1", "50004"}},
 //     {"matching", {"10.30.104.1", "50005"}}};
 
+// json services = {
+//     {"primary", {"172.31.28.206", "50001"}},
+//     {"sift", {"172.31.28.206", "50002"}},
+//     {"encoding", {"172.31.28.206", "50003"}},
+//     {"lsh", {"172.31.28.206", "50004"}},
+//     {"matching", {"172.31.28.206", "50005"}}};
+
 json services = {
-    {"primary", {"172.31.28.206 ", "50001"}},
-    {"sift", {"172.31.28.206 ", "50002"}},
-    {"encoding", {"172.31.28.206 ", "50003"}},
-    {"lsh", {"172.31.28.206 ", "50004"}},
-    {"matching", {"172.31.28.206 ", "50005"}}};
+    {"primary", {"0.0.0.0", "50001"}},
+    {"sift", {"0.0.0.0", "50002"}},
+    {"encoding", {"0.0.0.0", "50003"}},
+    {"lsh", {"0.0.0.0", "50004"}},
+    {"matching", {"0.0.0.0", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -898,6 +913,22 @@ void *ThreadUDPSenderFunction(void *socket)
             this_thread::sleep_for(chrono::milliseconds(1));
             continue;
         }
+
+        // search through the network interfaces available and their associated IP
+        struct ifaddrs *ifap, *ifa; 
+        struct sockaddr_in *sa;
+        char *addr;
+
+        getifaddrs (&ifap);
+        for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+            if (ifa->ifa_addr && ifa->ifa_addr->sa_family==AF_INET) {
+                sa = (struct sockaddr_in *) ifa->ifa_addr;
+                addr = inet_ntoa(sa->sin_addr);
+                printf("Interface: %s\tAddress: %s\n", ifa->ifa_name, addr);
+            }
+        }
+
+        freeifaddrs(ifap);
 
         // generate new socket everytime data is needed to be sent
         int next_service_socket;
