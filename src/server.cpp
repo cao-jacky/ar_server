@@ -117,19 +117,19 @@ std::map<int, string> service_map_reverse = {
 
 std::map<string, string> registered_services;
 
-// json services = {
-//     {"primary", {"10.30.100.1", "50001"}},
-//     {"sift", {"10.30.101.1", "50002"}},
-//     {"encoding", {"10.30.102.1", "50003"}},
-//     {"lsh", {"10.30.103.1", "50004"}},
-//     {"matching", {"10.30.104.1", "50005"}}};
-
 json services = {
-    {"primary", {"18.156.168.251", "50001"}},
-    {"sift", {"18.156.168.251", "50002"}},
-    {"encoding", {"18.156.168.251", "50003"}},
-    {"lsh", {"18.156.168.251", "50004"}},
-    {"matching", {"35.158.141.131", "50005"}}};
+    {"primary", {"10.30.100.1", "50001"}},
+    {"sift", {"10.30.101.1", "50002"}},
+    {"encoding", {"10.30.102.1", "50003"}},
+    {"lsh", {"10.30.103.1", "50004"}},
+    {"matching", {"10.30.104.1", "50005"}}};
+
+// json services = {
+//     {"primary", {"18.156.168.251", "50001"}},
+//     {"sift", {"18.156.168.251", "50002"}},
+//     {"encoding", {"18.156.168.251", "50003"}},
+//     {"lsh", {"18.156.168.251", "50004"}},
+//     {"matching", {"35.158.141.131", "50005"}}};
 
 // json services = {
 //     {"primary", {"0.0.0.0", "50001"}},
@@ -385,6 +385,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
+                        cout << "SIFT DATA1 " << curr_frame.sift_ip << endl;
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -394,9 +395,9 @@ void *ThreadUDPReceiverFunction(void *socket)
                     if (service_value == 5)
                     {
                         // copy sift details out
-                        char sift_tmp_ip[16];
-                        memcpy(sift_tmp_ip, &(buffer[40]), 16);
-                        curr_frame.sift_ip = (char *)sift_tmp_ip;
+                        char sift_tmp_ip2[16];
+                        memcpy(sift_tmp_ip2, &(buffer[40]), 16);
+                        curr_frame.sift_ip = (char *)sift_tmp_ip2;
 
                         char* sift_ip = curr_frame.sift_ip;  
                         string sift_ip_string = sift_ip;  
@@ -1062,6 +1063,7 @@ void *ThreadUDPSenderFunction(void *socket)
             memcpy(&(buffer[32]), curr_item.client_port.b, 4);
             memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
             memcpy(&(buffer[40]), curr_item.sift_ip, 16);
+            cout << "SIFT DATA1 " << curr_item.sift_ip << endl;
             memcpy(&(buffer[56]), curr_item.sift_port.b, 4);
             memcpy(&(buffer[60]), &(curr_item.buffer)[0], curr_item.buffer_size.i);
 
