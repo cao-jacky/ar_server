@@ -117,19 +117,19 @@ std::map<int, string> service_map_reverse = {
 
 std::map<string, string> registered_services;
 
-json services = {
-   {"primary", {"10.30.100.1", "50001"}},
-     {"sift", {"10.30.101.1", "50002"}},
-     {"encoding", {"10.30.102.1", "50003"}},
-     {"lsh", {"10.30.103.1", "50004"}},
-     {"matching", {"10.30.104.1", "50005"}}};
-
 // json services = {
-//    {"primary", {"35.157.216.194", "50001"}},
-//    {"sift", {"35.157.216.194", "50002"}},
-//    {"encoding", {"35.157.216.194", "50003"}},
-//    {"lsh", {"35.157.216.194", "50004"}},
-//    {"matching", {"35.157.216.194", "50005"}}};
+//    {"primary", {"10.30.100.1", "50001"}},
+//      {"sift", {"10.30.101.1", "50002"}},
+//      {"encoding", {"10.30.102.1", "50003"}},
+//      {"lsh", {"10.30.103.1", "50004"}},
+//      {"matching", {"10.30.104.1", "50005"}}};
+
+json services = {
+   {"primary", {"35.157.216.194", "50001"}},
+   {"sift", {"35.157.216.194", "50002"}},
+   {"encoding", {"35.157.216.194", "50003"}},
+   {"lsh", {"35.157.216.194", "50004"}},
+   {"matching", {"35.157.216.194", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -223,10 +223,14 @@ void *ThreadUDPReceiverFunction(void *socket)
     int prev_recv_packet_no = 0;
     int total_packets_no;
 
+    int last_packet_no = 0;
     int last_frame_no = 0;
+    bool valid = true;
 
     int packet_tally;
     int sift_data_count;
+
+    json frame_packets;
 
     char *results_buffer;
 
@@ -476,7 +480,7 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                 memcpy(tmp, &(buffer[12]), 4);
                 sift_res_buffer_size = *(int *)tmp;
-
+                
                 // logic to check for if first packet from a client or if the client does not match the previous
                 if (curr_packet_no == 0 || curr_client != previous_client)
                 {
@@ -488,45 +492,79 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                     sift_res_buffer = new char[sift_res_buffer_size];
                     memset(sift_res_buffer, 0, sift_res_buffer_size);
+
+                    frame_packets[to_string(curr_frame.frame_no)]["total_packets"] = total_packets_no;
+
                     packet_tally = 0;
                     sift_data_count = 0;
                     last_frame_no = curr_frame.frame_no;
                 }
 
                 if (curr_client == previous_client) {
-                    cout << last_frame_no << " " << curr_frame.frame_no << endl;
-                    if (curr_frame.frame_no >= last_frame_no) {
-                        int to_copy = MAX_PACKET_SIZE;
-                        int copy_index = curr_packet_no * MAX_PACKET_SIZE;
+                    // only run this code if either first packet, or this current packet has an ID of 1 larger than the past
+
+                    if (curr_packet_no == 0 || curr_packet_no == last_packet_no+1) {
+                        int to_copy = MAX_PACKET_SIZE; // amount of data to memcpy
+
                         if (curr_packet_no + 1 == total_packets_no)
                         {
                             to_copy = sift_res_buffer_size - sift_data_count;
-                        }
-                        memcpy(&(sift_res_buffer[copy_index]), &(buffer[48]), to_copy);
-                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                                    "For Frame " + to_string(curr_frame.frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
-                        packet_tally++;
-                        sift_data_count += MAX_PACKET_SIZE;
+                        } 
 
-                        if (curr_packet_no + 1 == total_packets_no)
-                        {
-                            // need to add logic to check whether all of the packets were received,
-                            // and whether they were in the correct order
+                        auto cf_packets = frame_packets[to_string(curr_frame.frame_no)]["packets"];
+                        int tc_pckts = cf_packets.size();
+                        cout << cf_packets << " " << tc_pckts << endl;
 
-                            if (packet_tally == total_packets_no)
-                            {
-                                // curr_frame.buffer = new char[curr_frame.buffer_size];
-                                curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                                memset(curr_frame.buffer, 0, curr_frame.buffer_size);
-                                memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
+                        if (to_copy > 0 && tc_pckts == curr_packet_no) {
+        
+                            // string s = frame_packets.dump();  
+                            // cout << s << endl;
 
-                                frames.push(curr_frame);
-                                print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                                            "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
+                            cout << "DEBUG " << curr_frame.frame_no << " " << curr_packet_no+1 << " " << total_packets_no << " " << sift_res_buffer_size << " " << to_copy << " " << sift_data_count << endl;
+
+                            memcpy(&(sift_res_buffer[sift_data_count]), &(buffer[48]), to_copy);
+                            print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                                        "For Frame " + to_string(curr_frame.frame_no) + " received packet with packet number of " + to_string(curr_packet_no));
+
+                            frame_packets[to_string(curr_frame.frame_no)]["packets"].push_back(curr_packet_no);
+                                
+                            packet_tally++;
+                            sift_data_count += to_copy;
+
+                            // index out from JSON
+                            auto curr_frame_packets = frame_packets[to_string(curr_frame.frame_no)]["packets"];
+                            int total_recv_packets = curr_frame_packets.size();
+
+                            cout << "BREAKPOINT1 " << total_recv_packets << " " <<  total_packets_no << endl;
+
+                            if (total_recv_packets == total_packets_no) {
+                                // need to add logic to check whether all of the packets were received,
+                                // and whether they were in the correct order
+                                if (packet_tally == total_packets_no)
+                                {
+                                    // curr_frame.buffer = new char[curr_frame.buffer_size];
+                                    cout << "BREAKPOINT2" << endl;
+
+                                    curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
+                                    cout << "BREAKPOINT3" << endl;
+                                    memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                                    cout << "BREAKPOINT4" << endl;
+                                    memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
+                                    cout << "BREAKPOINT5" << endl;
+
+                                    frames.push(curr_frame);
+                                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
+                                                "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
+                                }                   
                             }
-                        }
-                        last_frame_no = curr_frame.frame_no;
+                        } 
+
                     }
+
+                    
+                    last_packet_no = curr_packet_no;
+                    last_frame_no = curr_frame.frame_no;
+                    
                 }
                 previous_client = curr_client;
             }
@@ -534,7 +572,7 @@ void *ThreadUDPReceiverFunction(void *socket)
             {
                 // a request sent from matching to retrieve sift data
                 print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                          "Received request from 'matching' for sift data for frame " +
+                          "Received request from 'matching' for sift data for Frame " +
                               to_string(curr_frame.frame_no) + " and client " + string(curr_frame.client_id));
 
                 // find where in the JSON array is the matching frame
@@ -1069,7 +1107,9 @@ void *ThreadUDPSenderFunction(void *socket)
             memcpy(&(buffer[40]), curr_item.sift_ip, 16);
             cout << "SIFT DATA1 " << curr_item.sift_ip << endl;
             memcpy(&(buffer[56]), curr_item.sift_port.b, 4);
+            cout << "ISB1" << endl;
             memcpy(&(buffer[60]), &(curr_item.buffer)[0], curr_item.buffer_size.i);
+            cout << "ISB2" << endl;
 
             int udp_status = sendto(next_service_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&next_service_addr, next_service_addrlen);
             close(next_service_socket);
@@ -1079,7 +1119,7 @@ void *ThreadUDPSenderFunction(void *socket)
             }
 
             print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
-                      "Forwarded frame " + to_string(curr_item.frame_no.i) + " for client " +
+                      "Forwarded Frame " + to_string(curr_item.frame_no.i) + " for client " +
                           string(curr_item.client_id) + " to '" + next_service + "' service for processing" +
                           " with a payload size of " + to_string(curr_item.buffer_size.i));
         }
@@ -1118,7 +1158,7 @@ void *ThreadProcessFunction(void *param)
             if (service == "primary")
             {
                 print_log(service, string(client_id), to_string(frame_no),
-                          "Image from frame has been reduced from size " + to_string(frame_size) +
+                          "Image from Frame has been reduced from size " + to_string(frame_size) +
                               " to a Mat object of size " + to_string(frame_size));
 
                 item.client_id = client_id;
@@ -1179,7 +1219,7 @@ void *ThreadProcessFunction(void *param)
                 // storing SIFT data for retrieval by the matching service
                 int sift_data_size = 4 * siftresult.i * (15 + 3 + 128); // taken from export_siftdata
                 print_log(service, string(client_id), to_string(frame_no),
-                          "Expected size of SIFT data buffer to store for frame " + to_string(frame_no) +
+                          "Expected size of SIFT data buffer to store for Frame " + to_string(frame_no) +
                               " is " + to_string(sift_data_size) + " Bytes");
 
                 // create a buffer to store for matching to retrieve
@@ -1207,7 +1247,7 @@ void *ThreadProcessFunction(void *param)
                 sift_buffer_details.push_back(string(item.client_id) + "_" + to_string(item.frame_no.i));
 
                 print_log(service, string(client_id), to_string(frame_no),
-                          "Storing SIFT data for client " + string(item.client_id) + " and frame " +
+                          "Storing SIFT data for client " + string(item.client_id) + " and Frame " +
                               to_string(frame_no) + " in SIFT data buffer for collection by matching");
             }
             else if (service == "encoding")
