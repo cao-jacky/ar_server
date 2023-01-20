@@ -117,19 +117,19 @@ std::map<int, string> service_map_reverse = {
 
 std::map<string, string> registered_services;
 
-json services = {
-   {"primary", {"10.30.100.1", "50001"}},
-     {"sift", {"10.30.101.1", "50002"}},
-     {"encoding", {"10.30.102.1", "50003"}},
-     {"lsh", {"10.30.103.1", "50004"}},
-     {"matching", {"10.30.104.1", "50005"}}};
-
 // json services = {
-//    {"primary", {"35.157.216.194", "50001"}},
-//    {"sift", {"35.157.216.194", "50002"}},
-//    {"encoding", {"35.157.216.194", "50003"}},
-//    {"lsh", {"35.157.216.194", "50004"}},
-//    {"matching", {"35.157.216.194", "50005"}}};
+//    {"primary", {"10.30.100.1", "50001"}},
+//      {"sift", {"10.30.101.1", "50002"}},
+//      {"encoding", {"10.30.102.1", "50003"}},
+//      {"lsh", {"10.30.103.1", "50004"}},
+//      {"matching", {"10.30.104.1", "50005"}}};
+
+json services = {
+   {"primary", {"54.93.113.223", "50001"}},
+   {"sift", {"54.93.113.223", "50002"}},
+   {"encoding", {"54.93.113.223", "50003"}},
+   {"lsh", {"54.93.113.223", "50004"}},
+   {"matching", {"54.93.113.223", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -342,7 +342,8 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                 // copy frame image data into buffer
                 curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                // memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                memset(curr_frame.buffer, 0, sizeof(curr_frame.buffer));
                 memcpy(curr_frame.buffer, &(buffer[16]), curr_frame.buffer_size);
 
                 // copy client ip and port into buffer
@@ -434,7 +435,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                     }
                     // curr_frame.buffer = new char[curr_frame.buffer_size];
                     curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                    memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                    // memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                    memset(curr_frame.buffer, 0, sizeof(curr_frame.buffer));
                     memcpy(curr_frame.buffer, &(buffer[60]), curr_frame.buffer_size);
 
                     frames.push(curr_frame);
@@ -491,7 +493,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                                   " and total bytes of " + to_string(sift_res_buffer_size));
 
                     sift_res_buffer = new char[sift_res_buffer_size];
-                    memset(sift_res_buffer, 0, sift_res_buffer_size);
+                    // memset(sift_res_buffer, 0, sift_res_buffer_size);
+                    memset(sift_res_buffer, 0, sizeof(sift_res_buffer));
 
                     frame_packets[to_string(curr_frame.frame_no)]["total_packets"] = total_packets_no;
 
@@ -547,7 +550,7 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                                     curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
                                     cout << "BREAKPOINT3" << endl;
-                                    memset(curr_frame.buffer, 0, curr_frame.buffer_size);
+                                    memset(curr_frame.buffer, 0, sizeof(curr_frame.buffer));
                                     cout << "BREAKPOINT4" << endl;
                                     memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
                                     cout << "BREAKPOINT5" << endl;
@@ -555,6 +558,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                                     frames.push(curr_frame);
                                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                                                 "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
+                                    
                                 }                   
                             }
                         } 
@@ -567,6 +571,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                     
                 }
                 previous_client = curr_client;
+                //free(sift_res_buffer);
+                //free(curr_frame.buffer);
             }
             else if (curr_frame.data_type == MSG_MATCHING_SIFT)
             {
@@ -605,7 +611,7 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                     // preparing the buffer of the packets to be sent
                     char to_m_buffer[20 + MAX_PACKET_SIZE];
-                    memset(to_m_buffer, 0, 20 + MAX_PACKET_SIZE);
+                    memset(to_m_buffer, 0, sizeof(to_m_buffer));
                     memcpy(to_m_buffer, curr_frame.client_id, 4);
 
                     charint curr_frame_no;
@@ -772,6 +778,8 @@ void *udp_sift_data_listener(void *socket)
     int sift_data_count;
     int complete_data_size;
 
+    json frame_packets;
+
     recognizedMarker marker;
     bool markerDetected = false;
 
@@ -812,7 +820,8 @@ void *udp_sift_data_listener(void *socket)
                           " and total bytes of " + to_string(complete_data_size));
 
             sift_data_buffer = new char[complete_data_size];
-            memset(sift_data_buffer, 0, complete_data_size);
+            // memset(sift_data_buffer, 0, complete_data_size);
+            memset(sift_data_buffer, 0, sizeof(sift_data_buffer));
             packet_tally = 0;
             sift_data_count = 0;
 
@@ -825,6 +834,9 @@ void *udp_sift_data_listener(void *socket)
         {
             to_copy = complete_data_size - copy_index;
         }
+
+        cout << "DEBUG " << frame_no << " " << curr_packet_no+1 << " " << total_packets_no << " " << complete_data_size << " " << to_copy << " " << sift_data_count << endl;
+
         memcpy(&(sift_data_buffer[copy_index]), &(packet_buffer[20]), to_copy);
         print_log(service, string(client_id_ptr), to_string(frame_no), "For Frame " + to_string(frame_no) + " received " + to_string(curr_packet_no + 1) + " out of " + to_string(total_packets_no) + " packets");
 
@@ -847,6 +859,7 @@ void *udp_sift_data_listener(void *socket)
                 string frame_to_find = string(client_id_ptr) + "_" + to_string(frame_no);
                 int mbd_val = 0;
                 int mbd_loc;
+                cout << "LENGTH OF MATCHING BUFFER DETAILS " << matching_buffer_details.size() << " " << mbd_loc << endl;
                 for (auto mbd_it : matching_buffer_details)
                 {
                     // "it" is of type json::reference and has no key() member
@@ -880,8 +893,9 @@ void *udp_sift_data_listener(void *socket)
                     curRes.client_port.i = md_client_port;
                     curRes.previous_service.i = BOUNDARY;
 
-                    //curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
-                    curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
+                    curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
+                    //curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
+                    memset(curRes.buffer, 0, sizeof(curRes.buffer));
 
                     int pointer = 0;
                     memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
@@ -1094,9 +1108,10 @@ void *ThreadUDPSenderFunction(void *socket)
             inter_service_data.pop();
 
             int item_data_size = curr_item.buffer_size.i;
+            
             char buffer[60 + item_data_size];
-
             memset(buffer, 0, sizeof(buffer));
+
             memcpy(buffer, curr_item.client_id, 4);
             memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
             memcpy(&(buffer[8]), curr_item.data_type.b, 4);
@@ -1210,7 +1225,8 @@ void *ThreadProcessFunction(void *param)
 
                 // item.buffer = new unsigned char[4 + sift_buffer_size];
                 item.buffer = (unsigned char *)malloc(4 + sift_buffer_size);
-                memset(item.buffer, 0, 4 + sift_buffer_size);
+                // memset(item.buffer, 0, 4 + sift_buffer_size);
+                memset(item.buffer, 0, sizeof(item.buffer));
                 memcpy(&(item.buffer[0]), siftresult.b, 4);
                 memcpy(&(item.buffer[4]), sift_data_buffer, sift_buffer_size);
 
@@ -1258,7 +1274,8 @@ void *ThreadProcessFunction(void *param)
                 int sift_result = *(int *)tmp;
 
                 char *sift_resg = (char *)malloc(frame_size);
-                memset(sift_resg, 0, frame_size);
+                // memset(sift_resg, 0, frame_size);
+                memset(sift_resg, 0, sizeof(sift_resg));
                 memcpy(sift_resg, &(frame_data[4]), frame_size);
 
                 float *siftres = new float[128 * sift_result];
@@ -1290,7 +1307,8 @@ void *ThreadProcessFunction(void *param)
                 item.client_port.i = client_port;
                 item.previous_service.i = service_value;
                 item.buffer = new unsigned char[4 + encoding_buffer_size];
-                memset(item.buffer, 0, 4 + encoding_buffer_size);
+                // memset(item.buffer, 0, 4 + encoding_buffer_size);
+                memset(item.buffer, 0, sizeof(item.buffer));
                 memcpy(&(item.buffer[0]), encoded_size.b, 4);
                 memcpy(&(item.buffer[4]), encoded_vector, encoding_buffer_size);
 
@@ -1340,7 +1358,8 @@ void *ThreadProcessFunction(void *param)
                 item.previous_service.i = service_value;
 
                 item.buffer = (unsigned char *)malloc(4 + results_buffer_size);
-                memset(item.buffer, 0, 4 + results_buffer_size);
+                // memset(item.buffer, 0, 4 + results_buffer_size);
+                memset(item.buffer, 0, sizeof(item.buffer));
                 memcpy(&(item.buffer[0]), results_size.b, 4);
                 memcpy(&(item.buffer[4]), results_vector, results_buffer_size);
 
@@ -1360,9 +1379,10 @@ void *ThreadProcessFunction(void *param)
                 memcpy(tmp, &(frame_data[0]), 4);
                 int result_size = *(int *)tmp;
                     
-                //char *results_char = new char[result_size * 4];
-                char *results_char = (char*)malloc(result_size*4);
-                memset(results_char, 0, result_size*4);
+                char *results_char = new char[result_size * 4];
+                //char *results_char = (char*)malloc(result_size*4);
+                // memset(results_char, 0, result_size*4);
+                memset(results_char, 0, sizeof(results_char));
                 memcpy(results_char, &(frame_data[4]), result_size*4);
 
                 int data_index = 0;
