@@ -125,11 +125,11 @@ std::map<string, string> registered_services;
 //      {"matching", {"10.30.104.1", "50005"}}};
 
 json services = {
-   {"primary", {"54.93.113.223", "50001"}},
-   {"sift", {"54.93.113.223", "50002"}},
-   {"encoding", {"54.93.113.223", "50003"}},
-   {"lsh", {"54.93.113.223", "50004"}},
-   {"matching", {"54.93.113.223", "50005"}}};
+   {"primary", {"3.75.130.99", "50001"}},
+   {"sift", {"3.75.130.99", "50002"}},
+   {"encoding", {"3.75.130.99", "50003"}},
+   {"lsh", {"3.75.130.99", "50004"}},
+   {"matching", {"3.75.130.99", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -778,10 +778,10 @@ void *udp_sift_data_listener(void *socket)
     int sift_data_count;
     int complete_data_size;
 
-    json frame_packets;
-
     recognizedMarker marker;
     bool markerDetected = false;
+
+    json frame_packets;
 
     int last_packet_frame_no;
 
@@ -822,6 +822,9 @@ void *udp_sift_data_listener(void *socket)
             sift_data_buffer = new char[complete_data_size];
             // memset(sift_data_buffer, 0, complete_data_size);
             memset(sift_data_buffer, 0, sizeof(sift_data_buffer));
+
+            frame_packets[to_string(frame_no)]["total_packets"] = total_packets_no;
+
             packet_tally = 0;
             sift_data_count = 0;
 
@@ -835,13 +838,27 @@ void *udp_sift_data_listener(void *socket)
             to_copy = complete_data_size - copy_index;
         }
 
+        auto cf_packets = frame_packets[to_string(frame_no)]["packets"];
+        int tc_pckts = cf_packets.size();
+        cout << cf_packets << " " << tc_pckts << endl;
+
         cout << "DEBUG " << frame_no << " " << curr_packet_no+1 << " " << total_packets_no << " " << complete_data_size << " " << to_copy << " " << sift_data_count << endl;
+        cout << "BREAKPOINT2" << endl;
 
         memcpy(&(sift_data_buffer[copy_index]), &(packet_buffer[20]), to_copy);
         print_log(service, string(client_id_ptr), to_string(frame_no), "For Frame " + to_string(frame_no) + " received " + to_string(curr_packet_no + 1) + " out of " + to_string(total_packets_no) + " packets");
+        cout << "BREAKPOINT3" << endl;
+
+        frame_packets[to_string(frame_no)]["packets"].push_back(curr_packet_no);
 
         packet_tally++;
         sift_data_count += MAX_PACKET_SIZE;
+
+        // index out from JSON
+        auto curr_frame_packets = frame_packets[to_string(frame_no)]["packets"];
+        int total_recv_packets = curr_frame_packets.size();
+
+        cout << "BREAKPOINT1 " << total_recv_packets << " " <<  total_packets_no << endl;
 
         if (curr_packet_no + 1 == total_packets_no)
         {
@@ -865,6 +882,7 @@ void *udp_sift_data_listener(void *socket)
                     // "it" is of type json::reference and has no key() member
                     if (mbd_it == frame_to_find)
                     {
+                        cout << "FOUND CORRESPONDING MATCH" << endl;
                         mbd_loc = mbd_val;
                     }
                     mbd_val++;

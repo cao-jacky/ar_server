@@ -495,11 +495,14 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
     {
         print_log("matching", "0", "0", "Testing " + to_string(result[idx]) + " " + whole_list[result[idx]]);
 
+        cout << "M1" << endl;
         Mat image = imread(whole_list[result[idx]], CV_LOAD_IMAGE_COLOR);
+        cout << "M2" << endl;
         SiftData sData;
         int w, h;
         float *a, *b;
         sift_gpu(image, &a, &b, sData, w, h, true, true);
+        cout << "M3" << endl;
 
         print_log("matching", "0", "0", "Number of feature points: " + to_string(sData.numPts) + " " + to_string(tData.numPts));
         MatchSiftData(sData, tData);
