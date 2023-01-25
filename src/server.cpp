@@ -125,11 +125,11 @@ json services = {
      {"matching", {"10.30.104.1", "50005"}}};
 
 // json services = {
-//    {"primary", {"172.21.215.149", "50001"}},
-//    {"sift", {"172.21.215.149", "50002"}},
-//    {"encoding", {"172.21.215.149", "50003"}},
-//    {"lsh", {"172.21.215.149", "50004"}},
-//    {"matching", {"172.21.215.149", "50005"}}};
+//    {"primary", {"172.21.209.103", "50001"}},
+//    {"sift", {"172.21.209.103", "50002"}},
+//    {"encoding", {"172.21.209.103", "50003"}},
+//    {"lsh", {"172.21.209.103", "50004"}},
+//    {"matching", {"172.21.209.103", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -653,7 +653,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     }
                 }
 
-                free(msd_data_buffer);
+                // free(msd_data_buffer);
             }
         }
     }
