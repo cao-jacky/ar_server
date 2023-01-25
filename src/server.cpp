@@ -387,6 +387,8 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
+                        cout << "[DEBUG] SIFT IP " << curr_frame.sift_ip << endl;
+
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -545,7 +547,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                                     frames.push(curr_frame);
                                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
                                                 "All packets received for Frame " + to_string(curr_frame.frame_no) + " and will now pass the data to the encoding functions");
-                                    free(sift_res_buffer);
+                                    // free(sift_res_buffer);
                                 }                   
                             }
                         } else {
@@ -1113,7 +1115,7 @@ void *ThreadUDPSenderFunction(void *socket)
                       "Results for Frame " + to_string(curr_res.frame_no.i) +
                           " sent to client with number of markers of " + to_string(buffer_size));
 
-            // cout << "[DEBUG] client has IP of " << client_device_ip << " and port " << to_string(client_device_port) << endl;
+            cout << "[DEBUG] client has IP of " << client_device_ip << " and port " << to_string(client_device_port) << endl;
         }
         else
         {
