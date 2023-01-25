@@ -1077,7 +1077,7 @@ void *ThreadUDPSenderFunction(void *socket)
                 }
                 close(next_service_socket);
             }
-            free(curr_item.buffer);
+            // free(curr_item.buffer);
         }
         else if (service == "matching")
         {
