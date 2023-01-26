@@ -556,8 +556,8 @@ bool matching(vector<int> result, SiftData &tData, recognizedMarker &marker)
         {
             print_log("matching", "0", "0", "No matching objects");
         }
-        free(a);
-        free(b);
+        // free(a);
+        // free(b);
     }
     FreeSiftData(tData);
 }

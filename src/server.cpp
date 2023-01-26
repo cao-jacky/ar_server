@@ -6,6 +6,7 @@
 #include <opencv2/opencv.hpp>
 
 #include <nlohmann/json.hpp>
+#include <enet/enet.h>
 
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -20,6 +21,9 @@
 #include <fstream>
 #include <tuple>
 #include <math.h>
+
+#include <string>
+#include <sstream>  
 
 #include <numeric>
 
@@ -117,19 +121,19 @@ std::map<int, string> service_map_reverse = {
 
 std::map<string, string> registered_services;
 
-json services = {
-   {"primary", {"10.30.100.1", "50001"}},
-     {"sift", {"10.30.101.1", "50002"}},
-     {"encoding", {"10.30.102.1", "50003"}},
-     {"lsh", {"10.30.103.1", "50004"}},
-     {"matching", {"10.30.104.1", "50005"}}};
-
 // json services = {
-//    {"primary", {"172.21.209.103", "50001"}},
-//    {"sift", {"172.21.209.103", "50002"}},
-//    {"encoding", {"172.21.209.103", "50003"}},
-//    {"lsh", {"172.21.209.103", "50004"}},
-//    {"matching", {"172.21.209.103", "50005"}}};
+//    {"primary", {"10.30.100.1", "50001"}},
+//      {"sift", {"10.30.101.1", "50002"}},
+//      {"encoding", {"10.30.102.1", "50003"}},
+//      {"lsh", {"10.30.103.1", "50004"}},
+//      {"matching", {"10.30.104.1", "50005"}}};
+
+json services = {
+   {"primary", {"172.21.209.103", "50001"}},
+   {"sift", {"172.21.209.103", "50002"}},
+   {"encoding", {"172.21.209.103", "50003"}},
+   {"lsh", {"172.21.209.103", "50004"}},
+   {"matching", {"172.21.209.103", "50005"}}};
 
 json services_primary_knowledge;
 
@@ -143,7 +147,7 @@ char *ip_to_bytes(char *client_ip)
     sscanf(client_ip, "%hu.%hu.%hu.%hu", &a, &b, &c, &d);
 
     char *ip_buffer = new char[16];
-    memset(ip_buffer, 0, sizeof(ip_buffer));
+    memset(ip_buffer, 0, strlen(ip_buffer) + 1);
 
     charint ib_a;
     ib_a.i = (int)a;
@@ -235,6 +239,17 @@ void *ThreadUDPReceiverFunction(void *socket)
     char *results_buffer;
 
     char *previous_client;
+
+    json matching_ns = services["matching"];
+    string matching_ip = matching_ns[0];
+    int matching_recv_port = 51005;
+
+    if (enet_initialize() != 0)
+	{
+		printf("An error occurred while initializing ENet.\n");
+		exit(EXIT_FAILURE);
+	}
+
 
     if (service != "primary")
     {
@@ -342,8 +357,7 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                 // copy frame image data into buffer
                 curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                // memset(curr_frame.buffer, 0, curr_frame.buffer_size);
-                memset(curr_frame.buffer, 0, sizeof(curr_frame.buffer));
+                memset(curr_frame.buffer, 0, curr_frame.buffer_size);
                 memcpy(curr_frame.buffer, &(buffer[16]), curr_frame.buffer_size);
 
                 // copy client ip and port into buffer
@@ -387,8 +401,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
-                        cout << "[DEBUG] SIFT IP " << curr_frame.sift_ip << endl;
-
+                        // cout << "[DEBUG] SIFT IP " << curr_frame.sift_ip << endl;
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -438,8 +451,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                     }
                     // curr_frame.buffer = new char[curr_frame.buffer_size];
                     curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                    // memset(curr_frame.buffer, 0, curr_frame.buffer_size);
-                    memset(curr_frame.buffer, 0, sizeof(curr_frame.buffer));
+                    memset(curr_frame.buffer, 0, curr_frame.buffer_size);
                     memcpy(curr_frame.buffer, &(buffer[60]), curr_frame.buffer_size);
 
                     frames.push(curr_frame);
@@ -500,7 +512,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                         // free(sift_res_buffer);
                     }
                     sift_res_buffer = new char[sift_res_buffer_size];
-                    memset(sift_res_buffer, 0, sizeof(sift_res_buffer));
+                    memset(sift_res_buffer, 0, strlen(sift_res_buffer)+1);
 
                     frame_packets[to_string(curr_frame.frame_no)]["total_packets"] = total_packets_no;
 
@@ -542,7 +554,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                                 if (packet_tally == total_packets_no)
                                 {
                                     curr_frame.buffer = (char *)malloc(curr_frame.buffer_size);
-                                    memset(curr_frame.buffer, 0, sizeof(curr_frame.buffer));
+                                    memset(curr_frame.buffer, 0, curr_frame.buffer_size);
                                     memcpy(curr_frame.buffer, sift_res_buffer, curr_frame.buffer_size);
                                     frames.push(curr_frame);
                                     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
@@ -590,68 +602,62 @@ void *ThreadUDPReceiverFunction(void *socket)
                 int msd_frame_no = msd.frame_no.i;
                 float msd_data_size = (float)msd.sift_data_size.i;
                 char *msd_data_buffer = msd.sift_data;
+                
 
-                double max_packets = ceil(msd_data_size / MAX_PACKET_SIZE);
-                if (max_packets > 1)
+                ENetHost * client;
+                client = enet_host_create(NULL, 1, 2, 0, 0);
+
+                ENetAddress address;
+                ENetEvent event;
+                ENetPeer *peer;
+
+                // attempt connection to matching
+                enet_address_set_host(&address, matching_ip.c_str());
+                address.port = matching_recv_port;
+                
+                peer = enet_host_connect(client, &address, 2, 0);
+
+                if (peer == NULL)
                 {
-                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                              "Packet payload of " + to_string((int)msd_data_size) + " will be greater than " + to_string(MAX_PACKET_SIZE) +
-                                  " B, therefore, the data will be sent in " + to_string((int)max_packets) + " packets");
-
-                    // preparing the buffer of the packets to be sent
-                    char to_m_buffer[20 + MAX_PACKET_SIZE];
-                    memset(to_m_buffer, 0, sizeof(to_m_buffer));
-                    memcpy(to_m_buffer, curr_frame.client_id, 4);
-
-                    charint curr_frame_no;
-                    curr_frame_no.i = msd_frame_no;
-                    memcpy(&(to_m_buffer[4]), curr_frame_no.b, 4);
-
-                    charint total_packets;
-                    total_packets.i = max_packets;
-                    memcpy(&(to_m_buffer[12]), total_packets.b, 4);
-
-                    charint total_size;
-                    total_size.i = msd_data_size;
-                    memcpy(&(to_m_buffer[16]), total_size.b, 4);
-
-                    // setting index to copy data from
-                    int initial_index = 0;
-                    for (int i = 0; i < max_packets; i++)
-                    {
-                        // setting packet number to be read to account for out-of-order delivery
-                        charint curr_packet;
-                        curr_packet.i = i;
-
-                        int to_copy = MAX_PACKET_SIZE;
-                        if (i + 1 == max_packets)
-                        {
-                            to_copy = (int)msd_data_size - initial_index;
-                        }
-
-                        memcpy(&(to_m_buffer[8]), curr_packet.b, 4);
-                        memcpy(&(to_m_buffer[20]), &(msd_data_buffer)[initial_index], to_copy);
-
-                        char tmp[4];
-                        memcpy(tmp, &(msd_data_buffer[0]), 4);
-                        int sd_num_pts = *(int *)tmp;
-
-                        int udp_status = sendto(sock, to_m_buffer, sizeof(to_m_buffer), 0, (struct sockaddr *)&sift_rec_remote_addr, sizeof(sift_rec_remote_addr));
-                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no),
-                                  "Sent packet #" + to_string(i + 1) + " of " + to_string((int)max_packets) + " to matching" +
-                                      " with the following number of characters " + to_string(udp_status));
-                        if (udp_status == -1)
-                        {
-                            cout << "Error sending: " << strerror(errno) << endl;
-                        }
-                        else
-                        {
-                            close(udp_status);
-                        }
-                        initial_index += MAX_PACKET_SIZE;
-                        sleep_for(nanoseconds(10000000));
-                    }
+                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "No available peers for initiating an ENet connection to matching");
+                    // system("pause");
+                    exit(EXIT_FAILURE);
                 }
+                if (enet_host_service(client, &event, 1) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+                {
+                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Connection to matching succeeded");
+                }
+                else
+                {
+                    enet_peer_reset(peer);
+                    print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Connection to matching failed");
+                }
+
+                // preparing the buffer of the packets to be sent
+                char to_m_buffer[20 + int(msd_data_size)];
+                memset(to_m_buffer, 0, sizeof(to_m_buffer));
+                memcpy(to_m_buffer, curr_frame.client_id, 4);
+
+                charint curr_frame_no;
+                curr_frame_no.i = msd_frame_no;
+                memcpy(&(to_m_buffer[4]), curr_frame_no.b, 4);
+
+                // charint total_packets;
+                // total_packets.i = max_packets;
+                // memcpy(&(to_m_buffer[12]), total_packets.b, 4);
+
+                charint total_size;
+                total_size.i = msd_data_size;
+                memcpy(&(to_m_buffer[16]), total_size.b, 4);
+
+                memcpy(&(to_m_buffer[20]), msd_data_buffer, msd_data_size);
+
+                ENetPacket *packet = enet_packet_create(to_m_buffer, msd_data_size+1, ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+                enet_peer_send(peer, 0, packet);
+        
+        		enet_host_flush(client);
+
+                print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Sent sift data to matching of size " + to_string(msd_data_size));
 
                 // free(msd_data_buffer);
             }
@@ -753,7 +759,179 @@ void siftdata_reconstructor(char *sd_char_array, matchingSiftItem receivedSiftDa
     print_log(service, "0", "0", "SiftData has been reconstructed from sift service, example data: " + to_string(sd_num_pts) + " SIFT points");
 }
 
-void *udp_sift_data_listener(void *socket)
+void matching_processing(char *sift_data_buffer, char* client_id_ptr, int frame_no) {
+    recognizedMarker marker;
+    bool markerDetected = false;
+
+    siftdata_reconstructor(sift_data_buffer, receivedSiftData);
+    receivedSiftData.frame_no = frame_no;
+
+    // find where in the JSON array is the matching frame
+    string frame_to_find = string(client_id_ptr) + "_" + to_string(frame_no);
+    int mbd_val = 0;
+    int mbd_loc;
+    for (auto mbd_it : matching_buffer_details)
+    {
+        cout << to_string(mbd_val) << endl;
+        // "it" is of type json::reference and has no key() member
+        if (mbd_it == frame_to_find)
+        {
+            mbd_loc = mbd_val;
+        }
+        mbd_val++;
+    }
+
+    // copy out the matching data from the deque
+    matching_item md = matching_items[mbd_loc];
+    char *md_client_id = md.client_id;
+    char *md_client_ip = md.client_ip;
+    int md_client_port = md.client_port;
+    int md_frame_no = md.frame_no;
+    vector<int> result = md.lsh_result;
+
+    markerDetected = matching(result, reconstructed_data, marker);
+
+    inter_service_buffer curRes;
+    if (markerDetected)
+    {
+        charfloat p;
+        curRes.client_id = md_client_id;
+        curRes.frame_no.i = md_frame_no;
+        curRes.data_type.i = MSG_DATA_TRANSMISSION;
+        curRes.buffer_size.i = 1;
+        curRes.client_ip = md_client_ip;
+        curRes.client_port.i = md_client_port;
+        curRes.previous_service.i = BOUNDARY;
+
+        curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
+        //curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
+        memset(curRes.buffer, 0, 100 * curRes.buffer_size.i);
+
+        int pointer = 0;
+        memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
+        pointer += 4;
+        memcpy(&(curRes.buffer[pointer]), marker.height.b, 4);
+        pointer += 4;
+        memcpy(&(curRes.buffer[pointer]), marker.width.b, 4);
+        pointer += 4;
+
+        for (int j = 0; j < 4; j++)
+        {
+            p.f = marker.corners[j].x;
+            memcpy(&(curRes.buffer[pointer]), p.b, 4);
+            pointer += 4;
+            p.f = marker.corners[j].y;
+            memcpy(&(curRes.buffer[pointer]), p.b, 4);
+            pointer += 4;
+        }
+
+        memcpy(&(curRes.buffer[pointer]), marker.markername.data(), marker.markername.length());
+
+        recognizedMarkerID = marker.markerID.i;
+        inter_service_data.push(curRes);
+
+        // cout << recognizedMarkerID << endl;
+    }
+    else
+    {
+        curRes.frame_no.i = frame_no;
+        curRes.buffer_size.i = 0;
+    }
+}
+
+void *udp_sift_data_listener(void *socket) {
+    print_log(service, "0", "0", "Created thread to listen for SIFT data packets for the matching service");
+
+    ENetAddress address;
+    ENetHost * server;
+
+    int listener_port = 51005;
+    int listener_timeout = 100000000;
+
+    address.host = ENET_HOST_ANY;
+    address.port = listener_port;
+
+    char sift_sending_ip[80];
+    int sift_sending_port;
+
+    int recv_data_len;
+    char* recv_buffer;
+
+    char tmp[4];
+
+    char client_id[4];
+    char *client_id_ptr = client_id;
+    string client_id_string;
+    string client_id_corr;
+
+    int frame_no;
+    int complete_data_size;
+
+    char *sift_data_buffer;
+
+    server = enet_host_create(&address, 100, 2, 0, 0);
+    if (server == NULL)
+    {
+        fprintf(stderr, 
+                "An error occurred while trying to create an ENet server host.\n");
+        exit(EXIT_FAILURE);
+    } else {
+        print_log(service, "0", "0", "ENet server host created to listen on port " + to_string(listener_port));
+    }
+
+    ENetEvent event;
+    /* Wait up to 1000 milliseconds for an event. */
+    print_log(service, "0", "0", "ENet server will keep listening for " + to_string(listener_timeout / 1000) + " seconds");
+    while (enet_host_service(server, &event, listener_timeout) > 0)
+    {
+        switch (event.type)
+        {
+        case ENET_EVENT_TYPE_CONNECT:
+            enet_address_get_host_ip(&event.peer->address, sift_sending_ip, sizeof(sift_sending_ip));
+            sift_sending_port = event.peer -> address.port;
+
+            print_log(service, "0", "0", "sift has connected to matching, sift data will be received soon by matching from host " + string(sift_sending_ip) +  " and port " + to_string(sift_sending_port));
+            // event.peer -> data = (void *)"Client information";
+            break;
+        case ENET_EVENT_TYPE_RECEIVE:
+            recv_data_len = event.packet -> dataLength;
+            recv_buffer = new char[recv_data_len];
+
+            memset(recv_buffer, 0, recv_data_len);
+            memcpy(recv_buffer, event.packet -> data, recv_data_len);
+            
+            memcpy(client_id, recv_buffer, 4);
+            client_id_string = client_id;
+            client_id_corr = client_id_string.substr(0, 4);
+            client_id_ptr = &client_id_corr[0];
+
+            memcpy(tmp, &(recv_buffer[4]), 4);
+            frame_no = *(int *)tmp;
+
+            memcpy(tmp, &(recv_buffer[16]), 4);
+            complete_data_size = *(int *)tmp;
+
+            print_log(service, string(client_id_ptr), to_string(frame_no),
+                    "sift data received for Frame " + to_string(0) + " and will now attempt to reconstruct into a SiftData structure");
+
+            sift_data_buffer = new char[complete_data_size];
+            memset(sift_data_buffer, 0, complete_data_size);
+            memcpy(sift_data_buffer, &(recv_buffer[20]), complete_data_size);
+
+            matching_processing(sift_data_buffer, client_id_ptr, frame_no);
+
+            enet_packet_destroy(event.packet); // clean up packet
+            break;
+        case ENET_EVENT_TYPE_DISCONNECT:
+            printf ("%s disconnected.\n", event.peer -> data);
+            /* Reset the peer's client information. */
+            event.peer -> data = NULL;
+        }
+    }
+    print_log(service, "0", "0", "ENet server has timed out, data from sift will not be listened for now - please restart the matching service");
+}
+
+void *udp_sift_data_listener2(void *socket)
 {
     print_log(service, "0", "0", "Created thread to listen for SIFT data packets for the matching service");
 
@@ -815,8 +993,12 @@ void *udp_sift_data_listener(void *socket)
                           " with an expected total number of packets of " + to_string(total_packets_no) +
                           " and total bytes of " + to_string(complete_data_size));
 
-            sift_data_buffer = new char[complete_data_size];
-            memset(sift_data_buffer, 0, sizeof(sift_data_buffer));
+            // sift_data_buffer = new char[complete_data_size+1];
+            char *sift_data_buffer = new char[complete_data_size+1];
+
+            cout << "TEST " << strlen(sift_data_buffer)+1 << " " << complete_data_size << endl;
+            //memset(sift_data_buffer, 0, strlen(sift_data_buffer)+1);
+            memset(sift_data_buffer, 0, complete_data_size+1);
 
             frame_packets[to_string(frame_no)]["total_packets"] = total_packets_no;
 
@@ -907,7 +1089,7 @@ void *udp_sift_data_listener(void *socket)
 
                             curRes.buffer = new unsigned char[100 * curRes.buffer_size.i];
                             //curRes.buffer = (unsigned char*)malloc(100 * curRes.buffer_size.i);
-                            memset(curRes.buffer, 0, sizeof(curRes.buffer));
+                            memset(curRes.buffer, 0, 100 * curRes.buffer_size.i);
 
                             int pointer = 0;
                             memcpy(&(curRes.buffer[pointer]), marker.markerID.b, 4);
@@ -1115,7 +1297,7 @@ void *ThreadUDPSenderFunction(void *socket)
                       "Results for Frame " + to_string(curr_res.frame_no.i) +
                           " sent to client with number of markers of " + to_string(buffer_size));
 
-            cout << "[DEBUG] client has IP of " << client_device_ip << " and port " << to_string(client_device_port) << endl;
+            // cout << "[DEBUG] client has IP of " << client_device_ip << " and port " << to_string(client_device_port) << endl;
         }
         else
         {
@@ -1243,7 +1425,7 @@ void *ThreadProcessFunction(void *param)
                 // item.buffer = new unsigned char[4 + sift_buffer_size];
                 item.buffer = (unsigned char *)malloc(4 + sift_buffer_size);
                 // memset(item.buffer, 0, 4 + sift_buffer_size);
-                memset(item.buffer, 0, sizeof(item.buffer));
+                memset(item.buffer, 0, 4 + sift_buffer_size);
                 memcpy(&(item.buffer[0]), siftresult.b, 4);
                 memcpy(&(item.buffer[4]), sift_data_buffer, sift_buffer_size);
 
@@ -1299,7 +1481,7 @@ void *ThreadProcessFunction(void *param)
                 int sift_result = *(int *)tmp;
 
                 char *sift_resg = (char *)malloc(frame_size);
-                memset(sift_resg, 0, sizeof(sift_resg));
+                memset(sift_resg, 0, frame_size);
                 memcpy(sift_resg, &(frame_data[4]), frame_size);
 
                 float *siftres = new float[128 * sift_result];
@@ -1332,7 +1514,7 @@ void *ThreadProcessFunction(void *param)
                 item.client_port.i = client_port;
                 item.previous_service.i = service_value;
                 item.buffer = new unsigned char[4 + encoding_buffer_size];
-                memset(item.buffer, 0, sizeof(item.buffer));
+                memset(item.buffer, 0, strlen((char*)item.buffer)+1);
                 memcpy(&(item.buffer[0]), encoded_size.b, 4);
                 memcpy(&(item.buffer[4]), encoded_vector, encoding_buffer_size);
 
@@ -1386,7 +1568,7 @@ void *ThreadProcessFunction(void *param)
                 item.previous_service.i = service_value;
 
                 item.buffer = (unsigned char *)malloc(4 + results_buffer_size);
-                memset(item.buffer, 0, sizeof(item.buffer));
+                memset(item.buffer, 0, 4 + results_buffer_size);
                 memcpy(&(item.buffer[0]), results_size.b, 4);
                 memcpy(&(item.buffer[4]), results_vector, results_buffer_size);
 
@@ -1407,9 +1589,7 @@ void *ThreadProcessFunction(void *param)
                 int result_size = *(int *)tmp;
                     
                 char *results_char = new char[result_size * 4];
-                //char *results_char = (char*)malloc(result_size*4);
-                // memset(results_char, 0, result_size*4);
-                memset(results_char, 0, sizeof(results_char));
+                memset(results_char, 0, result_size*4);
                 memcpy(results_char, &(frame_data[4]), result_size*4);
 
                 int data_index = 0;
@@ -1437,21 +1617,22 @@ void *ThreadProcessFunction(void *param)
                 curr_mi.lsh_result = result;
 
                 int mi_count = matching_items.size();
-                // if ((mi_count-mbd_max)==0)
-                // {
-                //     matching_items.pop_front();
-                // }
+                if ((mi_count-mbd_max)==0)
+                {
+                    matching_items.pop_front();
+                }
                 matching_items.push_back(curr_mi); // append to end of the 10 items
                 deque<matching_item>::iterator it;
                 for (it = matching_items.begin(); it != matching_items.end(); ++it)
                 {
                     matching_item curr_item = *it;
                 }
-                // if (int(matching_buffer_details.size()) == mbd_max)
-                // {
-                //     matching_buffer_details.erase(0);
-                // }
+                if (int(matching_buffer_details.size()) == mbd_max)
+                {
+                    matching_buffer_details.erase(0);
+                }
                 matching_buffer_details.push_back(string(client_id) + "_" + to_string(frame_no));
+                print_log(service, string(client_id), to_string(frame_no), "Storing data from lsh for Frame " + to_string(frame_no));
                 //delete[] results_char;
             }
         }
@@ -1506,32 +1687,36 @@ void runServer(int port, string service)
         }
         else if (service == "matching")
         {
-            memset((char *)&matching_rec_addr, 0, sizeof(matching_rec_addr));
-            matching_rec_addr.sin_family = AF_INET;
-            matching_rec_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-            matching_rec_addr.sin_port = htons(51005);
+            // memset((char *)&matching_rec_addr, 0, sizeof(matching_rec_addr));
+            // matching_rec_addr.sin_family = AF_INET;
+            // matching_rec_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+            // matching_rec_addr.sin_port = htons(51005);
 
-            if ((sl_udp_sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-            {
-                cout << "[ERROR] Unable to open UDP socket" << endl;
-                exit(1);
-            }
-            if (bind(sl_udp_sock, (struct sockaddr *)&matching_rec_addr, sizeof(matching_rec_addr)) < 0)
-            {
-                cout << "[ERROR] Unable to bind UDP " << endl;
-                exit(1);
-            }
 
-            pthread_create(&sift_listen_thread, NULL, udp_sift_data_listener, (void *)&sl_udp_sock);
+
+            
+
+            // if ((sl_udp_sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+            // {
+            //     cout << "[ERROR] Unable to open UDP socket" << endl;
+            //     exit(1);
+            // }
+            // if (bind(sl_udp_sock, (struct sockaddr *)&matching_rec_addr, sizeof(matching_rec_addr)) < 0)
+            // {
+            //     cout << "[ERROR] Unable to bind UDP " << endl;
+            //     exit(1);
+            // }
+
+            pthread_create(&sift_listen_thread, NULL, udp_sift_data_listener, NULL);
         }
     }
-    else if (service == "sift")
-    {
-        json matching_ns = services["matching"];
-        string matching_ip = matching_ns[0];
-        inet_pton(AF_INET, matching_ip.c_str(), &(sift_rec_remote_addr.sin_addr));
-        sift_rec_remote_addr.sin_port = htons(51005);
-    }
+    // else if (service == "sift")
+    // {
+    //     json matching_ns = services["matching"];
+    //     string matching_ip = matching_ns[0];
+    //     inet_pton(AF_INET, matching_ip.c_str(), &(sift_rec_remote_addr.sin_addr));
+    //     sift_rec_remote_addr.sin_port = htons();
+    // }
 
     // check if there is a following service, and attempt to contact
     json val_names = (services_outline["val_name"]);
@@ -1592,7 +1777,7 @@ inline string getCurrentDateTime(string s)
     else if (s == "date")
         strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
     return string(buf);
-};
+}
 
 int main(int argc, char *argv[])
 {
