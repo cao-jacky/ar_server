@@ -402,7 +402,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                         char sift_tmp_ip[16];
                         memcpy(sift_tmp_ip, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip;
-                        // cout << "[DEBUG] SIFT IP " << curr_frame.sift_ip << endl;
+                        cout << "[DEBUG] SIFT IP " << curr_frame.sift_ip << endl;
 
                         memcpy(tmp, &(buffer[56]), 4);
                         curr_frame.sift_port = *(int *)tmp;
@@ -429,7 +429,7 @@ void *ThreadUDPReceiverFunction(void *socket)
                         memcpy(sift_tmp_ip2, &(buffer[40]), 16);
                         curr_frame.sift_ip = (char *)sift_tmp_ip2;
 
-                        char* sift_ip = curr_frame.sift_ip;  
+                        char* sift_ip = curr_frame.sift_ip; 
                         string sift_ip_string = sift_ip;  
 
                         json sift_ns = services["sift"];
@@ -459,7 +459,7 @@ void *ThreadUDPReceiverFunction(void *socket)
 
                         int udp_status = sendto(sock, ms_buffer, sizeof(ms_buffer), 0, (struct sockaddr *)&sift_rec_addr, sizeof(sift_rec_addr));
                         
-                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Requested data from sift service with details " +  sift_ip_string + " " + to_string(sift_port) + ", request packet has size " + to_string(udp_status));
+                        print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Requested data from sift service with details " +  sift_ip_string + ":" + to_string(sift_port) + ", request packet has size " + to_string(udp_status));
 
                         // free(ms_buffer);
                     }
