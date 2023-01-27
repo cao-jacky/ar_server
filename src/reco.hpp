@@ -85,6 +85,12 @@ struct inter_service_buffer {
     charint sift_port;
 };
 
+struct matching_sift {
+    char* sift_data;
+    int frame_no;
+    char* client_id;
+};
+
 struct sift_data_item {
     char* client_id;
     charint frame_no;
