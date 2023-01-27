@@ -79,6 +79,7 @@ struct inter_service_buffer {
     charint previous_service;
     charint buffer_size;
     unsigned char* buffer;
+    char* results_buffer;
     char* image_buffer;
     char* sift_ip;
     charint sift_port;
