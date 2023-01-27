@@ -18,7 +18,7 @@ INC += -I$(SIFT_ROOT) -I$(EIGEN_ROOT) -I$(FALCONN_ROOT)/src/include -I$(VL_ROOT)
 LIB = -lm -lrt -lpthread -ldl -pipe -L$(SIFT_ROOT) -lcudasift -std=c++0x -pthread 
 LIB += -lcudart -lcufft 
 LIB += `pkg-config --cflags --libs opencv`
-LIB += -fopenmp -lcublas -luvgrtp -lpthread -lenet
+LIB += -fopenmp -lcublas -lenet
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio
 
 NVCC	= /usr/local/cuda/bin/nvcc -arch=sm_75 -m 64 $(INC) 
