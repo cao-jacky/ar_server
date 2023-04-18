@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6499af79-a53a-4a4e-925f-efc2ebc83f4e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/build/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CMakeSystem.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CompilerIdC/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CompilerIdC/a.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CompilerIdCXX/a.out" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/3.22.1/CompilerIdCXX/a.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/CMakeRuleHashes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/CMakeRuleHashes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/TargetDirectories.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/TargetDirectories.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cmake_clean.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/compiler_depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/compiler_depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/compiler_depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.Release.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.Release.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.cmake.pre-gen" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.cmake.pre-gen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.depend" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaImage.cu.o.depend" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.Release.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.Release.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.cmake.pre-gen" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.cmake.pre-gen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.depend" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_cudaSiftH.cu.o.depend" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.Release.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.Release.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.cmake.pre-gen" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.cmake.pre-gen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.depend" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/cudasift_generated_matching.cu.o.depend" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/geomFuncs.cpp.o.d" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/geomFuncs.cpp.o.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/mainSift.cpp.o.d" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeFiles/cudasift.dir/mainSift.cpp.o.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CPackConfig.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CPackConfig.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/CPackSourceConfig.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/CPackSourceConfig.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/cudasift/libcudasift.a" beforeDir="false" afterPath="$PROJECT_DIR$/lib/cudasift/libcudasift.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/vlfeat/vl/kmeans.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/vlfeat/vl/kmeans.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server" beforeDir="false" afterPath="$PROJECT_DIR$/server" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reco.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/reco.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/server.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2OXwk7EdyoTRInbu040OgsLkWC6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dc015933&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RdControllerToolWindowsLayoutState" isNewUi="true">
+    <layout>
+      <window_info id="Space Code Reviews" />
+      <window_info id="Bookmarks" side_tool="true" />
+      <window_info id="Commit_Guest" show_stripe_button="false" />
+      <window_info id="Pull Requests" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.114843756" />
+      <window_info id="Commit" order="1" weight="0.25" />
+      <window_info id="Structure" order="2" weight="0.15963542" />
+      <window_info anchor="bottom" id="Python Packages" />
+      <window_info anchor="bottom" id="File Transfer" />
+      <window_info anchor="bottom" id="Database Changes" />
+      <window_info anchor="bottom" id="TypeScript" />
+      <window_info anchor="bottom" id="Vcpkg" />
+      <window_info anchor="bottom" id="Find" weight="0.32994187" />
+      <window_info anchor="bottom" id="clangd" />
+      <window_info anchor="bottom" id="Version Control" order="0" weight="0.32994187" />
+      <window_info active="true" anchor="bottom" id="Problems View" order="1" visible="true" weight="0.32994187" />
+      <window_info anchor="bottom" id="Terminal" order="2" weight="0.32994187" />
+      <window_info anchor="bottom" id="Services" order="3" />
+      <window_info anchor="right" id="make" side_tool="true" />
+      <window_info anchor="right" id="Meet New UI" show_stripe_button="false" side_tool="true" />
+      <window_info anchor="right" id="Notifications" order="0" weight="0.32994792" />
+      <window_info anchor="right" id="Database" order="1" weight="0.25" />
+    </layout>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6499af79-a53a-4a4e-925f-efc2ebc83f4e" name="Changes" comment="" />
+      <created>1681720375584</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681720375584</updated>
+      <workItem from="1681720378024" duration="32000" />
+      <workItem from="1681720417151" duration="189000" />
+      <workItem from="1681720642932" duration="127000" />
+      <workItem from="1681720821175" duration="195000" />
+      <workItem from="1681721041713" duration="96000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

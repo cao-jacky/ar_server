@@ -1,0 +1,51 @@
+[
+    {
+        "services": [
+            {
+                "service_name": "primary",
+                "order": 1,
+                "preprocessing": false,
+                "server": {
+                    "ip": "10.30.100.1",
+                    "port": 50001
+                }
+            },
+            {
+                "service_name": "sift",
+                "order": 2,
+                "preprocessing": true,
+                "server": {
+                    "ip": "10.30.101.1",
+                    "port": 50002
+                }
+            },
+            {
+                "service_name": "encoding",
+                "order": 3,
+                "preprocessing": true,
+                "server": {
+                    "ip": "10.30.102.1",
+                    "port": 50003
+                }
+            },
+            {
+                "service_name": "lsh",
+                "order": 4,
+                "preprocessing": true,
+                "server": {
+                    "ip": "10.30.103.1",
+                    "port": 50004
+                }
+            },
+            {
+                "service_name": "matching",
+                "order": 5,
+                "preprocessing": true,
+                "server": {
+                    "ip": "10.30.104.1",
+                    "port": 50005
+                }
+            }
+        ]
+    }
+]
