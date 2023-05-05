@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     int nn_num = 5;
 
     // Load service details from the JSON
-    string service_details_path = "src/data/service_details_oakestra.json";
+    string service_details_path = "data/service_details_oakestra.json";
     ifstream sdd(service_details_path);
     json sdd_json = json::parse(sdd);
     json service_details = sdd_json[0]["services"];

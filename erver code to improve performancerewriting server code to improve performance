@@ -1,0 +1,732 @@
+[33mcommit 9e73100927f8055142ad90a9acbf0016645b8b77[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Apr 18 11:00:34 2023 +0000
+
+    rewriting server code to improve performance
+
+[33mcommit dc015933a287b9d90c107e379adfc1103b6dae62[m[33m ([m[1;31morigin/distributed[m[33m)[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Jan 30 20:47:37 2023 +0100
+
+    cuda working
+
+[33mcommit df0099dfd9a9b38fd2de3e49a37af07a0b3660df[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 27 15:30:20 2023 +0200
+
+    added debug for SIFT IP
+
+[33mcommit a254bedbcde8b8d85e88771acb4cbe9b21c832e7[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 27 14:18:38 2023 +0200
+
+    fix IPs
+
+[33mcommit ae57d7cda9f47d31edc85e8121b853571090a6a3[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 27 12:15:32 2023 +0200
+
+    fix makefile
+
+[33mcommit 9fe786c2d4122d3180629c97740270f75e4c30df[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 27 12:09:15 2023 +0200
+
+    fixed several issues
+
+[33mcommit 792cd8e49b3ed9d606fbced7863e5cda21205647[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 27 08:36:38 2023 +0200
+
+    partially works
+
+[33mcommit 4dcdeceb60df1eefd8cdd8126ab3d94960889b45[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 26 15:03:58 2023 +0200
+
+    changing sift to matching to use enet
+
+[33mcommit 4db8c7dd32619c4fe0afa844fc42721e315e730d[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 25 13:47:36 2023 +0200
+
+    sift to matching free memory code commented out
+
+[33mcommit 7c2344a6a22c7a8a89d7565fb1d95789111e8c87[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 25 13:23:23 2023 +0200
+
+    removed packet memory freeing from sift
+
+[33mcommit 8af5cac6299d1b0c8493bc2dc83a746745323314[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 25 09:13:32 2023 +0200
+
+    debug code readded, commented out memory freeing
+
+[33mcommit 5c13ea557eb70cb1b201f286b7d789c136428e1e[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Jan 24 13:29:07 2023 +0200
+
+    changing IPs to deployment IPs
+
+[33mcommit 11ac0de086b537533ca0b1318c722817dc0098a6[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Jan 24 13:00:50 2023 +0200
+
+    removed several memory leaks
+    
+    - working on WSL, will redeploy into docker container
+
+[33mcommit 17d3c0c3bdb26534c2542bbda0c6631ea16a24a2[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Sat Jan 21 10:28:24 2023 +0100
+
+    backup of debug
+
+[33mcommit 4bcebbb9b346819f7e55c63f2efb55159529500c[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 20 23:50:53 2023 +0100
+
+    memory issues throughout
+
+[33mcommit fc8eedbf6c94adb4abab492ec541417c0fed5c6c[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 20 14:38:26 2023 +0100
+
+    changing ips
+
+[33mcommit 852dad222d7c9365c788452becf64e38b17ac89c[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 20 14:29:37 2023 +0100
+
+    fixed encoding, including debug messages
+
+[33mcommit 75a2741c9097b12d11316d0f725a6036819e1ba9[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 20 07:18:11 2023 +0100
+
+    correct server Ip
+
+[33mcommit f4a61e9b12246070c41a26ada5a824177cf3ef6f[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jan 20 07:15:38 2023 +0100
+
+    encoding packet check
+
+[33mcommit 8b9e795c8f8bac63ae827723d8d3aa34da072234[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 23:14:00 2023 +0100
+
+    ips incorrect
+
+[33mcommit 178ceb4dae370635c594d89f1011d307efd2ca6a[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 22:37:49 2023 +0100
+
+    modified encoding data storage
+
+[33mcommit 0f476e6d6566b5ecbfbd94c3e1e6a39d64b4aea7[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 11:57:06 2023 +0100
+
+    sift IP works
+
+[33mcommit 585fb861bbdb34aea487d6999defa133ebd353e6[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 11:45:26 2023 +0100
+
+    slight error in order of lines
+
+[33mcommit ee1bca15817bec41c2edc3f1178867b218c75da0[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 11:44:15 2023 +0100
+
+    fixing sift pulling by matching
+
+[33mcommit e83a064ddc9062c327b59d305b68692eca67660f[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 10:56:35 2023 +0100
+
+    testing on two servers
+
+[33mcommit a6f79d833774c565d26ef4a46006b086fd4c1ca4[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 10:39:23 2023 +0100
+
+    fixed sockets partially
+
+[33mcommit 577f457d2402fcb075de37b4d577a706b3f37238[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 10:05:06 2023 +0100
+
+    preparing to remove local running
+
+[33mcommit 946042c90091b2edbdb0611c0fe2c70b3f6d2495[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Jan 19 08:37:37 2023 +0100
+
+    include debug commands
+
+[33mcommit 91d2401bdae998912b9929a191506dec4f6a55f2[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 18 17:19:56 2023 +0100
+
+    another attempt at hotfix for fixing client IP
+
+[33mcommit 39fc8b81d1da30f1128e6ce1bb6782aa2903fb09[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 18 15:40:10 2023 +0100
+
+    fixed client IP in matching being incorrect
+
+[33mcommit 732ff8647800ffab84480c28c262fab076796466[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 18 13:46:34 2023 +0100
+
+    adding debug print for matchjing client
+
+[33mcommit 5cdaf0eff670f9b55b37d2e8b2390447bda4449f[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 18 09:38:57 2023 +0100
+
+    removing CMakeCache.txt to not cause errors
+
+[33mcommit 4929f8691cfef9630d62d717b75e048d73294e32[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Jan 18 09:37:03 2023 +0100
+
+    hotfix v2 for client IDs not showing correctly
+
+[33mcommit e1e96bd8e8ec0600949e3df1482f370c80904cab[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Jan 17 20:03:55 2023 +0100
+
+    updating makefiles to work with AWS
+
+[33mcommit b29fea9015e62d0e2e33e4ce3487d3fed53900e6[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Jan 17 19:59:25 2023 +0100
+
+    temp fix of the duplicate IDs in matching
+
+[33mcommit 3db79d9d9bd84c93ba726d226f714447fbc63f0d[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Jan 16 08:29:41 2023 +0100
+
+    temp fix to matching
+
+[33mcommit dea8d6e98da5a8376c37b5365b829052ebf70451[m
+Merge: 1d384e0 d473112
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Jan 9 09:14:56 2023 +0000
+
+    attempting to apply hotfix
+
+[33mcommit d47311253b58b2f6fb87e748843482770b66ade9[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Jan 9 09:07:42 2023 +0000
+
+    hotfix correct files
+
+[33mcommit 1d384e0e034fb174696ea011e5cf73aaab6438f6[m
+Author: Jacky Cao <jackycao¬@outlook.com>
+Date:   Mon Jan 9 08:21:51 2023 +0000
+
+    hot fix for encoding to take multiple clients
+
+[33mcommit fdfcb35584678af302acf298ff75fc7e4cf18c03[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Dec 29 15:40:46 2022 +0000
+
+    matching now uses SIFT IP from packaged IP
+
+[33mcommit 32f6657b253d8aec4c422dc64975a579adc4ce7f[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Dec 29 12:50:25 2022 +0000
+
+    attempting to incooporate sift details into the packets
+
+[33mcommit c29e6096b3be701be24e548757f1a5d20b0d6b10[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Dec 29 12:49:51 2022 +0000
+
+    modifying to work on AWS server
+
+[33mcommit 7fca07041189174756ebdb4a5ef6ec4fbcc2b4ee[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Nov 16 13:01:22 2022 +0200
+
+    updating next IP confirmation
+
+[33mcommit b49d1e87e6aad33e0e3857685efb0abef92b8093[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Oct 25 16:52:36 2022 +0300
+
+    attempting to solve CUDA memory issues
+
+[33mcommit fbd3685bcc3769d4cf6e0648997bf1750952c8ef[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Oct 24 16:56:55 2022 +0300
+
+    code backup
+    
+    - this version does not work anymore
+
+[33mcommit 8faac1c832d288efb74e648ea05b0d962ebcca0e[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Oct 3 16:59:41 2022 +0300
+
+    changing service IPs for deployment
+
+[33mcommit ea27b01f2ae8e8844422ca9693962feedb12468c[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Oct 3 14:20:29 2022 +0300
+
+    matching fixed
+    
+    system more or less works
+
+[33mcommit 2d71f68c5bc5b36b5e988aea70cda23c5b7c327d[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Sep 30 17:09:19 2022 +0300
+
+    partially works
+    
+    - matching doesnt work
+
+[33mcommit 022fac8941b0da91ba470279fe91db36352dd220[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Sep 29 15:04:45 2022 +0300
+
+    added wait timer to multipacket sender
+
+[33mcommit 56b02890ab1867ecaadf403c573ebfdf03228d42[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Sep 28 13:50:39 2022 +0300
+
+    improved stability of code
+
+[33mcommit 32acd3d47e86b92f288aebf273cf3224f8fc1dd5[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Sep 22 16:57:46 2022 +0300
+
+    logs not needed
+
+[33mcommit 4d13310732c83057b71770492aa8706a3ad5baeb[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Sep 22 16:56:39 2022 +0300
+
+    tidied up code
+    
+    - one bug surrounding if there are no more frames
+
+[33mcommit a9f5fe6acdf85c53177ddd7bc18a57cda3b9daa1[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Sep 22 15:42:31 2022 +0300
+
+    fixed issue with accuracy
+    
+    - backing up code in current state
+    - several additions and changes were made to enable the correct accuracy to be calculated
+
+[33mcommit b754d9a9b52ff055d5f5a301f49cb99f60655ec7[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Sep 19 16:59:35 2022 +0300
+
+    attempting to fix sift issue
+    
+    - code is stable, but accuracy is not working correctly
+
+[33mcommit 9d139c79ec2092ead229751cce99611167818a31[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Sep 7 11:12:54 2022 +0300
+
+    backing up system
+
+[33mcommit 816bd4f1f205e856bfcb5db6edebd7699a24c320[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jul 15 13:58:01 2022 +0300
+
+    updating with corrected libs
+
+[33mcommit 71a3b740af67ef07ad4f1b8ec50ebe84fea9a3ae[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Fri Jul 15 13:46:11 2022 +0300
+
+    updated server
+
+[33mcommit 017bede48fbefdd3bd5f2aaa1a5f49e574b2fa1b[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Jun 27 16:47:21 2022 +0300
+
+    major changes made
+    
+    - new inter-service packet messaging
+    - working on sift to matching data transfer
+
+[33mcommit e6928fb90ebe6dd4f5a51879c2052190c584eba6[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Jun 20 10:50:39 2022 +0300
+
+    improving functionality of server
+
+[33mcommit e55c8645661b3759cf7913742f39e807f5c89b30[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Apr 26 12:26:33 2022 +0300
+
+    fixing client details passing to matching
+
+[33mcommit f7a96e2307b89252ecfab146784add0542f71af0[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Apr 20 10:05:35 2022 +0300
+
+    fixing errors
+
+[33mcommit 3b4d23c6b418e53185c16955e2a75d2deb4d7bbb[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Apr 19 17:37:06 2022 +0300
+
+    fixing issue with inter-server communication
+
+[33mcommit 94dba2085297b56be4069c2a265fd6dda9cbf3f6[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Apr 12 16:44:42 2022 +0300
+
+    added extra debug information
+
+[33mcommit eeefb1941e0572a2f8e46368854537a97ffe7e44[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Apr 12 15:36:04 2022 +0300
+
+    updating dockerfile and readme
+
+[33mcommit 90c7a71647b08f5ac2a0b5d2543d0ef546d61207[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Apr 12 14:24:37 2022 +0300
+
+    fixing hardcoding of matching IP
+    
+    - also added service name to most status messages
+
+[33mcommit 9046300a7fcc683f0158c327e739df9c67ecc94c[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Mar 3 13:39:57 2022 +0200
+
+    tidied the code
+    
+    - partially at least
+
+[33mcommit f6659fbb04b3cfebbab21393c0b59b217f6edd63[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Mar 3 12:26:13 2022 +0200
+
+    entire system works
+    
+    - need to tidy code and ask about IPs
+
+[33mcommit 309ee46071393b092437a7eb6fac37c58ab3aa07[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Mar 2 10:49:43 2022 +0200
+
+    services separated
+    
+    - need to implement a returner to the client
+
+[33mcommit 1323a88ace7ef9ce9902bd77a9b7a9e08c90e4cb[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 28 18:08:15 2022 +0200
+
+    working on matching and SIFT data
+
+[33mcommit f386a516dda38f7392ac21ca13977c0de4be1b27[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Feb 23 14:18:58 2022 +0200
+
+    encoding temporarily working
+
+[33mcommit db54c106396fd3913af5da8b56936e736fdd63db[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 21 19:11:10 2022 +0200
+
+    main to sift
+    
+    - main and sift work, encoding doesnt
+
+[33mcommit ba74d52c66c2ea6ef1cf96e10832ced9ef58b793[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Wed Feb 16 15:31:10 2022 +0200
+
+    modules registering with main
+    
+    - basic functionality added where modules can register themselves with the main module
+
+[33mcommit 45d40299ccc3d8c4c5267f8d2ae288584107fcfe[m
+Merge: 590bc17 6e9e529
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Feb 15 15:51:26 2022 +0200
+
+    Merge remote-tracking branch 'origin/single_process' into single_process
+
+[33mcommit 590bc1794c76f5b159ddde9b06c08142e27d8a2d[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Tue Feb 15 15:51:00 2022 +0200
+
+    preparing to make changes
+    
+    will branch into a "distributed" branch
+
+[33mcommit 6e9e529f7672fdfb03df3cb224d6466430d012e1[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:27:42 2022 +0200
+
+    backup of code
+
+[33mcommit c4ee67f894cd7af33276b3214e6d0d23502e0501[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:08:42 2022 +0200
+
+    ishouldtestlocally
+
+[33mcommit 9dc2511e09ae04ae57f1d36bcc826c0d70125a4a[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:07:58 2022 +0200
+
+    a
+
+[33mcommit 57a83d3a24218f6a3b96fab22915354f7c4725c2[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:07:06 2022 +0200
+
+    notworking
+
+[33mcommit e1a3d198785a0b291a0e5c32c343f0f74a6b6c6b[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:04:20 2022 +0200
+
+    more errors
+
+[33mcommit a5ca8530902ae0b87105e14598f84d7e25644c74[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:03:26 2022 +0200
+
+    small error
+
+[33mcommit 98a819272b60cbf66f08a51da1a3db4667059edf[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 16:02:08 2022 +0200
+
+    adding logging code to other processes
+
+[33mcommit 0e49ea7f9429a6b49067fc542c3f9888b9393a2d[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:46:54 2022 +0200
+
+    update
+
+[33mcommit ca7be00bb38150b25afa9ce3961ab5c0e5fa0a7b[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:41:10 2022 +0200
+
+    cpu usage tester
+
+[33mcommit eb85bdf58353d24308d7301aac72ae61d692fc7f[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:28:50 2022 +0200
+
+    cpu usage test update 2
+
+[33mcommit 929462e00d122945be6b5c01309a66910f88842f[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:24:08 2022 +0200
+
+    cpu usage test update
+
+[33mcommit 78829428d474c8c20d6d554d17d259044e181e50[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:11:56 2022 +0200
+
+    cpu usage test
+
+[33mcommit de7de88d3c7f02b88e8a81dc86dc19339ad7c461[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:05:38 2022 +0200
+
+    another update to physical memory test
+
+[33mcommit 4074fcaf37ea416564268d763d4186b3facf8991[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:02:52 2022 +0200
+
+    physical memory test update
+
+[33mcommit bcb060ad33acfbc81304fc51ce68a41df34d7537[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 15:02:08 2022 +0200
+
+    physical memory test
+
+[33mcommit b98389033ad3bdc92e90a96894e66c7dd448e6fd[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 14:55:58 2022 +0200
+
+    virtual memory test update
+
+[33mcommit 4ccf30ebeaed748140689b71412fb77f0bfa8788[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 14:52:54 2022 +0200
+
+    virtual memory test
+
+[33mcommit ab405b87dcc4eaabc1fa43bbce941fdf980803d4[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Mon Feb 14 14:27:32 2022 +0200
+
+    working from docker container
+
+[33mcommit a95703af02882ceab99500574a7ad38435d7a4f0[m
+Author: Jacky Cao <jackycao@outlook.com>
+Date:   Thu Dec 12 09:04:53 2019 +0200
+
+    backup 121219
+
+[33mcommit 3252377b611a33d0d8b67eb6fe295a4751c9eafa[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Mon Nov 18 12:50:55 2019 +0200
+
+    no more text files being uploaded
+
+[33mcommit cd34c715a1f48bee3372580a444912e289e4b1da[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Mon Nov 18 12:38:07 2019 +0200
+
+    better log processing
+
+[33mcommit 8498d62479342df9c352af7497711d1a28de1ab9[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 24 13:16:43 2019 +0300
+
+    more logs for testing the latencies
+
+[33mcommit ac1d1a491294c995bea718bfeecbae15fa8a5195[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 24 10:49:07 2019 +0300
+
+    server is able to process images <9ms
+
+[33mcommit 82db3d63738f55963f3de04b5ffaa0f69c205548[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 24 09:25:06 2019 +0300
+
+    testing with two Android phones, and through the scalability thread
+    
+    - log files are a mess, but they are used for data processing
+    nonetheless
+    - results found at https://docs.google.com/spreadsheets/d/11Jz5MKBh1hoz6jTg5RPPbzwVvmtyxThKRLlS2UWePp4/edit#gid=0
+
+[33mcommit 1b3807ebe9b51c63eee54114cb6a830178ae521d[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Tue Oct 22 16:42:45 2019 +0300
+
+    beginning testing with two devices
+    
+    - cache server seems very glitchy and hit or miss
+
+[33mcommit 835ae718bb8eff64d32a3b1d4d286b9f306f758b[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Tue Oct 22 09:32:58 2019 +0300
+
+    preparing to make a docker container image
+
+[33mcommit ba089033a955092f10c355cc5d33422bcfbaba57[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Fri Oct 18 16:20:52 2019 +0300
+
+    more README editing x2
+
+[33mcommit 8e80b1a561879f2ee079c2a32b535d7fbf12a10a[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Fri Oct 18 16:19:19 2019 +0300
+
+    more README editing
+
+[33mcommit 2559f6a69b6378d38560bf079e329d174dadf91b[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Fri Oct 18 16:17:36 2019 +0300
+
+    updating README
+
+[33mcommit f121dfd5ec7b3696c180a8a0590f45e7cd1c7d44[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Fri Oct 18 16:07:53 2019 +0300
+
+    cleaning up the server and recognition code
+
+[33mcommit 8dbc39505ba4fd38d90582f94c4ae90517babca7[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Fri Oct 18 12:30:27 2019 +0300
+
+    server runs from just one prompt now
+    
+    - no need to run two separate terminal sessions
+    - caching and calling from the cache appears to work as well
+    - code needs tidying up
+
+[33mcommit 1eef5d84ab9cd7f3196cbe5d375e57bd872ee3a6[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 17 16:22:35 2019 +0300
+
+    cache server has an issue which is related to a global read error with
+    gmm_1
+    
+    - solution attempt #1: try new hardware, i.e. there might be a chance
+    that the GPU on my current machine is just kaput? i've requested another
+    machine to see if that fixes the issue
+    - solution attempt #2: creating a separate branch and combining the
+    cache and regcongition "servers" together to produce just one deployable
+    process
+
+[33mcommit fc9d24caa58520ecbffe68e10be33c3b40231647[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 3 16:19:27 2019 +0300
+
+    obtaining latency results
+    
+    - saving server terminal outputs as log files
+    - Python scripts in a Jupyter notebook which can parse through the log
+    files
+
+[33mcommit 521fbafa13afc8b3ccba20ea53605e1662476170[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 3 08:42:38 2019 +0300
+
+    updating readme
+
+[33mcommit a74493ed60350b77d4937f912baf315aac343a3d[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Thu Oct 3 08:38:56 2019 +0300
+
+    disabled the cache server
+    
+    - items being added into the cache has been disabled in server.cpp
+    - items being added to the cache would lead to the cache server to crash
+    -- the error most likely is coming from the onlineCacheProcessing
+    function in reco.cpp
+
+[33mcommit 6847876892a1a7656de95cdb5fd94ec9e68c8fd7[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Wed Oct 2 12:40:13 2019 +0300
+
+    updating part of the README
+
+[33mcommit c1f2648f986a3cac20b05c0cb605ba0cec0a0e57[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Tue Oct 1 16:36:01 2019 +0300
+
+    trying to workout why cache server crashes after one recognition
+
+[33mcommit 4b5799fba7268046c11a03fc308b05959ffe09b2[m
+Author: Jacky Cao <probablyameow+github@gmail.com>
+Date:   Tue Oct 1 11:33:45 2019 +0300
+
+    server code
