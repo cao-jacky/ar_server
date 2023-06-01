@@ -1,4 +1,4 @@
-# Install script for directory: /home/jackycao/ar_server/lib/cudasift
+# Install script for directory: /mnt/d/research/ar_server/lib/cudasift
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -42,28 +42,28 @@ if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES
-    "/home/jackycao/ar_server/lib/cudasift/cudaImage.cu"
-    "/home/jackycao/ar_server/lib/cudasift/cudaImage.h"
-    "/home/jackycao/ar_server/lib/cudasift/cudaSiftH.cu"
-    "/home/jackycao/ar_server/lib/cudasift/cudaSiftH.h"
-    "/home/jackycao/ar_server/lib/cudasift/matching.cu"
-    "/home/jackycao/ar_server/lib/cudasift/cudaSiftD.h"
-    "/home/jackycao/ar_server/lib/cudasift/cudaSift.h"
-    "/home/jackycao/ar_server/lib/cudasift/cudautils.h"
-    "/home/jackycao/ar_server/lib/cudasift/geomFuncs.cpp"
-    "/home/jackycao/ar_server/lib/cudasift/mainSift.cpp"
-    "/home/jackycao/ar_server/lib/cudasift/cudaSiftD.cu"
-    "/home/jackycao/ar_server/lib/cudasift/CMakeLists.txt"
-    "/home/jackycao/ar_server/lib/cudasift/Copyright.txt"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaImage.cu"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaImage.h"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaSiftH.cu"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaSiftH.h"
+    "/mnt/d/research/ar_server/lib/cudasift/matching.cu"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaSiftD.h"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaSift.h"
+    "/mnt/d/research/ar_server/lib/cudasift/cudautils.h"
+    "/mnt/d/research/ar_server/lib/cudasift/geomFuncs.cpp"
+    "/mnt/d/research/ar_server/lib/cudasift/mainSift.cpp"
+    "/mnt/d/research/ar_server/lib/cudasift/cudaSiftD.cu"
+    "/mnt/d/research/ar_server/lib/cudasift/CMakeLists.txt"
+    "/mnt/d/research/ar_server/lib/cudasift/Copyright.txt"
     )
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/data" TYPE FILE FILES
-    "/home/jackycao/ar_server/lib/cudasift/data/left.pgm"
-    "/home/jackycao/ar_server/lib/cudasift/data/righ.pgm"
+    "/mnt/d/research/ar_server/lib/cudasift/data/left.pgm"
+    "/mnt/d/research/ar_server/lib/cudasift/data/righ.pgm"
     )
 endif()
 
@@ -75,5 +75,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/jackycao/ar_server/lib/cudasift/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/d/research/ar_server/lib/cudasift/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

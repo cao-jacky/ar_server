@@ -7,3 +7,7 @@
 
 
 ar_server.tar.gz
+
+src/build/
+
+lib/cudasift/CMakeFiles/

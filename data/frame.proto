@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "./gRPCspec";
+
+// The service definition exposed by the AR application.
+service QueueService {
+  // NextFrame send the next frame
+  rpc NextFrame (Frame) returns (Frame) {}
+}
+
+// The request mand response frame structure.
+message Frame {
+  string client = 1;
+  string id = 2;
+  string qos = 3;
+  bytes data = 4; // generic data byte array containing the expected input and output data of the AR Service
+}

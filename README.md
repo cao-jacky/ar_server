@@ -32,7 +32,7 @@ Prerequisites are for OpenCV and CUDA to be pre-installed before compiling the c
 ```sh
 $ cd lib/cudasift 
 $ sed -i 's/executable/library/g' CMakeLists.txt
-$ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .
+$ cmake -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-12.1 -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .
 $ make
 $ cd ../../build # rerun from this point if changes are made to server.cpp or reco.cpp
 $ make
