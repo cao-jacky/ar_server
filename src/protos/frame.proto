@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package oakestra;
-
 option go_package = "./gRPCspec";
 
 // The service definition exposed by the AR application.

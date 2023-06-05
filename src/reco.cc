@@ -32,6 +32,9 @@ extern "C"
 #include <tuple>
 #include <iomanip>
 
+#include <unistd.h>
+
+
 using namespace std;
 using namespace falconn;
 using namespace Eigen;
@@ -79,10 +82,8 @@ bool mycompare(char *x, char *y)
 
 void load_images(vector<char *> online_images)
 {
-    cout << "2.1" << endl;
     gpu_init();
-    cout << "2.2" << endl;
-    const char *home = "data/bk_train";
+    const char *home = "../../data/bk_train";
     DIR *d = opendir(home);
     struct dirent *cur_dir;
     vector<char *> paths;
@@ -97,7 +98,6 @@ void load_images(vector<char *> online_images)
         }
     }
     sort(paths.begin(), paths.end(), mycompare);
-    cout << "2.3" << endl;
     for (int i = 0; i < online_images.size(); i++)
     {
         print_log("", "0", "0", "Online image: " + string(online_images[i]));
