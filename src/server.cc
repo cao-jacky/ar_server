@@ -58,14 +58,18 @@ vector<char *> online_annotations;
 queue<frame_buffer> frames;
 queue<inter_service_buffer> inter_service_data;
 
-Frame MakeFrame(string client, string id, string qos, char *data)
+Frame MakeFrame(string client, string id, string qos, char *data, int data_size)
 {
     Frame f;
     f.set_client(client);
     f.set_id(id);
     f.set_qos(qos);
-    f.set_data(data);
+    f.set_data(data, data_size);
     return f;
+}
+
+void frame_analyser()
+{
 }
 
 // Implementation of the classes for gRPC server and client behavior.
@@ -74,7 +78,57 @@ class QueueImpl final : public QueueService::Service
     Status NextFrame(ServerContext *context, const Frame *request,
                      Frame *reply) override
     {
+        string curr_client = request->client();
+        string curr_id = request->id();
+        string curr_qos = request->qos();
 
+        // received data from gRPC server, will store into relevant data structure
+        string curr_data = request->data();
+
+        char tmp[4];
+        char tmp_ip[16];
+
+        frame_buffer curr_frame;
+
+        memcpy(tmp, curr_data.c_str(), 4);
+        tmp[4] = '\0';
+        curr_frame.client_id = tmp;
+
+        memcpy(tmp, &(curr_data.c_str()[4]), 4);
+        curr_frame.frame_no = *(int *)tmp;
+
+        memcpy(tmp, &(curr_data.c_str()[8]), 4);
+        curr_frame.data_type = *(int *)tmp;
+
+        memcpy(tmp, &(curr_data.c_str()[12]), 4);
+        curr_frame.buffer_size = *(int *)tmp;
+        int buffer_size = curr_frame.buffer_size;
+
+        memcpy(tmp_ip, &(curr_data.c_str()[16]), 16);
+        tmp_ip[16] = '\0';
+        curr_frame.client_ip = tmp_ip;
+
+        memcpy(tmp, &(curr_data.c_str()[32]), 4);
+        curr_frame.client_port = *(int *)tmp;
+
+        // selecting out sift buffer size, and sift data is buffer size > 0
+        memcpy(tmp, &(curr_data.c_str()[40]), 4);
+        int sift_buffer_size = *(int *)tmp;
+        if (sift_buffer_size > 0)
+        {
+            curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
+            memset(curr_frame.sift_buffer, 0, sift_buffer_size);
+            memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44+buffer_size]), sift_buffer_size);
+        }
+
+        print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
+
+        // copy frame image data into buffer
+        curr_frame.buffer = (char *)malloc(buffer_size);
+        memset(curr_frame.buffer, 0, buffer_size);
+        memcpy(curr_frame.buffer, &(curr_data.c_str()[44]), buffer_size);
+
+        frames.push(curr_frame);
 
         return Status::OK;
     }
@@ -86,11 +140,11 @@ public:
     QueueClient(std::shared_ptr<Channel> channel)
         : stub_(QueueService::NewStub(channel)) {}
 
-    void NextFrame(string client, string id, string qos, char *data)
+    void NextFrame(string client, string id, string qos, char *data, int data_size)
     {
         // Prepare data to be sent to next service
         Frame request;
-        request = MakeFrame(client, id, qos, data);
+        request = MakeFrame(client, id, qos, data, data_size);
 
         Frame reply;
         ClientContext context;
@@ -99,7 +153,6 @@ public:
         if (status.ok())
         {
             print_log("", "0", "0", "Receiving gRPC server sent an ok status, data transmitted succesfully");
-
         }
         else
         {
@@ -120,7 +173,7 @@ void thread_udp_receiver(service_data *service_context)
     print_log(curr_service, "0", "0", "Thread created to receive data sent with UDP");
 
     char tmp[4];
-    char buffer[60 + PACKET_SIZE];
+    char buffer[44 + PACKET_SIZE];
 
     struct sockaddr_in remoteAddr;
     socklen_t addrlen = sizeof(remoteAddr);
@@ -190,7 +243,7 @@ void thread_processor(service_data *service_context)
     print_log(curr_service, "0", "0", "Thread created to process data that has been pushed to frames buffer");
 
     // void array of functions relating to data types
-    void (*processing_functions[1])(string, int, frame_buffer) = {primary_processing};
+    void (*processing_functions[3])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing};
 
     while (1)
     {
@@ -203,8 +256,8 @@ void thread_processor(service_data *service_context)
         frame_buffer curr_frame = frames.front();
         frames.pop();
 
-        // call appropiate function
-        (*processing_functions[curr_service_order])(curr_service, curr_service_order, curr_frame);
+        // call appropiate function with 0-indexed selection
+        (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame);
     }
 }
 
@@ -229,31 +282,51 @@ void thread_sender(service_data *service_context)
         inter_service_buffer curr_item = inter_service_data.front();
         inter_service_data.pop();
 
-        char tmp[4];
-        memcpy(tmp, curr_item.client_id, 4);
-        cout << tmp << endl;
+        // string client_id;
+        // memcpy(client_id, curr_item.client_id, 4);
 
-        char buffer[60 + curr_item.buffer_size.i];
+        int data_buffer_size = curr_item.buffer_size.i;
+        int buffer_size = 60 + data_buffer_size;
+
+        int sift_buffer_size = 0;
+        if (curr_service != "primary")
+        {
+            // setting buffer size according to the SIFT data required to carry throughout the services
+            sift_buffer_size = curr_item.sift_buffer_size.i;
+            buffer_size += sift_buffer_size;
+        }
+
+        char buffer[buffer_size];
         memset(buffer, 0, sizeof(buffer));
 
-        memcpy(buffer, curr_item.client_id, 4);
+        if (curr_service == "primary")
+        {
+            memcpy(&(buffer[44]), &(curr_item.image_buffer)[0], data_buffer_size);
+        }
+        else
+        {
+            // store sift buffer size and then the sift data itself
+            memcpy(&(buffer[40]), curr_item.sift_buffer_size.b, 4);
+            memcpy(&(buffer[44+data_buffer_size]), curr_item.sift_buffer, sift_buffer_size);
+
+            // store main buffer data
+            memcpy(&(buffer[44]), &(curr_item.buffer)[0], data_buffer_size);
+        }
+
+        memcpy(buffer, curr_item.client_id.c_str(), 4);
         memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
         memcpy(&(buffer[8]), curr_item.data_type.b, 4);
         memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
-        memcpy(&(buffer[16]), curr_item.client_ip, 16);
+        memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
         memcpy(&(buffer[32]), curr_item.client_port.b, 4);
         memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
-        memcpy(&(buffer[60]), &(curr_item.image_buffer)[0], curr_item.buffer_size.i + 1);
 
         string next_service_grpc_str = "localhost:" + to_string(next_service_port);
 
-        cout << next_service_grpc_str << endl;
-
         QueueClient QueueService(
             grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
-        QueueService.NextFrame(tmp, "1", "1", buffer);
-        print_log(service, string(curr_item.client_id), to_string(curr_item.frame_no.i),
-                  "Frame " + to_string(curr_item.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a payload size of " + to_string(curr_item.buffer_size.i));
+        QueueService.NextFrame(curr_item.client_id, "1", "1", buffer, buffer_size);
+        print_log(curr_service, curr_item.client_id, to_string(curr_item.frame_no.i), "Frame " + to_string(curr_item.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(buffer_size) + " which includes next service buffer size of " + to_string(data_buffer_size) + " Bytes and sift buffer size of " + to_string(sift_buffer_size) + " Bytes");
     }
 }
 
@@ -400,7 +473,7 @@ int main(int argc, char **argv)
                 int service_port = val["server"]["port"];
 
                 print_log(service, "0", "0", "Selected service is " + service + " and the IP of it is " + service_ip);
-                print_log(service, "0", "0", "The provided IP of the primary module is " + string(argv[2]));
+                // print_log(service, "0", "0", "The provided IP of the primary module is " + string(argv[2]));
 
                 // Perform service preprocessing if required, i.e., initial variable loading and encoding
                 bool preprocesisng = val["preprocessing"];

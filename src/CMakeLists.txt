@@ -84,7 +84,11 @@ target_link_libraries(oakestra_grpc_proto
 add_library(vlfeat ${VLFEAT_SOURCE_FILES})
 
 add_library(reco STATIC reco.cc)
+
 add_library(primary STATIC services/primary.cc)
+add_library(sift STATIC services/sift.cc)
+add_library(encoding STATIC services/encoding.cc)
+
 
 # cuda_add_executable(
 #   reco
@@ -112,6 +116,8 @@ cuda_add_executable(server
     server.cc
     reco.cc
     services/primary.cc
+    services/sift.cc
+    services/encoding.cc
     cuda_files.cu 
     ${CXXSRCS} 
     ${CSRCS}
@@ -126,6 +132,8 @@ target_link_libraries(reco -L$(SIFT_ROOT) -lcudasift)
 target_link_libraries(server
   reco
   primary
+  sift
+  encoding
   ${OpenCV_LIBS} 
   oakestra_grpc_proto
   absl::flags
