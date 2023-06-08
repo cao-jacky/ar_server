@@ -7,7 +7,8 @@
 #include "cudaImage.h"
 #include "cuda_files.h"
 #include "Eigen/Dense"
-#include "falconn/lsh_nn_table.h"
+// #include "falconn/lsh_nn_table.h"
+#include "falconn/lsh_nn_table_impl.h"
 extern "C"
 {
 #include "vl/generic.h"
@@ -33,7 +34,6 @@ extern "C"
 #include <iomanip>
 
 #include <unistd.h>
-
 
 using namespace std;
 using namespace falconn;
@@ -333,4 +333,40 @@ void encodeDatabase(int factor, int nn)
     tablet = construct_table<DenseVector<float>>(lsh, params);
     table = tablet->construct_query_object(100);
     print_log("", "0", "0", "LSH tables prepartion done");
+}
+
+tuple<int, char *> lsh_nn(vector<float> enc_vec)
+{
+    vector<float> test;
+    vector<int> result;
+    DenseVector<float> t(SIZE);
+
+    char *encoded_results;
+
+    double start, finish;
+    double duration_lshnn;
+
+    test = enc_vec;
+
+    for (int j = 0; j < SIZE; j++)
+    {
+        t[j] = test[j];
+    }
+    start = wallclock();
+    table->find_k_nearest_neighbors(t, nn_num, &result);
+    finish = wallclock();
+    duration_lshnn = (double)(finish - start);
+    print_log("lsh", "0", "0", "LSH NN search took a time of " + to_string(duration_lshnn * 1000) + " ms");
+
+    int enc_res_size = result.size();
+    encoded_results = (char *)malloc(enc_res_size * sizeof(int));
+    int buffer_count = 0;
+    for (int x : result)
+    {
+        charint enc_res;
+        enc_res.i = x;
+        memcpy(&(encoded_results[buffer_count]), enc_res.b, 4);
+        buffer_count += 4;
+    }
+    return make_tuple(enc_res_size, encoded_results);
 }

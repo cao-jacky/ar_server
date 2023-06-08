@@ -492,6 +492,4 @@ std::unique_ptr<LSHNearestNeighborTable<PointType, KeyType>> construct_table(
 
 }  // namespace falconn
 
-#include "wrapper/cpp_wrapper_impl.h"
-
 #endif

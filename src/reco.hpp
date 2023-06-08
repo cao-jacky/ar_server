@@ -123,7 +123,7 @@ void test();
 
 // void sift_processing(int &sift_points, char **sift_data_buffer, char **raw_sift_data, cv::Mat image, SiftData &siftData);
 // std::tuple<int, char*> encoding(float* siftresg, int siftResult, std::vector<float> &enc_vec, bool cache, char** enc_vector);
-// std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
+std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
 // bool matching(std::vector<int> result, SiftData &tData, recognizedMarker &marker);
 // bool query(cv::Mat queryImage, recognizedMarker &marker);
 // bool cacheQuery(cv::Mat queryImage, recognizedMarker &marker);

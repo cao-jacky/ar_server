@@ -90,8 +90,6 @@ tuple<int, char *> encoding(float *siftresg, int siftResult, vector<float> &enc_
 
 void encoding_processing(string service, int service_order, frame_buffer curr_frame)
 {
-    vector<float> test;
-
     inter_service_buffer item;
     char tmp[4];
 
@@ -103,6 +101,8 @@ void encoding_processing(string service, int service_order, frame_buffer curr_fr
     string client_ip = curr_frame.client_ip;
     int client_port = curr_frame.client_port;
     char *frame_data = curr_frame.buffer;
+
+    vector<float> test;
 
     memcpy(tmp, &(frame_data[0]), 4);
     int sift_result = *(int *)tmp;
