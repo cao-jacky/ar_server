@@ -20,3 +20,4 @@ void client_preprocessing_request(string service, frame_buffer curr_frame, char*
 void primary_processing(string service, int service_order, frame_buffer curr_frame);
 void sift_processing(string service, int service_order, frame_buffer curr_frame);
 void encoding_processing(string service, int service_order, frame_buffer curr_frame);
+void lsh_processing(string service, int service_order, frame_buffer curr_frame);

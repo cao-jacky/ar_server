@@ -114,6 +114,7 @@ class QueueImpl final : public QueueService::Service
         // selecting out sift buffer size, and sift data is buffer size > 0
         memcpy(tmp, &(curr_data.c_str()[40]), 4);
         int sift_buffer_size = *(int *)tmp;
+        curr_frame.sift_buffer_size = sift_buffer_size;
         if (sift_buffer_size > 0)
         {
             curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
@@ -243,7 +244,7 @@ void thread_processor(service_data *service_context)
     print_log(curr_service, "0", "0", "Thread created to process data that has been pushed to frames buffer");
 
     // void array of functions relating to data types
-    void (*processing_functions[3])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing};
+    void (*processing_functions[4])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing};
 
     while (1)
     {

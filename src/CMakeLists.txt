@@ -44,6 +44,8 @@ file(GLOB VLFEAT_SOURCE_FILES ../lib/vlfeat/vl/*.c)
 file(GLOB TARGET_H CHEADERS "*.h")
 file(GLOB TARGET_H CXXHEADERS "../lib/vlfeat/vl/*.h")
 
+set(HEADERS reco.hpp)
+
 cuda_add_library(cuda_files SHARED cuda_files.cu)
 target_link_libraries(cuda_files cublas)
 
@@ -88,6 +90,7 @@ add_library(reco STATIC reco.cc)
 add_library(primary STATIC services/primary.cc)
 add_library(sift STATIC services/sift.cc)
 add_library(encoding STATIC services/encoding.cc)
+add_library(lsh STATIC services/lsh.cc)
 
 
 # cuda_add_executable(
@@ -115,9 +118,11 @@ set(sources
 cuda_add_executable(server 
     server.cc
     reco.cc
+    ${HEADERS}
     services/primary.cc
     services/sift.cc
     services/encoding.cc
+    services/lsh.cc
     cuda_files.cu 
     ${CXXSRCS} 
     ${CSRCS}
@@ -134,6 +139,7 @@ target_link_libraries(server
   primary
   sift
   encoding
+  lsh
   ${OpenCV_LIBS} 
   oakestra_grpc_proto
   absl::flags

@@ -39,7 +39,7 @@ struct frame_buffer
     int data_type;
     int buffer_size;
     char *buffer;
-    charint sift_buffer_size;
+    int sift_buffer_size;
     char *sift_buffer;
 };
 
