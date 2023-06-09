@@ -36,11 +36,6 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
-// using helloworld::Greeter;
-// using helloworld::HelloReply;
-// using helloworld::HelloRequest;
-// using QueueService;
-// using Frame;
 
 #define PACKET_SIZE 60000
 
@@ -57,6 +52,7 @@ vector<char *> online_annotations;
 
 queue<frame_buffer> frames;
 queue<inter_service_buffer> inter_service_data;
+queue<inter_service_buffer> results_frames;
 
 Frame MakeFrame(string client, string id, string qos, char *data, int data_size)
 {
@@ -66,10 +62,6 @@ Frame MakeFrame(string client, string id, string qos, char *data, int data_size)
     f.set_qos(qos);
     f.set_data(data, data_size);
     return f;
-}
-
-void frame_analyser()
-{
 }
 
 // Implementation of the classes for gRPC server and client behavior.
@@ -119,7 +111,7 @@ class QueueImpl final : public QueueService::Service
         {
             curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
             memset(curr_frame.sift_buffer, 0, sift_buffer_size);
-            memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44+buffer_size]), sift_buffer_size);
+            memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44 + buffer_size]), sift_buffer_size);
         }
 
         print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
@@ -234,6 +226,86 @@ void thread_udp_receiver(service_data *service_context)
 
 void thread_udp_sender(service_data *service_context)
 {
+    string curr_service = service_context->name;
+    int curr_service_order = service_context->order;
+    int curr_service_port = service_context->port;
+
+    int next_service_port = curr_service_port + 1;
+
+    print_log(curr_service, "0", "0", "Thread created to send results data to the client with UDP");
+
+    while (1)
+    {
+        if (results_frames.empty())
+        {
+            this_thread::sleep_for(chrono::milliseconds(1));
+            continue;
+        }
+
+        inter_service_buffer curr_res = results_frames.front();
+        results_frames.pop();
+
+        char tmp[4];
+        int buffer_size = curr_res.buffer_size.i;
+
+        int next_service_socket;
+        struct sockaddr_in next_service_sock;
+        struct sockaddr_in client_addr;
+        if ((next_service_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+        {
+            perror("socket creation failed");
+            exit(EXIT_FAILURE);
+        }
+        memset((char *)&next_service_sock, 0, sizeof(next_service_sock));
+
+        // Filling server information
+        next_service_sock.sin_family = AF_INET;
+        next_service_sock.sin_port = htons(0);
+        next_service_sock.sin_addr.s_addr = htonl(INADDR_ANY);
+
+        // Forcefully attaching socket to the port 8080
+        if (bind(next_service_socket, (struct sockaddr *)&next_service_sock,
+                 sizeof(next_service_sock)) < 0)
+        {
+            print_log(service, "0", "0", "ERROR: Unable to bind UDP");
+            exit(1);
+        }
+
+        char buffer[16 + (100 * buffer_size)];
+        memset(buffer, 0, sizeof(buffer));
+
+        memcpy(buffer, curr_res.client_id.c_str(), 4);
+        memcpy(&(buffer[4]), curr_res.frame_no.b, 4);
+        memcpy(&(buffer[12]), curr_res.buffer_size.b, 4);
+        if (buffer_size != 0)
+        {
+            memcpy(&(buffer[16]), curr_res.results_buffer, 100 * buffer_size);
+        }
+
+        memcpy(tmp, curr_res.frame_no.b, 4);
+        int frame_no = *(int *)tmp;
+
+        string client_return_ip = curr_res.client_ip;
+
+        memcpy(tmp, curr_res.client_port.b, 4);
+        tmp[4] = '\0';
+        int client_return_port = *(int *)tmp;
+
+        client_addr.sin_family = AF_INET;
+        client_addr.sin_addr.s_addr = inet_addr(client_return_ip.c_str());
+        client_addr.sin_port = htons(client_return_port);
+
+        inet_pton(AF_INET, client_return_ip.c_str(), &(client_addr.sin_addr));
+
+        int udp_status = sendto(next_service_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
+        print_log(service, curr_res.client_id, to_string(frame_no), "Results for Frame " + to_string(frame_no) + " sent to client with number of markers of " + to_string(buffer_size) + " where client has details of IP " + client_return_ip + " and port " + to_string(client_return_port));
+
+        close(next_service_socket);
+        if (udp_status == -1)
+        {
+            printf("Error sending: %i\n", errno);
+        }
+    }
 }
 
 void thread_processor(service_data *service_context)
@@ -244,7 +316,7 @@ void thread_processor(service_data *service_context)
     print_log(curr_service, "0", "0", "Thread created to process data that has been pushed to frames buffer");
 
     // void array of functions relating to data types
-    void (*processing_functions[4])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing};
+    void (*processing_functions[5])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
 
     while (1)
     {
@@ -283,9 +355,6 @@ void thread_sender(service_data *service_context)
         inter_service_buffer curr_item = inter_service_data.front();
         inter_service_data.pop();
 
-        // string client_id;
-        // memcpy(client_id, curr_item.client_id, 4);
-
         int data_buffer_size = curr_item.buffer_size.i;
         int buffer_size = 60 + data_buffer_size;
 
@@ -308,7 +377,7 @@ void thread_sender(service_data *service_context)
         {
             // store sift buffer size and then the sift data itself
             memcpy(&(buffer[40]), curr_item.sift_buffer_size.b, 4);
-            memcpy(&(buffer[44+data_buffer_size]), curr_item.sift_buffer, sift_buffer_size);
+            memcpy(&(buffer[44 + data_buffer_size]), curr_item.sift_buffer, sift_buffer_size);
 
             // store main buffer data
             memcpy(&(buffer[44]), &(curr_item.buffer)[0], data_buffer_size);
@@ -423,6 +492,11 @@ void run_server(string service_name, int service_order, string service_ip, int s
 
         // pthread_create(&receiver_thread, NULL, thread_udp_receiver, &curr_service);
         // pthread_join(receiver_thread, NULL);
+    }
+    else if (service_name == "matching")
+    {
+        thread sender_udp_thread(thread_udp_sender, &curr_service);
+        sender_udp_thread.join();
     }
 
     processor_thread.join();

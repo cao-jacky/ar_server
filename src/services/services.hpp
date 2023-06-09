@@ -21,3 +21,4 @@ void primary_processing(string service, int service_order, frame_buffer curr_fra
 void sift_processing(string service, int service_order, frame_buffer curr_frame);
 void encoding_processing(string service, int service_order, frame_buffer curr_frame);
 void lsh_processing(string service, int service_order, frame_buffer curr_frame);
+void matching_processing(string service, int service_order, frame_buffer curr_frame);

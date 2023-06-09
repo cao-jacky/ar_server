@@ -91,7 +91,7 @@ add_library(primary STATIC services/primary.cc)
 add_library(sift STATIC services/sift.cc)
 add_library(encoding STATIC services/encoding.cc)
 add_library(lsh STATIC services/lsh.cc)
-
+add_library(matching STATIC services/matching.cc)
 
 # cuda_add_executable(
 #   reco
@@ -123,6 +123,7 @@ cuda_add_executable(server
     services/sift.cc
     services/encoding.cc
     services/lsh.cc
+    services/matching.cc
     cuda_files.cu 
     ${CXXSRCS} 
     ${CSRCS}
@@ -140,6 +141,7 @@ target_link_libraries(server
   sift
   encoding
   lsh
+  matching
   ${OpenCV_LIBS} 
   oakestra_grpc_proto
   absl::flags

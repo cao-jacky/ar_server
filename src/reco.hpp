@@ -121,9 +121,11 @@ void load_params();
 void encodeDatabase(int factor, int nn);
 void test();
 
+std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
+std::tuple<int, float *> sift_gpu(cv::Mat img, float **sift_res, float **sift_frame, SiftData &sift_data, int &w, int &h, bool online, bool is_color_image);
+
 // void sift_processing(int &sift_points, char **sift_data_buffer, char **raw_sift_data, cv::Mat image, SiftData &siftData);
 // std::tuple<int, char*> encoding(float* siftresg, int siftResult, std::vector<float> &enc_vec, bool cache, char** enc_vector);
-std::tuple<int, char*> lsh_nn(std::vector<float> enc_vec);
 // bool matching(std::vector<int> result, SiftData &tData, recognizedMarker &marker);
 // bool query(cv::Mat queryImage, recognizedMarker &marker);
 // bool cacheQuery(cv::Mat queryImage, recognizedMarker &marker);
