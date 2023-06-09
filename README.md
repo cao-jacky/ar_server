@@ -34,7 +34,7 @@ $ cd lib/cudasift
 $ sed -i 's/executable/library/g' CMakeLists.txt
 $ cmake -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-12.1 -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .
 $ make
-$ cd ../../build # rerun from this point if changes are made to server.cpp or reco.cpp
+$ cd ../../src/build # rerun from this point if changes are made to server.cpp or reco.cpp
 $ make
 $ cd ..
 $ ./gpu_fv size[s/m/l] nearest_neighbour_number[1/2/3/4/5] port_number[#XXXXX] 
