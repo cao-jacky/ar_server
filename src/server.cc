@@ -151,7 +151,7 @@ public:
         else
         {
             cout << status.error_code() << ": " << status.error_message()
-                      << endl;
+                 << endl;
             // print_log(curr_service, "0", "0", "[ERROR]" + status.error_code() + ": " + status.error_message());
             // return "RPC failed";
         }
@@ -341,7 +341,8 @@ void thread_sender(service_data *service_context)
     int curr_service_order = service_context->order;
     int curr_service_port = service_context->port;
 
-    int next_service_port = curr_service_port + 1;
+    // int next_service_port = curr_service_port + 1;
+    int next_service_port = 5000;
 
     print_log(curr_service, "0", "0", "Thread created to use gRPC to send data that has been pushed to inter-frames buffer");
 
@@ -407,7 +408,7 @@ void RunServer(service_data *service_context)
     // int curr_service_port = service_context->port;
 
     // hardcoding port to be 5000 to be able to communicate with the Oakestra queue
-    int curr_service_port = 5000; 
+    int curr_service_port = 5000;
 
     string server_address = absl::StrFormat("0.0.0.0:%d", curr_service_port);
     QueueImpl service;
@@ -477,7 +478,7 @@ void run_server(string service_name, int service_order, string service_ip, int s
         memset((char *)&local_addr, 0, sizeof(local_addr));
         local_addr.sin_family = AF_INET;
         local_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-        local_addr.sin_port = htons(service_port);
+        local_addr.sin_port = htons(50501);
 
         if ((udp_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         {
@@ -525,8 +526,8 @@ int main(int argc, char **argv)
     string binary_directory_string = binary_directory.string();
 
     // Load service details from the JSON
-    string service_details_path =  binary_directory_string + "/../../data/service_details_oakestra.json";
-    
+    string service_details_path = binary_directory_string + "/../../data/service_details_oakestra.json";
+
     ifstream sdd(service_details_path);
     json sdd_json = json::parse(sdd);
     json service_details = sdd_json[0]["services"];
@@ -553,8 +554,8 @@ int main(int argc, char **argv)
             {
                 service = curr_service_name;
                 service_order = curr_service_order;
-                string service_ip = val["server"]["ip"];
-                string service_ip = "0.0.0.0"
+                // string service_ip = val["server"]["ip"];
+                string service_ip = "0.0.0.0";
                 int service_port = val["server"]["port"];
 
                 print_log(service, "0", "0", "Selected service is " + service + " and the IP of it is " + service_ip);
