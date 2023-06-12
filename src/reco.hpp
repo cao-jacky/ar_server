@@ -114,7 +114,7 @@ struct matching_item
 void print_log(std::string service_name, std::string client_id, std::string frame_no, std::string message);
 
 double wallclock();
-void load_images(std::vector<char *> onlineImages);
+void load_images(std::string binary_directory, std::vector<char *> onlineImages);
 void trainParams();
 void trainCacheParams();
 void load_params();

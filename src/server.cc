@@ -131,7 +131,7 @@ class QueueImpl final : public QueueService::Service
 class QueueClient
 {
 public:
-    QueueClient(std::shared_ptr<Channel> channel)
+    QueueClient(shared_ptr<Channel> channel)
         : stub_(QueueService::NewStub(channel)) {}
 
     void NextFrame(string client, string id, string qos, char *data, int data_size)
@@ -150,15 +150,15 @@ public:
         }
         else
         {
-            std::cout << status.error_code() << ": " << status.error_message()
-                      << std::endl;
+            cout << status.error_code() << ": " << status.error_message()
+                      << endl;
             // print_log(curr_service, "0", "0", "[ERROR]" + status.error_code() + ": " + status.error_message());
             // return "RPC failed";
         }
     }
 
 private:
-    std::unique_ptr<QueueService::Stub> stub_;
+    unique_ptr<QueueService::Stub> stub_;
 };
 
 void thread_udp_receiver(service_data *service_context)
@@ -409,7 +409,7 @@ void RunServer(service_data *service_context)
     // hardcoding port to be 5000 to be able to communicate with the Oakestra queue
     int curr_service_port = 5000; 
 
-    std::string server_address = absl::StrFormat("0.0.0.0:%d", curr_service_port);
+    string server_address = absl::StrFormat("0.0.0.0:%d", curr_service_port);
     QueueImpl service;
 
     grpc::EnableDefaultHealthCheckService(true);
@@ -422,7 +422,7 @@ void RunServer(service_data *service_context)
 
     unique_ptr<Server> server(builder.BuildAndStart());
     print_log(curr_service, "0", "0", "Thread created to run gRPC server listening locally on port " + to_string(curr_service_port));
-    // cout << "Server listening on " << server_address << std::endl;
+    // cout << "Server listening on " << server_address << endl;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.
@@ -434,17 +434,16 @@ bool in_array(const string &value, const vector<string> &array)
     return find(array.begin(), array.end(), value) != array.end();
 }
 
-void load_online()
+void load_online(string binary_directory)
 {
-    string curr_wp = filesystem::current_path();
-    ifstream file(curr_wp + "/../../data/onlineData.dat");
+    ifstream file(binary_directory + "/../../data/onlineData.dat");
     string line;
     int i = 0;
     while (getline(file, line))
     {
-        string corr_path = curr_wp + "/../../";
+        string corr_path = binary_directory + "/../../";
         line = corr_path.append(line);
-        
+
         char *file_name = new char[256];
         strcpy(file_name, line.c_str());
 
@@ -521,9 +520,13 @@ int main(int argc, char **argv)
     int query_size_factor = 3;
     int nn_num = 5;
 
+    filesystem::path binary_path = filesystem::absolute(argv[0]);
+    filesystem::path binary_directory = binary_path.parent_path();
+    string binary_directory_string = binary_directory.string();
+
     // Load service details from the JSON
-    string curr_wp = filesystem::current_path();
-    string service_details_path =  curr_wp + "/../../data/service_details_oakestra.json";
+    string service_details_path =  binary_directory_string + "/../../data/service_details_oakestra.json";
+    
     ifstream sdd(service_details_path);
     json sdd_json = json::parse(sdd);
     json service_details = sdd_json[0]["services"];
@@ -560,8 +563,8 @@ int main(int argc, char **argv)
                 bool preprocesisng = val["preprocessing"];
                 if (preprocesisng)
                 {
-                    load_online();
-                    load_images(online_images);
+                    load_online(binary_directory_string);
+                    load_images(binary_directory_string, online_images);
                     load_params();
 
                     encodeDatabase(query_size_factor, nn_num);

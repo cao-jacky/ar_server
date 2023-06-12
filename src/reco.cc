@@ -81,10 +81,10 @@ bool mycompare(char *x, char *y)
         return 0;
 }
 
-void load_images(vector<char *> online_images)
+void load_images(string binary_directory, vector<char *> online_images)
 {
     gpu_init();
-    string curr_wp = filesystem::current_path();
+    string curr_wp = binary_directory;
     curr_wp = curr_wp.append("/../../data/bk_train");
     const char *home = curr_wp.c_str();
     DIR *d = opendir(home);
