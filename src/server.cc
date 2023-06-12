@@ -403,7 +403,10 @@ void thread_sender(service_data *service_context)
 void RunServer(service_data *service_context)
 {
     string curr_service = service_context->name;
-    int curr_service_port = service_context->port;
+    // int curr_service_port = service_context->port;
+
+    // hardcoding port to be 5000 to be able to communicate with the Oakestra queue
+    int curr_service_port = 5000; 
 
     std::string server_address = absl::StrFormat("0.0.0.0:%d", curr_service_port);
     QueueImpl service;

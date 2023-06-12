@@ -157,7 +157,6 @@ target_link_libraries(server
   opencv_imgproc 
   opencv_videoio 
   cublas 
-  enet
   vlfeat
   OpenMP::OpenMP_CXX
   )
