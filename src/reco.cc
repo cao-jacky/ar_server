@@ -32,6 +32,7 @@ extern "C"
 #include <atomic>
 #include <tuple>
 #include <iomanip>
+#include <filesystem>
 
 #include <unistd.h>
 
@@ -83,7 +84,9 @@ bool mycompare(char *x, char *y)
 void load_images(vector<char *> online_images)
 {
     gpu_init();
-    const char *home = "../../data/bk_train";
+    string curr_wp = filesystem::current_path();
+    curr_wp = curr_wp.append("/../../data/bk_train");
+    const char *home = curr_wp.c_str();
     DIR *d = opendir(home);
     struct dirent *cur_dir;
     vector<char *> paths;

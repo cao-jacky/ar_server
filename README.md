@@ -37,8 +37,13 @@ $ make
 $ cd ../../src/build
 $ make
 $ cd ..
-$ ./gpu_fv size[s/m/l] nearest_neighbour_number[1/2/3/4/5] port_number[#XXXXX] 
+$ ./server service[primary/sift/encoding/lsh/matching]
 ```
+
+```sh
+/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=true -p=50001
+```
+
 
 ### Deployment specifications
 

@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <thread>
 #include <queue>
+#include <filesystem>
 
 #include "absl/flags/flag.h"
 #include "absl/flags/parse.h"
@@ -435,14 +436,15 @@ bool in_array(const string &value, const vector<string> &array)
 
 void load_online()
 {
-    ifstream file("../../data/onlineData.dat");
+    string curr_wp = filesystem::current_path();
+    ifstream file(curr_wp + "/../../data/onlineData.dat");
     string line;
     int i = 0;
     while (getline(file, line))
     {
-        string corr_path = "../../";
+        string corr_path = curr_wp + "/../../";
         line = corr_path.append(line);
-
+        
         char *file_name = new char[256];
         strcpy(file_name, line.c_str());
 
@@ -520,7 +522,8 @@ int main(int argc, char **argv)
     int nn_num = 5;
 
     // Load service details from the JSON
-    string service_details_path = "../../data/service_details_oakestra.json";
+    string curr_wp = filesystem::current_path();
+    string service_details_path =  curr_wp + "/../../data/service_details_oakestra.json";
     ifstream sdd(service_details_path);
     json sdd_json = json::parse(sdd);
     json service_details = sdd_json[0]["services"];
