@@ -554,6 +554,7 @@ int main(int argc, char **argv)
                 service = curr_service_name;
                 service_order = curr_service_order;
                 string service_ip = val["server"]["ip"];
+                string service_ip = "0.0.0.0"
                 int service_port = val["server"]["port"];
 
                 print_log(service, "0", "0", "Selected service is " + service + " and the IP of it is " + service_ip);

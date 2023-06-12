@@ -42,6 +42,8 @@ $ ./server service[primary/sift/encoding/lsh/matching]
 
 ```sh
 /home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=true -p=50001
+/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=false -p=50001  -next "localhost:50002"
+
 ```
 
 
