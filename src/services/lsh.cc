@@ -4,7 +4,7 @@
 extern queue<frame_buffer> frames;
 extern queue<inter_service_buffer> inter_service_data;
 
-void lsh_processing(string service, int service_order, frame_buffer curr_frame)
+inter_service_buffer lsh_processing(string service, int service_order, frame_buffer curr_frame)
 {
     inter_service_buffer item;
     char tmp[4];
@@ -62,6 +62,6 @@ void lsh_processing(string service, int service_order, frame_buffer curr_frame)
     item.sift_buffer_size.i = curr_frame.sift_buffer_size;
     item.sift_buffer = curr_frame.sift_buffer;
 
-    inter_service_data.push(item);
     print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'encoding' data");
+    return item;
 }

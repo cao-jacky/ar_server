@@ -26,7 +26,7 @@ void client_preprocessing_request(string service, frame_buffer curr_frame, char 
     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Added frame into internal buffer for processing");
 }
 
-void primary_processing(string service, int service_order, frame_buffer curr_frame)
+inter_service_buffer primary_processing(string service, int service_order, frame_buffer curr_frame)
 {
     string client_id = curr_frame.client_id;
     int frame_no = curr_frame.frame_no;
@@ -45,5 +45,5 @@ void primary_processing(string service, int service_order, frame_buffer curr_fra
     item.previous_service.i = service_order;
     item.image_buffer =  curr_frame.buffer;
 
-    inter_service_data.push(item);
+    return item;
 }

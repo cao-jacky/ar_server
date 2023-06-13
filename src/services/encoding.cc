@@ -88,7 +88,7 @@ tuple<int, char *> encoding(float *siftresg, int siftResult, vector<float> &enc_
     return make_tuple(SIZE, encoded_vector);
 }
 
-void encoding_processing(string service, int service_order, frame_buffer curr_frame)
+inter_service_buffer encoding_processing(string service, int service_order, frame_buffer curr_frame)
 {
     inter_service_buffer item;
     char tmp[4];
@@ -148,8 +148,9 @@ void encoding_processing(string service, int service_order, frame_buffer curr_fr
     item.sift_buffer_size.i = curr_frame.sift_buffer_size;
     item.sift_buffer = curr_frame.sift_buffer;
 
-    inter_service_data.push(item);
     print_log(service, client_id, to_string(frame_no), "Performed encoding on received sift data");
+
+    return item;
 
     delete[] siftres;
     delete[] encoded_vec;
