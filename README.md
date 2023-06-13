@@ -7,9 +7,8 @@ The server component of the mobile\_ar\_system - single\_process branch is the c
 Command for running the Docker image is
 
 ```sh
-$ sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=host -it ghcr.io/giobart/arpipeline -c '/home/ar_server/server lsh 192.168.1.102 false'
-$ sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=host -it ghcr.io/giobart/arpipeline
-$ sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=host -it ar_server:20220928_1401
+sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=host -p 50000-50501:50000-50501/udp -v /usr/lib:/usr/lib --privileged=true -it ghcr.io/cao-jacky/ar_server:2023-06-12_1810
+sudo docker run --entrypoint=/bin/bash --rm --gpus all --net=ar_network -p 50002:50002/udp -v /usr/lib:/usr/lib --privileged=true -it ghcr.io/cao-jacky/ar_server:2023-06-12_1810
 ```
 
 To compile for multiple architectures:
@@ -41,8 +40,9 @@ $ ./server service[primary/sift/encoding/lsh/matching]
 ```
 
 ```sh
-/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=true -p=50001
-/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=false -p=50001  -next "localhost:50002"
+/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=false -p=50001  -next="0.0.0.0:50002" -sidecar="localhost:5000"
+/home/ar_server/src/build/server sift & /home/SidecarQueue -entry=true -exit=false -p=50002  -next="0.0.0.0:50003" -sidecar="localhost:5000"
+/home/ar_server/src/build/server encoding & /home/SidecarQueue -entry=true -exit=false -p=50003  -next "0.0.0.0:50004" -sidecar="localhost:5000"
 
 ```
 

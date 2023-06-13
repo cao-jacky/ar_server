@@ -341,8 +341,8 @@ void thread_sender(service_data *service_context)
     int curr_service_order = service_context->order;
     int curr_service_port = service_context->port;
 
-    // int next_service_port = curr_service_port + 1;
-    int next_service_port = 5000;
+    int next_service_port = curr_service_port + 1;
+    // int next_service_port = 5000;
 
     print_log(curr_service, "0", "0", "Thread created to use gRPC to send data that has been pushed to inter-frames buffer");
 
@@ -507,10 +507,6 @@ void run_server(string service_name, int service_order, string service_ip, int s
     processor_thread.join();
     grpc_thread.join();
     sender_thread.join();
-
-    // start the gRPC listening server
-    // RunServer(service_name, service_order, service_ip, service_port);
-    // pthread_t receiver_udp_thread, sender_thread, processor_thread;
 }
 
 int main(int argc, char **argv)
