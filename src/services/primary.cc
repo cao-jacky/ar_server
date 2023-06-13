@@ -13,7 +13,7 @@ void client_echo(string service, frame_buffer curr_frame)
     print_log(service, string(curr_frame.client_id), "0", "Received an initial echo message from client with IP " + client_ip + " and port " + to_string(client_port));
 }
 
-void client_preprocessing_request(string service, frame_buffer curr_frame, char *buffer)
+frame_buffer client_preprocessing_request(string service, frame_buffer curr_frame, char *buffer)
 {
     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a filesize of " + to_string(curr_frame.buffer_size) + " Bytes");
 
@@ -22,8 +22,8 @@ void client_preprocessing_request(string service, frame_buffer curr_frame, char 
     memset(curr_frame.buffer, 0, curr_frame.buffer_size);
     memcpy(curr_frame.buffer, &(buffer[16]), curr_frame.buffer_size);
 
-    frames.push(curr_frame);
     print_log(service, string(curr_frame.client_id), to_string(curr_frame.frame_no), "Added frame into internal buffer for processing");
+    return curr_frame;
 }
 
 inter_service_buffer primary_processing(string service, int service_order, frame_buffer curr_frame)

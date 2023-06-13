@@ -34,7 +34,6 @@ $ cmake -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-12.1 -G "Unix Makefiles" -DCMAK
 $ make
 $ cd ../../src/build
 $ make
-$ cd ..
 $ ./server service[primary/sift/encoding/lsh/matching]
 ```
 

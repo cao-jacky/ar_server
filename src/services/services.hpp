@@ -16,7 +16,7 @@ struct service_data
 
 // primary
 void client_echo(string service, frame_buffer curr_frame);
-void client_preprocessing_request(string service, frame_buffer curr_frame, char* buffer);
+frame_buffer client_preprocessing_request(string service, frame_buffer curr_frame, char* buffer);
 inter_service_buffer primary_processing(string service, int service_order, frame_buffer curr_frame);
 inter_service_buffer sift_processing(string service, int service_order, frame_buffer curr_frame);
 inter_service_buffer encoding_processing(string service, int service_order, frame_buffer curr_frame);

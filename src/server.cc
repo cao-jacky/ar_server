@@ -171,13 +171,16 @@ class QueueImpl final : public QueueService::Service
         memcpy(&(buffer[32]), curr_item.client_port.b, 4);
         memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
 
-        string next_service_grpc_str = "localhost:" + to_string(next_service_port);
+        // string next_service_grpc_str = "localhost:" + to_string(next_service_port);
 
         // QueueClient QueueService(
         //     grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
         // QueueService.NextFrame(curr_item.client_id, "1", "1", buffer, buffer_size);
 
         char *buffer_pointer = buffer;
+        // reply->set_client(curr_item.client_id);
+        // reply->set_id(curr_item.frame_no.i);
+        // reply->set_qos("");
         reply->set_data(buffer_pointer, to_send_buffer_size);
         // Frame request;
         // request = MakeFrame(client, id, qos, data, data_size);
@@ -278,7 +281,44 @@ void thread_udp_receiver(service_data *service_context)
             }
             else if (curr_data_type == 1)
             {
-                client_preprocessing_request(curr_service, curr_frame, buffer);
+                frame_buffer curr_item = client_preprocessing_request(curr_service, curr_frame, buffer);
+
+                int to_send_data_buffer_size = curr_item.buffer_size;
+                int to_send_buffer_size = 60 + to_send_data_buffer_size;
+
+                char buffer[to_send_buffer_size];
+                memset(buffer, 0, sizeof(buffer));
+
+                memcpy(&(buffer[44]), &(curr_item.buffer)[0], to_send_data_buffer_size);
+
+                memcpy(buffer, curr_item.client_id.c_str(), 4);
+
+                charint bytes_frame_no;
+                bytes_frame_no.i = curr_item.frame_no;
+                memcpy(&(buffer[4]), bytes_frame_no.b, 4);
+
+                charint bytes_data_type;
+                bytes_data_type.i = curr_item.frame_no;
+                memcpy(&(buffer[8]), bytes_data_type.b, 4);
+
+                charint bytes_buffer_size;
+                bytes_buffer_size.i = curr_item.buffer_size;
+                memcpy(&(buffer[12]), bytes_buffer_size.b, 4);
+
+                memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
+
+                charint bytes_client_port;
+                bytes_client_port.i = curr_item.client_port;
+                memcpy(&(buffer[32]), bytes_client_port.b, 4);
+
+                // charint bytes_previous_service;
+                // bytes_previous_service.i = curr_item.previous_service;
+                // memcpy(&(buffer[36]), bytes_previous_service.b, 4);
+
+                string next_service_grpc_str = "localhost:50001";
+                QueueClient QueueService(
+                    grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
+                QueueService.NextFrame(client_id, "1", "1", buffer, to_send_buffer_size);
             }
         }
     }
@@ -367,99 +407,6 @@ void thread_udp_sender(service_data *service_context)
         }
     }
 }
-
-// void thread_processor(service_data *service_context)
-// {
-//     string curr_service = service_context->name;
-//     int curr_service_order = service_context->order;
-
-//     print_log(curr_service, "0", "0", "Thread created to process data that has been pushed to frames buffer");
-
-//     // void array of functions relating to data types
-//     void (*processing_functions[5])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
-
-//     while (1)
-//     {
-//         if (frames.empty())
-//         {
-//             this_thread::sleep_for(chrono::milliseconds(1));
-//             continue;
-//         }
-
-//         frame_buffer curr_frame = frames.front();
-//         frames.pop();
-
-//         // call appropiate function with 0-indexed selection
-//         (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame);
-//     }
-// }
-
-// void thread_sender(service_data *service_context)
-// {
-//     string curr_service = service_context->name;
-//     int curr_service_order = service_context->order;
-//     int curr_service_port = service_context->port;
-
-//     int next_service_port = curr_service_port + 1;
-//     // int next_service_port = 5000;
-
-//     print_log(curr_service, "0", "0", "Thread created to use gRPC to send data that has been pushed to inter-frames buffer");
-
-//     while (1)
-//     {
-//         if (inter_service_data.empty())
-//         {
-//             this_thread::sleep_for(chrono::milliseconds(1));
-//             continue;
-//         }
-
-//         inter_service_buffer curr_item = inter_service_data.front();
-//         inter_service_data.pop();
-
-//         int data_buffer_size = curr_item.buffer_size.i;
-//         int buffer_size = 60 + data_buffer_size;
-
-//         int sift_buffer_size = 0;
-//         if (curr_service != "primary")
-//         {
-//             // setting buffer size according to the SIFT data required to carry throughout the services
-//             sift_buffer_size = curr_item.sift_buffer_size.i;
-//             buffer_size += sift_buffer_size;
-//         }
-
-//         char buffer[buffer_size];
-//         memset(buffer, 0, sizeof(buffer));
-
-//         if (curr_service == "primary")
-//         {
-//             memcpy(&(buffer[44]), &(curr_item.image_buffer)[0], data_buffer_size);
-//         }
-//         else
-//         {
-//             // store sift buffer size and then the sift data itself
-//             memcpy(&(buffer[40]), curr_item.sift_buffer_size.b, 4);
-//             memcpy(&(buffer[44 + data_buffer_size]), curr_item.sift_buffer, sift_buffer_size);
-
-//             // store main buffer data
-//             memcpy(&(buffer[44]), &(curr_item.buffer)[0], data_buffer_size);
-//         }
-
-//         memcpy(buffer, curr_item.client_id.c_str(), 4);
-//         memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
-//         memcpy(&(buffer[8]), curr_item.data_type.b, 4);
-//         memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
-//         memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
-//         memcpy(&(buffer[32]), curr_item.client_port.b, 4);
-//         memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
-
-//         string next_service_grpc_str = "localhost:" + to_string(next_service_port);
-
-//         QueueClient QueueService(
-//             grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
-//         QueueService.NextFrame(curr_item.client_id, "1", "1", buffer, buffer_size);
-//         print_log(curr_service, curr_item.client_id, to_string(curr_item.frame_no.i), "Frame " + to_string(curr_item.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(buffer_size) + " which includes next service buffer size of " + to_string(data_buffer_size) + " Bytes and sift buffer size of " + to_string(sift_buffer_size) + " Bytes");
-//     }
-// }
 
 void RunServer(service_data *service_context)
 {
