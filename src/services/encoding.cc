@@ -88,7 +88,7 @@ tuple<int, char *> encoding(float *siftresg, int siftResult, vector<float> &enc_
     return make_tuple(SIZE, encoded_vector);
 }
 
-void encoding_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
+void encoding_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer &results_frame)
 {
     char tmp[4];
 

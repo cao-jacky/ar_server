@@ -130,7 +130,7 @@ class QueueImpl final : public QueueService::Service
 
         // frames.push(curr_frame);
 
-        void (*processing_functions[5])(string, int, frame_buffer, inter_service_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
+        void (*processing_functions[5])(string, int, frame_buffer, inter_service_buffer&) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
 
         // call appropiate function with 0-indexed selection
         inter_service_buffer results_frame;

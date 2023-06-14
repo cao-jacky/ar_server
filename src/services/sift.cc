@@ -204,7 +204,7 @@ void sift_analysis(int &sift_points, char **sift_data_buffer, char **raw_sift_da
     free(siftframe);
 }
 
-void sift_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
+void sift_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer &results_frame)
 {
     SiftData tData;
     float sift_array[2];

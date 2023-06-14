@@ -26,7 +26,7 @@ frame_buffer client_preprocessing_request(string service, frame_buffer curr_fram
     return curr_frame;
 }
 
-void primary_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
+void primary_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer &results_frame)
 {
     string client_id = curr_frame.client_id;
     int frame_no = curr_frame.frame_no;

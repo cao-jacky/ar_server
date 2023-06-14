@@ -179,7 +179,7 @@ bool matching(string service, vector<int> result, SiftData &tData, recognizedMar
     
 }
 
-void matching_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
+void matching_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer &results_frame)
 {
     int recognised_marker_id;
     char tmp[4];

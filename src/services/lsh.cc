@@ -4,7 +4,7 @@
 extern queue<frame_buffer> frames;
 extern queue<inter_service_buffer> inter_service_data;
 
-void lsh_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
+void lsh_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer &results_frame)
 {
     char tmp[4];
 
