@@ -130,11 +130,23 @@ class QueueImpl final : public QueueService::Service
 
         // frames.push(curr_frame);
 
-        void (*processing_functions[5])(string, int, frame_buffer, inter_service_buffer&) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
+        // void (*processing_functions[5])(string, int, frame_buffer, inter_service_buffer&) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
 
         // call appropiate function with 0-indexed selection
         inter_service_buffer results_frame;
-        (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame, results_frame);
+
+        if (curr_service == "primary") {
+            primary_processing(curr_service, curr_service_order, curr_frame, results_frame);
+        } else if (curr_service == "sift") {
+            sift_processing(curr_service, curr_service_order, curr_frame, results_frame);
+        } else if (curr_service == "encoding") {
+            encoding_processing(curr_service, curr_service_order, curr_frame, results_frame);
+        } else if (curr_service == "lsh") {
+            lsh_processing(curr_service, curr_service_order, curr_frame, results_frame);
+        } else if (curr_service == "matching") {
+            matching_processing(curr_service, curr_service_order, curr_frame, results_frame);
+        }
+        // (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame, results_frame);
 
         int to_send_data_buffer_size = results_frame.buffer_size.i;
         int to_send_buffer_size = 60 + to_send_data_buffer_size;
