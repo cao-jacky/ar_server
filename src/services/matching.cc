@@ -179,7 +179,7 @@ bool matching(string service, vector<int> result, SiftData &tData, recognizedMar
     
 }
 
-inter_service_buffer matching_processing(string service, int service_order, frame_buffer curr_frame)
+void matching_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
 {
     int recognised_marker_id;
     char tmp[4];
@@ -187,7 +187,6 @@ inter_service_buffer matching_processing(string service, int service_order, fram
 
     recognizedMarker marker;
     bool marker_detected = false;
-    inter_service_buffer curRes;
 
     string client_id = curr_frame.client_id;
     int frame_no = curr_frame.frame_no;
@@ -224,36 +223,36 @@ inter_service_buffer matching_processing(string service, int service_order, fram
 
     if (marker_detected)
     {
-        curRes.client_id = client_id;
-        curRes.frame_no.i = frame_no;
-        // curRes.data_type.i = MSG_DATA_TRANSMISSION;
-        curRes.buffer_size.i = 1;
-        curRes.client_ip = client_ip;
-        curRes.client_port.i = client_port;
-        curRes.previous_service.i = BOUNDARY;
+        results_frame.client_id = client_id;
+        results_frame.frame_no.i = frame_no;
+        // results_frame.data_type.i = MSG_DATA_TRANSMISSION;
+        results_frame.buffer_size.i = 1;
+        results_frame.client_ip = client_ip;
+        results_frame.client_port.i = client_port;
+        results_frame.previous_service.i = BOUNDARY;
 
-        curRes.results_buffer = new char[100 * curRes.buffer_size.i];
+        results_frame.results_buffer = new char[100 * results_frame.buffer_size.i];
 
         int pointer = 0;
-        memcpy(&(curRes.results_buffer[pointer]), marker.markerID.b, 4);
+        memcpy(&(results_frame.results_buffer[pointer]), marker.markerID.b, 4);
         pointer += 4;
-        memcpy(&(curRes.results_buffer[pointer]), marker.height.b, 4);
+        memcpy(&(results_frame.results_buffer[pointer]), marker.height.b, 4);
         pointer += 4;
-        memcpy(&(curRes.results_buffer[pointer]), marker.width.b, 4);
+        memcpy(&(results_frame.results_buffer[pointer]), marker.width.b, 4);
         pointer += 4;
 
         charfloat p;
         for (int j = 0; j < 4; j++)
         {
             p.f = marker.corners[j].x;
-            memcpy(&(curRes.results_buffer[pointer]), p.b, 4);
+            memcpy(&(results_frame.results_buffer[pointer]), p.b, 4);
             pointer += 4;
             p.f = marker.corners[j].y;
-            memcpy(&(curRes.results_buffer[pointer]), p.b, 4);
+            memcpy(&(results_frame.results_buffer[pointer]), p.b, 4);
             pointer += 4;
         }
 
-        memcpy(&(curRes.results_buffer[pointer]), marker.markername.data(), marker.markername.length());
+        memcpy(&(results_frame.results_buffer[pointer]), marker.markername.data(), marker.markername.length());
 
         recognised_marker_id = marker.markerID.i;
 
@@ -261,8 +260,7 @@ inter_service_buffer matching_processing(string service, int service_order, fram
     }
     else
     {
-        curRes.frame_no.i = frame_no;
-        curRes.buffer_size.i = 0;
+        results_frame.frame_no.i = frame_no;
+        results_frame.buffer_size.i = 0;
     }
-    return curRes;
 }

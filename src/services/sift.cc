@@ -204,7 +204,7 @@ void sift_analysis(int &sift_points, char **sift_data_buffer, char **raw_sift_da
     free(siftframe);
 }
 
-inter_service_buffer sift_processing(string service, int service_order, frame_buffer curr_frame)
+void sift_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
 {
     SiftData tData;
     float sift_array[2];
@@ -243,33 +243,29 @@ inter_service_buffer sift_processing(string service, int service_order, frame_bu
     siftresult.i = sift_points;
     int sift_buffer_size = 128 * 4 * siftresult.i; // size of char values
 
-    inter_service_buffer item;
-
     // push data required for next service
-    item.client_id = client_id;
-    item.frame_no.i = frame_no;
-    // item.data_type.i = MSG_SIFT_TO_ENCODING;
-    item.buffer_size.i = 4 + sift_buffer_size;
-    item.client_ip = client_ip;
-    item.client_port.i = client_port;
-    item.previous_service.i = service_order;
+    results_frame.client_id = client_id;
+    results_frame.frame_no.i = frame_no;
+    // results_frame.data_type.i = MSG_SIFT_TO_ENCODING;
+    results_frame.buffer_size.i = 4 + sift_buffer_size;
+    results_frame.client_ip = client_ip;
+    results_frame.client_port.i = client_port;
+    results_frame.previous_service.i = service_order;
 
-    // item.buffer = new unsigned char[4 + sift_buffer_size];
-    item.buffer = (unsigned char *)malloc(4 + sift_buffer_size);
-    // memset(item.buffer, 0, 4 + sift_buffer_size);
-    memset(item.buffer, 0, 4 + sift_buffer_size);
-    memcpy(&(item.buffer[0]), siftresult.b, 4);
-    memcpy(&(item.buffer[4]), sift_data_buffer, sift_buffer_size);
+    // results_frame.buffer = new unsigned char[4 + sift_buffer_size];
+    results_frame.buffer = (unsigned char *)malloc(4 + sift_buffer_size);
+    // memset(results_frame.buffer, 0, 4 + sift_buffer_size);
+    memset(results_frame.buffer, 0, 4 + sift_buffer_size);
+    memcpy(&(results_frame.buffer[0]), siftresult.b, 4);
+    memcpy(&(results_frame.buffer[4]), sift_data_buffer, sift_buffer_size);
 
     // storing SIFT data for retrieval by the matching service
     int sift_data_size = 4 * siftresult.i * (15 + 3 + 128); // taken from export_siftdata
 
     print_log(service, client_id, to_string(frame_no), "Expected size of SIFT data buffer to pack for Frame " + to_string(frame_no) + " is " + to_string(sift_data_size) + " Bytes");
 
-    item.sift_buffer_size.i = sift_data_size;
-    item.sift_buffer = raw_sift_data;
-
-    return item;
+    results_frame.sift_buffer_size.i = sift_data_size;
+    results_frame.sift_buffer = raw_sift_data;
 
     FreeSiftData(tData);
     free(frame_data);

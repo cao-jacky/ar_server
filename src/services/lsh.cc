@@ -4,9 +4,8 @@
 extern queue<frame_buffer> frames;
 extern queue<inter_service_buffer> inter_service_data;
 
-inter_service_buffer lsh_processing(string service, int service_order, frame_buffer curr_frame)
+void lsh_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
 {
-    inter_service_buffer item;
     char tmp[4];
 
     string client_id = curr_frame.client_id;
@@ -45,23 +44,22 @@ inter_service_buffer lsh_processing(string service, int service_order, frame_buf
 
     char *results_vector = get<1>(results_returned);
 
-    item.client_id = client_id;
-    item.frame_no.i = frame_no;
-    // item.data_type.i = MSG_DATA_TRANSMISSION;
-    item.buffer_size.i = 4 + results_buffer_size;
-    item.client_ip = client_ip;
-    item.client_port.i = client_port;
-    item.previous_service.i = service_order;
+    results_frame.client_id = client_id;
+    results_frame.frame_no.i = frame_no;
+    // results_frame.data_type.i = MSG_DATA_TRANSMISSION;
+    results_frame.buffer_size.i = 4 + results_buffer_size;
+    results_frame.client_ip = client_ip;
+    results_frame.client_port.i = client_port;
+    results_frame.previous_service.i = service_order;
 
-    item.buffer = (unsigned char *)malloc(4 + results_buffer_size);
-    memset(item.buffer, 0, 4 + results_buffer_size);
-    memcpy(&(item.buffer[0]), results_size.b, 4);
-    memcpy(&(item.buffer[4]), results_vector, results_buffer_size);
+    results_frame.buffer = (unsigned char *)malloc(4 + results_buffer_size);
+    memset(results_frame.buffer, 0, 4 + results_buffer_size);
+    memcpy(&(results_frame.buffer[0]), results_size.b, 4);
+    memcpy(&(results_frame.buffer[4]), results_vector, results_buffer_size);
 
-    // copy sift data into item buffer
-    item.sift_buffer_size.i = curr_frame.sift_buffer_size;
-    item.sift_buffer = curr_frame.sift_buffer;
+    // copy sift data into results_frame buffer
+    results_frame.sift_buffer_size.i = curr_frame.sift_buffer_size;
+    results_frame.sift_buffer = curr_frame.sift_buffer;
 
     print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'encoding' data");
-    return item;
 }

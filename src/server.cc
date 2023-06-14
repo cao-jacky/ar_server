@@ -130,19 +130,20 @@ class QueueImpl final : public QueueService::Service
 
         // frames.push(curr_frame);
 
-        inter_service_buffer (*processing_functions[5])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
+        void (*processing_functions[5])(string, int, frame_buffer, inter_service_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
 
         // call appropiate function with 0-indexed selection
-        inter_service_buffer curr_item = (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame);
+        inter_service_buffer results_frame;
+        (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame, results_frame);
 
-        int to_send_data_buffer_size = curr_item.buffer_size.i;
+        int to_send_data_buffer_size = results_frame.buffer_size.i;
         int to_send_buffer_size = 60 + to_send_data_buffer_size;
 
         int to_send_sift_buffer_size = 0;
         if (curr_service != "primary")
         {
             // setting buffer size according to the SIFT data required to carry throughout the services
-            to_send_sift_buffer_size = curr_item.sift_buffer_size.i;
+            to_send_sift_buffer_size = results_frame.sift_buffer_size.i;
             to_send_buffer_size += to_send_sift_buffer_size;
         }
 
@@ -151,29 +152,29 @@ class QueueImpl final : public QueueService::Service
 
         if (curr_service == "primary")
         {
-            memcpy(&(buffer[44]), &(curr_item.image_buffer)[0], to_send_data_buffer_size);
+            memcpy(&(buffer[44]), &(results_frame.image_buffer)[0], to_send_data_buffer_size);
         }
         else
         {
             // store sift buffer size and then the sift data itself
-            memcpy(&(buffer[40]), curr_item.sift_buffer_size.b, 4);
-            memcpy(&(buffer[44 + to_send_data_buffer_size]), curr_item.sift_buffer, to_send_sift_buffer_size);
+            memcpy(&(buffer[40]), results_frame.sift_buffer_size.b, 4);
+            memcpy(&(buffer[44 + to_send_data_buffer_size]), results_frame.sift_buffer, to_send_sift_buffer_size);
 
             // store main buffer data
-            memcpy(&(buffer[44]), &(curr_item.buffer)[0], to_send_data_buffer_size);
+            memcpy(&(buffer[44]), &(results_frame.buffer)[0], to_send_data_buffer_size);
         }
 
-        memcpy(buffer, curr_item.client_id.c_str(), 4);
-        memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
-        memcpy(&(buffer[8]), curr_item.data_type.b, 4);
-        memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
-        memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
-        memcpy(&(buffer[32]), curr_item.client_port.b, 4);
-        memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
+        memcpy(buffer, results_frame.client_id.c_str(), 4);
+        memcpy(&(buffer[4]), results_frame.frame_no.b, 4);
+        memcpy(&(buffer[8]), results_frame.data_type.b, 4);
+        memcpy(&(buffer[12]), results_frame.buffer_size.b, 4);
+        memcpy(&(buffer[16]), results_frame.client_ip.c_str(), 16);
+        memcpy(&(buffer[32]), results_frame.client_port.b, 4);
+        memcpy(&(buffer[36]), results_frame.previous_service.b, 4);
 
         char *buffer_pointer = buffer;
         reply->set_data(buffer_pointer, to_send_buffer_size);
-        print_log(curr_service, curr_item.client_id, to_string(curr_item.frame_no.i), "Frame " + to_string(curr_item.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
+        print_log(curr_service, results_frame.client_id, to_string(results_frame.frame_no.i), "Frame " + to_string(results_frame.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
 
         return Status::OK;
     }

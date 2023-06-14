@@ -88,9 +88,8 @@ tuple<int, char *> encoding(float *siftresg, int siftResult, vector<float> &enc_
     return make_tuple(SIZE, encoded_vector);
 }
 
-inter_service_buffer encoding_processing(string service, int service_order, frame_buffer curr_frame)
+void encoding_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
 {
-    inter_service_buffer item;
     char tmp[4];
 
     string client_id = curr_frame.client_id;
@@ -132,25 +131,23 @@ inter_service_buffer encoding_processing(string service, int service_order, fram
 
     char *encoded_vector = get<1>(encoding_results);
 
-    item.client_id = client_id;
-    item.frame_no.i = frame_no;
-    // item.data_type.i = MSG_DATA_TRANSMISSION;
-    item.buffer_size.i = 4 + encoding_buffer_size;
-    item.client_ip = client_ip;
-    item.client_port.i = client_port;
-    item.previous_service.i = service_order;
-    item.buffer = new unsigned char[4 + encoding_buffer_size];
-    memset(item.buffer, 0, strlen((char *)item.buffer) + 1);
-    memcpy(&(item.buffer[0]), encoded_size.b, 4);
-    memcpy(&(item.buffer[4]), encoded_vector, encoding_buffer_size);
+    results_frame.client_id = client_id;
+    results_frame.frame_no.i = frame_no;
+    // results_frame.data_type.i = MSG_DATA_TRANSMISSION;
+    results_frame.buffer_size.i = 4 + encoding_buffer_size;
+    results_frame.client_ip = client_ip;
+    results_frame.client_port.i = client_port;
+    results_frame.previous_service.i = service_order;
+    results_frame.buffer = new unsigned char[4 + encoding_buffer_size];
+    memset(results_frame.buffer, 0, strlen((char *)results_frame.buffer) + 1);
+    memcpy(&(results_frame.buffer[0]), encoded_size.b, 4);
+    memcpy(&(results_frame.buffer[4]), encoded_vector, encoding_buffer_size);
 
-    // copy sift data into item buffer
-    item.sift_buffer_size.i = curr_frame.sift_buffer_size;
-    item.sift_buffer = curr_frame.sift_buffer;
+    // copy sift data into results_frame buffer
+    results_frame.sift_buffer_size.i = curr_frame.sift_buffer_size;
+    results_frame.sift_buffer = curr_frame.sift_buffer;
 
     print_log(service, client_id, to_string(frame_no), "Performed encoding on received sift data");
-
-    return item;
 
     delete[] siftres;
     delete[] encoded_vec;

@@ -26,7 +26,7 @@ frame_buffer client_preprocessing_request(string service, frame_buffer curr_fram
     return curr_frame;
 }
 
-inter_service_buffer primary_processing(string service, int service_order, frame_buffer curr_frame)
+void primary_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer results_frame)
 {
     string client_id = curr_frame.client_id;
     int frame_no = curr_frame.frame_no;
@@ -34,16 +34,12 @@ inter_service_buffer primary_processing(string service, int service_order, frame
 
     print_log(service, string(client_id), to_string(frame_no), "Image from Frame has been reduced from size " + to_string(frame_size) + " to a Mat object of size " + to_string(frame_size));
 
-    inter_service_buffer item;
-
-    item.client_id = client_id;
-    item.frame_no.i = curr_frame.frame_no;
-    item.data_type.i = curr_frame.data_type;
-    item.buffer_size.i = curr_frame.buffer_size;
-    item.client_ip = curr_frame.client_ip;
-    item.client_port.i = curr_frame.client_port;
-    item.previous_service.i = service_order;
-    item.image_buffer =  curr_frame.buffer;
-
-    return item;
+    results_frame.client_id = client_id;
+    results_frame.frame_no.i = curr_frame.frame_no;
+    results_frame.data_type.i = curr_frame.data_type;
+    results_frame.buffer_size.i = curr_frame.buffer_size;
+    results_frame.client_ip = curr_frame.client_ip;
+    results_frame.client_port.i = curr_frame.client_port;
+    results_frame.previous_service.i = service_order;
+    results_frame.image_buffer = curr_frame.buffer;
 }
