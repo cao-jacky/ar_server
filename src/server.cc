@@ -84,53 +84,51 @@ class QueueImpl final : public QueueService::Service
         // received data from gRPC server, will store into relevant data structure
         string curr_data = request->data();
 
-        cout << curr_client << " " << curr_data << endl;
+        char tmp[4];
+        char tmp_ip[16];
 
-        // char tmp[4];
-        // char tmp_ip[16];
+        frame_buffer curr_frame;
 
-        // frame_buffer curr_frame;
+        memcpy(tmp, curr_data.c_str(), 4);
+        tmp[4] = '\0';
+        curr_frame.client_id = tmp;
 
-        // memcpy(tmp, curr_data.c_str(), 4);
-        // tmp[4] = '\0';
-        // curr_frame.client_id = tmp;
+        memcpy(tmp, &(curr_data.c_str()[4]), 4);
+        curr_frame.frame_no = *(int *)tmp;
 
-        // memcpy(tmp, &(curr_data.c_str()[4]), 4);
-        // curr_frame.frame_no = *(int *)tmp;
+        memcpy(tmp, &(curr_data.c_str()[8]), 4);
+        curr_frame.data_type = *(int *)tmp;
 
-        // memcpy(tmp, &(curr_data.c_str()[8]), 4);
-        // curr_frame.data_type = *(int *)tmp;
+        memcpy(tmp, &(curr_data.c_str()[12]), 4);
+        curr_frame.buffer_size = *(int *)tmp;
+        int buffer_size = curr_frame.buffer_size;
 
-        // memcpy(tmp, &(curr_data.c_str()[12]), 4);
-        // curr_frame.buffer_size = *(int *)tmp;
-        // int buffer_size = curr_frame.buffer_size;
+        memcpy(tmp_ip, &(curr_data.c_str()[16]), 16);
+        tmp_ip[16] = '\0';
+        curr_frame.client_ip = tmp_ip;
 
-        // memcpy(tmp_ip, &(curr_data.c_str()[16]), 16);
-        // tmp_ip[16] = '\0';
-        // curr_frame.client_ip = tmp_ip;
+        memcpy(tmp, &(curr_data.c_str()[32]), 4);
+        curr_frame.client_port = *(int *)tmp;
 
-        // memcpy(tmp, &(curr_data.c_str()[32]), 4);
-        // curr_frame.client_port = *(int *)tmp;
+        // selecting out sift buffer size, and sift data is buffer size > 0
+        memcpy(tmp, &(curr_data.c_str()[40]), 4);
+        int sift_buffer_size = *(int *)tmp;
+        curr_frame.sift_buffer_size = sift_buffer_size;
+        if (sift_buffer_size > 0)
+        {
+            curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
+            memset(curr_frame.sift_buffer, 0, sift_buffer_size);
+            memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44 + buffer_size]), sift_buffer_size);
+        }
 
-        // // selecting out sift buffer size, and sift data is buffer size > 0
-        // memcpy(tmp, &(curr_data.c_str()[40]), 4);
-        // int sift_buffer_size = *(int *)tmp;
-        // curr_frame.sift_buffer_size = sift_buffer_size;
-        // if (sift_buffer_size > 0)
-        // {
-        //     curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
-        //     memset(curr_frame.sift_buffer, 0, sift_buffer_size);
-        //     memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44 + buffer_size]), sift_buffer_size);
-        // }
+        print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
 
-        // print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
+        // copy frame image data into buffer
+        curr_frame.buffer = (char *)malloc(buffer_size);
+        memset(curr_frame.buffer, 0, buffer_size);
+        memcpy(curr_frame.buffer, &(curr_data.c_str()[44]), buffer_size);
 
-        // // copy frame image data into buffer
-        // curr_frame.buffer = (char *)malloc(buffer_size);
-        // memset(curr_frame.buffer, 0, buffer_size);
-        // memcpy(curr_frame.buffer, &(curr_data.c_str()[44]), buffer_size);
-
-        // // frames.push(curr_frame);
+        // frames.push(curr_frame);
 
         // inter_service_buffer (*processing_functions[5])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
 
@@ -475,7 +473,8 @@ void run_server(string service_name, int service_order, string service_ip, int s
         memset((char *)&local_addr, 0, sizeof(local_addr));
         local_addr.sin_family = AF_INET;
         local_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-        local_addr.sin_port = htons(50001);
+        // local_addr.sin_port = htons(50001);
+        local_addr.sin_port = htons(50501);
 
         if ((udp_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         {
