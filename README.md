@@ -28,18 +28,18 @@ sudo docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ghcr
 Prerequisites are for OpenCV and CUDA to be pre-installed before compiling the code
 
 ```sh
-$ cd lib/cudasift 
-$ sed -i 's/executable/library/g' CMakeLists.txt
-$ cmake -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-12.1 -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .
-$ make
-$ cd ../../src/build
-$ make
-$ ./server service[primary/sift/encoding/lsh/matching]
+cd lib/cudasift 
+sed -i 's/executable/library/g' CMakeLists.txt
+cmake -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-12.1 -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .
+make
+cd ../../src/build
+make
+./server service[primary/sift/encoding/lsh/matching]
 ```
 
 ```sh
-/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -exit=false -p=50001  -next=127.0.0.1:50002 -sidecar=localhost:5000
-/home/ar_server/src/build/server sift & /home/SidecarQueue -entry=true -exit=false -p=50002  -next=127.0.0.1:50003 -sidecar=localhost:5000
+/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -p=50001 -next=0.0.0.0:50002 -sidecar=0.0.0.0:5000
+/home/ar_server/src/build/server sift & /home/SidecarQueue -entry=true -exit=false -p=50002 -next=127.0.0.1:50003 -sidecar=localhost:5000
 /home/ar_server/src/build/server encoding & /home/SidecarQueue -entry=true -exit=false -p=50003  -next=0.0.0.0:50004 -sidecar=localhost:5000
 
 ```

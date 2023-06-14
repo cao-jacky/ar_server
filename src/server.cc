@@ -84,107 +84,98 @@ class QueueImpl final : public QueueService::Service
         // received data from gRPC server, will store into relevant data structure
         string curr_data = request->data();
 
-        char tmp[4];
-        char tmp_ip[16];
+        cout << curr_client << " " << curr_data << endl;
 
-        frame_buffer curr_frame;
+        // char tmp[4];
+        // char tmp_ip[16];
 
-        memcpy(tmp, curr_data.c_str(), 4);
-        tmp[4] = '\0';
-        curr_frame.client_id = tmp;
+        // frame_buffer curr_frame;
 
-        memcpy(tmp, &(curr_data.c_str()[4]), 4);
-        curr_frame.frame_no = *(int *)tmp;
+        // memcpy(tmp, curr_data.c_str(), 4);
+        // tmp[4] = '\0';
+        // curr_frame.client_id = tmp;
 
-        memcpy(tmp, &(curr_data.c_str()[8]), 4);
-        curr_frame.data_type = *(int *)tmp;
+        // memcpy(tmp, &(curr_data.c_str()[4]), 4);
+        // curr_frame.frame_no = *(int *)tmp;
 
-        memcpy(tmp, &(curr_data.c_str()[12]), 4);
-        curr_frame.buffer_size = *(int *)tmp;
-        int buffer_size = curr_frame.buffer_size;
+        // memcpy(tmp, &(curr_data.c_str()[8]), 4);
+        // curr_frame.data_type = *(int *)tmp;
 
-        memcpy(tmp_ip, &(curr_data.c_str()[16]), 16);
-        tmp_ip[16] = '\0';
-        curr_frame.client_ip = tmp_ip;
+        // memcpy(tmp, &(curr_data.c_str()[12]), 4);
+        // curr_frame.buffer_size = *(int *)tmp;
+        // int buffer_size = curr_frame.buffer_size;
 
-        memcpy(tmp, &(curr_data.c_str()[32]), 4);
-        curr_frame.client_port = *(int *)tmp;
+        // memcpy(tmp_ip, &(curr_data.c_str()[16]), 16);
+        // tmp_ip[16] = '\0';
+        // curr_frame.client_ip = tmp_ip;
 
-        // selecting out sift buffer size, and sift data is buffer size > 0
-        memcpy(tmp, &(curr_data.c_str()[40]), 4);
-        int sift_buffer_size = *(int *)tmp;
-        curr_frame.sift_buffer_size = sift_buffer_size;
-        if (sift_buffer_size > 0)
-        {
-            curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
-            memset(curr_frame.sift_buffer, 0, sift_buffer_size);
-            memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44 + buffer_size]), sift_buffer_size);
-        }
+        // memcpy(tmp, &(curr_data.c_str()[32]), 4);
+        // curr_frame.client_port = *(int *)tmp;
 
-        print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
+        // // selecting out sift buffer size, and sift data is buffer size > 0
+        // memcpy(tmp, &(curr_data.c_str()[40]), 4);
+        // int sift_buffer_size = *(int *)tmp;
+        // curr_frame.sift_buffer_size = sift_buffer_size;
+        // if (sift_buffer_size > 0)
+        // {
+        //     curr_frame.sift_buffer = (char *)malloc(sift_buffer_size);
+        //     memset(curr_frame.sift_buffer, 0, sift_buffer_size);
+        //     memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44 + buffer_size]), sift_buffer_size);
+        // }
 
-        // copy frame image data into buffer
-        curr_frame.buffer = (char *)malloc(buffer_size);
-        memset(curr_frame.buffer, 0, buffer_size);
-        memcpy(curr_frame.buffer, &(curr_data.c_str()[44]), buffer_size);
+        // print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
 
-        // frames.push(curr_frame);
+        // // copy frame image data into buffer
+        // curr_frame.buffer = (char *)malloc(buffer_size);
+        // memset(curr_frame.buffer, 0, buffer_size);
+        // memcpy(curr_frame.buffer, &(curr_data.c_str()[44]), buffer_size);
 
-        inter_service_buffer (*processing_functions[5])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
+        // // frames.push(curr_frame);
 
-        // call appropiate function with 0-indexed selection
-        inter_service_buffer curr_item = (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame);
+        // inter_service_buffer (*processing_functions[5])(string, int, frame_buffer) = {primary_processing, sift_processing, encoding_processing, lsh_processing, matching_processing};
 
-        int to_send_data_buffer_size = curr_item.buffer_size.i;
-        int to_send_buffer_size = 60 + to_send_data_buffer_size;
+        // // call appropiate function with 0-indexed selection
+        // inter_service_buffer curr_item = (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame);
 
-        int to_send_sift_buffer_size = 0;
-        if (curr_service != "primary")
-        {
-            // setting buffer size according to the SIFT data required to carry throughout the services
-            to_send_sift_buffer_size = curr_item.sift_buffer_size.i;
-            to_send_buffer_size += to_send_sift_buffer_size;
-        }
+        // int to_send_data_buffer_size = curr_item.buffer_size.i;
+        // int to_send_buffer_size = 60 + to_send_data_buffer_size;
 
-        char buffer[to_send_buffer_size];
-        memset(buffer, 0, sizeof(buffer));
+        // int to_send_sift_buffer_size = 0;
+        // if (curr_service != "primary")
+        // {
+        //     // setting buffer size according to the SIFT data required to carry throughout the services
+        //     to_send_sift_buffer_size = curr_item.sift_buffer_size.i;
+        //     to_send_buffer_size += to_send_sift_buffer_size;
+        // }
 
-        if (curr_service == "primary")
-        {
-            memcpy(&(buffer[44]), &(curr_item.image_buffer)[0], to_send_data_buffer_size);
-        }
-        else
-        {
-            // store sift buffer size and then the sift data itself
-            memcpy(&(buffer[40]), curr_item.sift_buffer_size.b, 4);
-            memcpy(&(buffer[44 + to_send_data_buffer_size]), curr_item.sift_buffer, to_send_sift_buffer_size);
+        // char buffer[to_send_buffer_size];
+        // memset(buffer, 0, sizeof(buffer));
 
-            // store main buffer data
-            memcpy(&(buffer[44]), &(curr_item.buffer)[0], to_send_data_buffer_size);
-        }
+        // if (curr_service == "primary")
+        // {
+        //     memcpy(&(buffer[44]), &(curr_item.image_buffer)[0], to_send_data_buffer_size);
+        // }
+        // else
+        // {
+        //     // store sift buffer size and then the sift data itself
+        //     memcpy(&(buffer[40]), curr_item.sift_buffer_size.b, 4);
+        //     memcpy(&(buffer[44 + to_send_data_buffer_size]), curr_item.sift_buffer, to_send_sift_buffer_size);
 
-        memcpy(buffer, curr_item.client_id.c_str(), 4);
-        memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
-        memcpy(&(buffer[8]), curr_item.data_type.b, 4);
-        memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
-        memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
-        memcpy(&(buffer[32]), curr_item.client_port.b, 4);
-        memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
+        //     // store main buffer data
+        //     memcpy(&(buffer[44]), &(curr_item.buffer)[0], to_send_data_buffer_size);
+        // }
 
-        // string next_service_grpc_str = "localhost:" + to_string(next_service_port);
+        // memcpy(buffer, curr_item.client_id.c_str(), 4);
+        // memcpy(&(buffer[4]), curr_item.frame_no.b, 4);
+        // memcpy(&(buffer[8]), curr_item.data_type.b, 4);
+        // memcpy(&(buffer[12]), curr_item.buffer_size.b, 4);
+        // memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
+        // memcpy(&(buffer[32]), curr_item.client_port.b, 4);
+        // memcpy(&(buffer[36]), curr_item.previous_service.b, 4);
 
-        // QueueClient QueueService(
-        //     grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
-        // QueueService.NextFrame(curr_item.client_id, "1", "1", buffer, buffer_size);
-
-        char *buffer_pointer = buffer;
-        // reply->set_client(curr_item.client_id);
-        // reply->set_id(curr_item.frame_no.i);
-        // reply->set_qos("");
-        reply->set_data(buffer_pointer, to_send_buffer_size);
-        // Frame request;
-        // request = MakeFrame(client, id, qos, data, data_size);
-        print_log(curr_service, curr_item.client_id, to_string(curr_item.frame_no.i), "Frame " + to_string(curr_item.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
+        // char *buffer_pointer = buffer;
+        // reply->set_data(buffer_pointer, to_send_buffer_size);
+        // print_log(curr_service, curr_item.client_id, to_string(curr_item.frame_no.i), "Frame " + to_string(curr_item.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
 
         return Status::OK;
     }
@@ -484,7 +475,7 @@ void run_server(string service_name, int service_order, string service_ip, int s
         memset((char *)&local_addr, 0, sizeof(local_addr));
         local_addr.sin_family = AF_INET;
         local_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-        local_addr.sin_port = htons(50501);
+        local_addr.sin_port = htons(50001);
 
         if ((udp_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
         {
