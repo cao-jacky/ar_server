@@ -38,8 +38,8 @@ make
 ```
 
 ```sh
-/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -p=50001 -next=0.0.0.0:50002 -sidecar=0.0.0.0:5000
-/home/ar_server/src/build/server sift & /home/SidecarQueue -entry=true -exit=false -p=50002 -next=127.0.0.1:50003 -sidecar=localhost:5000
+/home/ar_server/src/build/server primary & /home/SidecarQueue -entry=true -p=50001 -next=172.18.0.3:50002 -sidecar=0.0.0.0:5000
+/home/ar_server/src/build/server sift & /home/SidecarQueue -p=50002 -next=127.0.0.1:50003 -sidecar=localhost:5000
 /home/ar_server/src/build/server encoding & /home/SidecarQueue -entry=true -exit=false -p=50003  -next=0.0.0.0:50004 -sidecar=localhost:5000
 
 ```
