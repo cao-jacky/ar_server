@@ -244,7 +244,7 @@ class QueueImpl final : public QueueService::Service
         }
 
         char *buffer_pointer = buffer;
-        // reply->set_data(buffer_pointer, to_send_buffer_size);
+        reply->set_data(buffer_pointer, to_send_buffer_size);
 
         // Comment this code if needed to test locally, else, use "reply->set_data"
         // cout << next_service_grpc_str << endl;
