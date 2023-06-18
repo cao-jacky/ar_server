@@ -230,8 +230,8 @@ void sift_processing(string service, int service_order, frame_buffer curr_frame,
 
     vector<uchar> imgdata(frame_data, frame_data + frame_size);
     Mat img_scene = imdecode(imgdata, IMREAD_GRAYSCALE);
-    // imwrite("query.jpg", img_scene);
-    Mat detect = img_scene(Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
+    imwrite("query.jpg", img_scene);
+    Mat detect = img_scene(cv::Rect(RECO_W_OFFSET, RECO_H_OFFSET, 160, 270));
 
     sift_analysis(sift_points, &sift_data_buffer, &raw_sift_data, detect, tData);
 

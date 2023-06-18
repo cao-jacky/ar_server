@@ -70,6 +70,39 @@ Frame MakeFrame(string client, string id, string qos, char *data, int data_size)
 }
 
 // Implementation of the classes for gRPC server and client behavior.
+class QueueClient
+{
+public:
+    QueueClient(shared_ptr<Channel> channel)
+        : stub_(QueueService::NewStub(channel)) {}
+
+    void NextFrame(string client, string id, string qos, char *data, int data_size)
+    {
+        // Prepare data to be sent to next service
+        Frame request;
+        request = MakeFrame(client, id, qos, data, data_size);
+
+        Frame reply;
+        ClientContext context;
+        Status status = stub_->NextFrame(&context, request, &reply);
+
+        if (status.ok())
+        {
+            print_log("", "0", "0", "Receiving gRPC server sent an ok status, data transmitted succesfully");
+        }
+        else
+        {
+            cout << status.error_code() << ": " << status.error_message()
+                 << endl;
+            // print_log(curr_service, "0", "0", "[ERROR]" + status.error_code() + ": " + status.error_message());
+            // return "RPC failed";
+        }
+    }
+
+private:
+    unique_ptr<QueueService::Stub> stub_;
+};
+
 class QueueImpl final : public QueueService::Service
 {
     Status NextFrame(ServerContext *context, const Frame *request,
@@ -121,7 +154,7 @@ class QueueImpl final : public QueueService::Service
             memcpy(curr_frame.sift_buffer, &(curr_data.c_str()[44 + buffer_size]), sift_buffer_size);
         }
 
-        print_log(service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
+        print_log(curr_service, curr_frame.client_id, to_string(curr_frame.frame_no), "Frame " + to_string(curr_frame.frame_no) + " received and has a service buffer size of " + to_string(buffer_size) + " Bytes and a sift buffer size of " + to_string(sift_buffer_size) + " for client with IP " + curr_frame.client_ip + " and port " + to_string(curr_frame.client_port));
 
         // copy frame image data into buffer
         curr_frame.buffer = (char *)malloc(buffer_size);
@@ -135,15 +168,24 @@ class QueueImpl final : public QueueService::Service
         // call appropiate function with 0-indexed selection
         inter_service_buffer results_frame;
 
-        if (curr_service == "primary") {
+        if (curr_service == "primary")
+        {
             primary_processing(curr_service, curr_service_order, curr_frame, results_frame);
-        } else if (curr_service == "sift") {
+        }
+        else if (curr_service == "sift")
+        {
             sift_processing(curr_service, curr_service_order, curr_frame, results_frame);
-        } else if (curr_service == "encoding") {
+        }
+        else if (curr_service == "encoding")
+        {
             encoding_processing(curr_service, curr_service_order, curr_frame, results_frame);
-        } else if (curr_service == "lsh") {
+        }
+        else if (curr_service == "lsh")
+        {
             lsh_processing(curr_service, curr_service_order, curr_frame, results_frame);
-        } else if (curr_service == "matching") {
+        }
+        else if (curr_service == "matching")
+        {
             matching_processing(curr_service, curr_service_order, curr_frame, results_frame);
         }
         // (*processing_functions[curr_service_order - 1])(curr_service, curr_service_order, curr_frame, results_frame);
@@ -152,11 +194,15 @@ class QueueImpl final : public QueueService::Service
         int to_send_buffer_size = 60 + to_send_data_buffer_size;
 
         int to_send_sift_buffer_size = 0;
-        if (curr_service != "primary")
+        if (curr_service != "primary" && curr_service != "matching")
         {
             // setting buffer size according to the SIFT data required to carry throughout the services
             to_send_sift_buffer_size = results_frame.sift_buffer_size.i;
             to_send_buffer_size += to_send_sift_buffer_size;
+        }
+        else if (curr_service == "matching")
+        {
+            to_send_buffer_size = 16 + (100 * to_send_data_buffer_size);
         }
 
         char buffer[to_send_buffer_size];
@@ -166,7 +212,17 @@ class QueueImpl final : public QueueService::Service
         {
             memcpy(&(buffer[44]), &(results_frame.image_buffer)[0], to_send_data_buffer_size);
         }
-        else
+        else if (curr_service == "matching")
+        {
+            memcpy(buffer, results_frame.client_id.c_str(), 4);
+            memcpy(&(buffer[4]), results_frame.frame_no.b, 4);
+            memcpy(&(buffer[12]), results_frame.buffer_size.b, 4);
+            if (to_send_data_buffer_size != 0)
+            {
+                memcpy(&(buffer[16]), &(results_frame.results_buffer)[0], 100 * to_send_data_buffer_size);
+            }
+        }
+        else if (curr_service != "matching" and curr_service != "primary")
         {
             // store sift buffer size and then the sift data itself
             memcpy(&(buffer[40]), results_frame.sift_buffer_size.b, 4);
@@ -176,246 +232,40 @@ class QueueImpl final : public QueueService::Service
             memcpy(&(buffer[44]), &(results_frame.buffer)[0], to_send_data_buffer_size);
         }
 
-        memcpy(buffer, results_frame.client_id.c_str(), 4);
-        memcpy(&(buffer[4]), results_frame.frame_no.b, 4);
-        memcpy(&(buffer[8]), results_frame.data_type.b, 4);
-        memcpy(&(buffer[12]), results_frame.buffer_size.b, 4);
-        memcpy(&(buffer[16]), results_frame.client_ip.c_str(), 16);
-        memcpy(&(buffer[32]), results_frame.client_port.b, 4);
-        memcpy(&(buffer[36]), results_frame.previous_service.b, 4);
+        if (curr_service != "matching")
+        {
+            memcpy(buffer, results_frame.client_id.c_str(), 4);
+            memcpy(&(buffer[4]), results_frame.frame_no.b, 4);
+            memcpy(&(buffer[8]), results_frame.data_type.b, 4);
+            memcpy(&(buffer[12]), results_frame.buffer_size.b, 4);
+            memcpy(&(buffer[16]), results_frame.client_ip.c_str(), 16);
+            memcpy(&(buffer[32]), results_frame.client_port.b, 4);
+            memcpy(&(buffer[36]), results_frame.previous_service.b, 4);
+        }
 
         char *buffer_pointer = buffer;
-        reply->set_data(buffer_pointer, to_send_buffer_size);
+        // reply->set_data(buffer_pointer, to_send_buffer_size);
+
+        // Comment this code if needed to test locally, else, use "reply->set_data"
+        // cout << next_service_grpc_str << endl;
+        // QueueClient QueueService(
+        //     grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
+        // QueueService.NextFrame(results_frame.client_id, "1", "1", buffer, to_send_buffer_size);
+
         print_log(curr_service, results_frame.client_id, to_string(results_frame.frame_no.i), "Frame " + to_string(results_frame.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
 
         return Status::OK;
     }
 };
 
-class QueueClient
-{
-public:
-    QueueClient(shared_ptr<Channel> channel)
-        : stub_(QueueService::NewStub(channel)) {}
-
-    void NextFrame(string client, string id, string qos, char *data, int data_size)
-    {
-        // Prepare data to be sent to next service
-        Frame request;
-        request = MakeFrame(client, id, qos, data, data_size);
-
-        Frame reply;
-        ClientContext context;
-        Status status = stub_->NextFrame(&context, request, &reply);
-
-        if (status.ok())
-        {
-            print_log("", "0", "0", "Receiving gRPC server sent an ok status, data transmitted succesfully");
-        }
-        else
-        {
-            cout << status.error_code() << ": " << status.error_message()
-                 << endl;
-            // print_log(curr_service, "0", "0", "[ERROR]" + status.error_code() + ": " + status.error_message());
-            // return "RPC failed";
-        }
-    }
-
-private:
-    unique_ptr<QueueService::Stub> stub_;
-};
-
-void thread_udp_receiver(service_data *service_context)
-{
-    string curr_service = service_context->name;
-    print_log(curr_service, "0", "0", "Thread created to receive data sent with UDP");
-
-    char tmp[4];
-    char buffer[44 + PACKET_SIZE];
-
-    struct sockaddr_in remoteAddr;
-    socklen_t addrlen = sizeof(remoteAddr);
-
-    int udp_socket = service_context->udp_socket;
-
-    while (1)
-    {
-        frame_buffer curr_frame;
-
-        char client_id[4];
-
-        memset(buffer, 0, sizeof(buffer));
-        recvfrom(udp_socket, buffer, PACKET_SIZE, 0, (struct sockaddr *)&remoteAddr, &addrlen);
-
-        char *device_ip = inet_ntoa(remoteAddr.sin_addr);
-        int device_port = htons(remoteAddr.sin_port);
-
-        // select out data from pre-determined format
-        memcpy(client_id, &(buffer[0]), 4);
-        client_id[4] = '\0';
-
-        char *curr_client = (char *)client_id;
-        curr_frame.client_id = curr_client;
-
-        memcpy(tmp, &(buffer[4]), 4);
-        tmp[4] = '\0';
-        curr_frame.frame_no = *(int *)tmp;
-
-        memcpy(tmp, &(buffer[8]), 4);
-        tmp[4] = '\0';
-        curr_frame.data_type = *(int *)tmp;
-        int curr_data_type = curr_frame.data_type;
-
-        memcpy(tmp, &(buffer[12]), 4);
-        curr_frame.buffer_size = *(int *)tmp;
-
-        // store client IP and port details
-        curr_frame.client_ip = device_ip;
-        curr_frame.client_port = device_port;
-
-        // pass frame data to appropiate function depending in curr_data_type
-        if (curr_data_type >= 0)
-        {
-            // client_echo(udp_socket, curr_service, curr_frame);
-            if (curr_data_type == 0)
-            {
-                client_echo(curr_service, curr_frame);
-            }
-            else if (curr_data_type == 1)
-            {
-                frame_buffer curr_item = client_preprocessing_request(curr_service, curr_frame, buffer);
-
-                int to_send_data_buffer_size = curr_item.buffer_size;
-                int to_send_buffer_size = 60 + to_send_data_buffer_size;
-
-                char buffer[to_send_buffer_size];
-                memset(buffer, 0, sizeof(buffer));
-
-                memcpy(&(buffer[44]), &(curr_item.buffer)[0], to_send_data_buffer_size);
-
-                memcpy(buffer, curr_item.client_id.c_str(), 4);
-
-                charint bytes_frame_no;
-                bytes_frame_no.i = curr_item.frame_no;
-                memcpy(&(buffer[4]), bytes_frame_no.b, 4);
-
-                charint bytes_data_type;
-                bytes_data_type.i = curr_item.frame_no;
-                memcpy(&(buffer[8]), bytes_data_type.b, 4);
-
-                charint bytes_buffer_size;
-                bytes_buffer_size.i = curr_item.buffer_size;
-                memcpy(&(buffer[12]), bytes_buffer_size.b, 4);
-
-                memcpy(&(buffer[16]), curr_item.client_ip.c_str(), 16);
-
-                charint bytes_client_port;
-                bytes_client_port.i = curr_item.client_port;
-                memcpy(&(buffer[32]), bytes_client_port.b, 4);
-
-                // charint bytes_previous_service;
-                // bytes_previous_service.i = curr_item.previous_service;
-                // memcpy(&(buffer[36]), bytes_previous_service.b, 4);
-
-                string next_service_grpc_str = "localhost:50001";
-                QueueClient QueueService(
-                    grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
-                QueueService.NextFrame(client_id, "1", "1", buffer, to_send_buffer_size);
-            }
-        }
-    }
-}
-
-void thread_udp_sender(service_data *service_context)
-{
-    string curr_service = service_context->name;
-    int curr_service_order = service_context->order;
-    int curr_service_port = service_context->port;
-
-    int next_service_port = curr_service_port + 1;
-
-    print_log(curr_service, "0", "0", "Thread created to send results data to the client with UDP");
-
-    while (1)
-    {
-        if (results_frames.empty())
-        {
-            this_thread::sleep_for(chrono::milliseconds(1));
-            continue;
-        }
-
-        inter_service_buffer curr_res = results_frames.front();
-        results_frames.pop();
-
-        char tmp[4];
-        int buffer_size = curr_res.buffer_size.i;
-
-        int next_service_socket;
-        struct sockaddr_in next_service_sock;
-        struct sockaddr_in client_addr;
-        if ((next_service_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-        {
-            perror("socket creation failed");
-            exit(EXIT_FAILURE);
-        }
-        memset((char *)&next_service_sock, 0, sizeof(next_service_sock));
-
-        // Filling server information
-        next_service_sock.sin_family = AF_INET;
-        next_service_sock.sin_port = htons(0);
-        next_service_sock.sin_addr.s_addr = htonl(INADDR_ANY);
-
-        // Forcefully attaching socket to the port 8080
-        if (bind(next_service_socket, (struct sockaddr *)&next_service_sock,
-                 sizeof(next_service_sock)) < 0)
-        {
-            print_log(service, "0", "0", "ERROR: Unable to bind UDP");
-            exit(1);
-        }
-
-        char buffer[16 + (100 * buffer_size)];
-        memset(buffer, 0, sizeof(buffer));
-
-        memcpy(buffer, curr_res.client_id.c_str(), 4);
-        memcpy(&(buffer[4]), curr_res.frame_no.b, 4);
-        memcpy(&(buffer[12]), curr_res.buffer_size.b, 4);
-        if (buffer_size != 0)
-        {
-            memcpy(&(buffer[16]), curr_res.results_buffer, 100 * buffer_size);
-        }
-
-        memcpy(tmp, curr_res.frame_no.b, 4);
-        int frame_no = *(int *)tmp;
-
-        string client_return_ip = curr_res.client_ip;
-
-        memcpy(tmp, curr_res.client_port.b, 4);
-        tmp[4] = '\0';
-        int client_return_port = *(int *)tmp;
-
-        client_addr.sin_family = AF_INET;
-        client_addr.sin_addr.s_addr = inet_addr(client_return_ip.c_str());
-        client_addr.sin_port = htons(client_return_port);
-
-        inet_pton(AF_INET, client_return_ip.c_str(), &(client_addr.sin_addr));
-
-        int udp_status = sendto(next_service_socket, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, sizeof(client_addr));
-        print_log(service, curr_res.client_id, to_string(frame_no), "Results for Frame " + to_string(frame_no) + " sent to client with number of markers of " + to_string(buffer_size) + " where client has details of IP " + client_return_ip + " and port " + to_string(client_return_port));
-
-        close(next_service_socket);
-        if (udp_status == -1)
-        {
-            printf("Error sending: %i\n", errno);
-        }
-    }
-}
-
 void RunServer(service_data *service_context)
 {
     string curr_service = service_context->name;
+
+    // Comment when developing locally
     // int curr_service_port = service_context->port;
 
-    // hardcoding port to be 5000 to be able to communicate with the Oakestra queue
+    // Hardcoding port 5000 to communicate with the Oakestra queue
     int curr_service_port = 5000;
 
     string server_address = absl::StrFormat("0.0.0.0:%d", curr_service_port);
@@ -424,14 +274,13 @@ void RunServer(service_data *service_context)
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();
     ServerBuilder builder;
-    // Listen on the given address without any authentication mechanism.
+    // Listen on the given address without any authentication mechanism
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
 
     builder.RegisterService(&service);
 
     unique_ptr<Server> server(builder.BuildAndStart());
     print_log(curr_service, "0", "0", "Thread created to run gRPC server listening locally on port " + to_string(curr_service_port));
-    // cout << "Server listening on " << server_address << endl;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.
@@ -474,48 +323,8 @@ void run_server(string service_name, int service_order, string service_ip, int s
     curr_service.ip = service_ip;
     curr_service.port = service_port;
 
-    // thread processor_thread(thread_processor, &curr_service);
-    // thread sender_thread(thread_sender, &curr_service);
     thread grpc_thread(RunServer, &curr_service);
-
-    // Start UDP listener only for primary service
-    if (service_name == "primary")
-    {
-        int udp_socket;
-
-        memset((char *)&local_addr, 0, sizeof(local_addr));
-        local_addr.sin_family = AF_INET;
-        local_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-        // local_addr.sin_port = htons(50001);
-        local_addr.sin_port = htons(50501);
-
-        if ((udp_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-        {
-            print_log(service, "0", "0", "[ERROR] Unable to open UDP socket");
-            exit(1);
-        }
-        if (bind(udp_socket, (struct sockaddr *)&local_addr, sizeof(local_addr)) < 0)
-        {
-            print_log(service, "0", "0", "[ERROR] Unable to bind UDP");
-            exit(1);
-        }
-        curr_service.udp_socket = udp_socket;
-
-        thread receiver_udp_thread(thread_udp_receiver, &curr_service);
-        receiver_udp_thread.join();
-
-        // pthread_create(&receiver_thread, NULL, thread_udp_receiver, &curr_service);
-        // pthread_join(receiver_thread, NULL);
-    }
-    else if (service_name == "matching")
-    {
-        thread sender_udp_thread(thread_udp_sender, &curr_service);
-        sender_udp_thread.join();
-    }
-
-    // processor_thread.join();
     grpc_thread.join();
-    // sender_thread.join();
 }
 
 int main(int argc, char **argv)
@@ -569,7 +378,6 @@ int main(int argc, char **argv)
                 curr_service_port = service_port;
 
                 print_log(service, "0", "0", "Selected service is " + service + " and the IP of it is " + service_ip);
-                // print_log(service, "0", "0", "The provided IP of the primary module is " + string(argv[2]));
 
                 // Perform service preprocessing if required, i.e., initial variable loading and encoding
                 bool preprocesisng = val["preprocessing"];

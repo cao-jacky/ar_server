@@ -32,7 +32,7 @@ void primary_processing(string service, int service_order, frame_buffer curr_fra
     int frame_no = curr_frame.frame_no;
     int frame_size = curr_frame.buffer_size;
 
-    print_log(service, string(client_id), to_string(frame_no), "Image from Frame has been reduced from size " + to_string(frame_size) + " to a Mat object of size " + to_string(frame_size));
+    print_log(service, string(client_id), to_string(frame_no), "Image from Frame " + to_string(frame_no) +  " has been reduced from size " + to_string(frame_size) + " to a Mat object of size " + to_string(frame_size));
 
     results_frame.client_id = client_id;
     results_frame.frame_no.i = curr_frame.frame_no;

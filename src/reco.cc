@@ -216,8 +216,8 @@ tuple<int, float *> sift_gpu(Mat img, float **sift_res, float **sift_frame, Sift
         p++;
     }
 
-    if (!online)
-        FreeSiftData(sift_data); //
+    // if (!online)
+    //     FreeSiftData(sift_data); 
 
     finish = wallclock();
     duration_gmm = (double)(finish - start);

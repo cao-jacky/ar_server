@@ -13,7 +13,7 @@ extern queue<inter_service_buffer> results_frames;
 
 extern vector<char *> whole_list;
 
-void siftdata_reconstructor(string service, char *sd_char_array, SiftData reconstructed_sift_data, frame_buffer curr_frame)
+void siftdata_reconstructor(string service, char *sd_char_array, SiftData &reconstructed_sift_data, frame_buffer curr_frame)
 {
     SiftData reconstructed_data;
 
@@ -167,7 +167,7 @@ bool matching(string service, vector<int> result, SiftData &tData, recognizedMar
                 marker.corners[i].y = scene_corners[i].y + RECO_H_OFFSET;
             }
             marker.markername = "gpu_recognized_image.";
-            print_log(service, client_id, to_string(frame_no), "Recognised object(s)");            
+            print_log(service, client_id, to_string(frame_no), "Recognised object(s)");
             return true;
         }
         else
@@ -176,7 +176,6 @@ bool matching(string service, vector<int> result, SiftData &tData, recognizedMar
             return false;
         }
     }
-    
 }
 
 void matching_processing(string service, int service_order, frame_buffer curr_frame, inter_service_buffer &results_frame)
@@ -231,7 +230,8 @@ void matching_processing(string service, int service_order, frame_buffer curr_fr
         results_frame.client_port.i = client_port;
         results_frame.previous_service.i = BOUNDARY;
 
-        results_frame.results_buffer = new char[100 * results_frame.buffer_size.i];
+        // results_frame.results_buffer = new char[100 * results_frame.buffer_size.i];
+        results_frame.results_buffer = (unsigned char *)malloc(100 * results_frame.buffer_size.i);
 
         int pointer = 0;
         memcpy(&(results_frame.results_buffer[pointer]), marker.markerID.b, 4);
