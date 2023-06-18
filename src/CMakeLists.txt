@@ -47,6 +47,7 @@ file(GLOB TARGET_H CXXHEADERS "../lib/vlfeat/vl/*.h")
 set(HEADERS reco.hpp)
 
 cuda_add_library(cuda_files SHARED cuda_files.cu)
+set_property(TARGET cuda_files PROPERTY CUDA_ARCHITECTURES 60)
 target_link_libraries(cuda_files cublas)
 
 add_compile_options(-O3 -pthread -fopenmp -DVL_DISABLE_AVX)
@@ -127,11 +128,12 @@ cuda_add_executable(server
     cuda_files.cu 
     ${CXXSRCS} 
     ${CSRCS}
-    OPTIONS -arch=sm_60
+    OPTIONS -arch sm_60
 )
 
 set_property(TARGET server 
              PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+set_property(TARGET server PROPERTY CUDA_ARCHITECTURES 60)
 
 target_link_libraries(reco -L$(SIFT_ROOT) -lcudasift)
 
