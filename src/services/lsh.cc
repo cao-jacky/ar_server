@@ -62,4 +62,6 @@ void lsh_processing(string service, int service_order, frame_buffer curr_frame, 
     results_frame.sift_buffer = curr_frame.sift_buffer;
 
     print_log(service, string(client_id), to_string(frame_no), "Performed analysis on received 'encoding' data");
+
+    free(enc_vec_char);
 }

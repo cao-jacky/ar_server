@@ -16,6 +16,7 @@ extern vector<char *> whole_list;
 void siftdata_reconstructor(string service, char *sd_char_array, SiftData &reconstructed_sift_data, frame_buffer curr_frame)
 {
     SiftData reconstructed_data;
+    SiftPoint *cpu_data = nullptr;
 
     string client_id = curr_frame.client_id;
     int frame_no = curr_frame.frame_no;
@@ -32,7 +33,7 @@ void siftdata_reconstructor(string service, char *sd_char_array, SiftData &recon
     reconstructed_data.maxPts = *(int *)tmp;
     curr_posn += 4;
 
-    SiftPoint *cpu_data = (SiftPoint *)calloc(sd_num_pts, sizeof(SiftPoint));
+    cpu_data = new SiftPoint[sd_num_pts];
 
     for (int i = 0; i < sd_num_pts; i++)
     {
@@ -128,8 +129,11 @@ bool matching(string service, vector<int> result, SiftData &tData, recognizedMar
         Mat image = imread(whole_list[result[idx]], IMREAD_COLOR);
         SiftData sData;
         int w, h;
-        float *a, *b;
+        float *a = nullptr, *b = nullptr;
         sift_gpu(image, &a, &b, sData, w, h, true, true);
+
+        delete[] a;
+        delete[] b;
 
         print_log(service, client_id, to_string(frame_no), "Number of feature points: " + to_string(sData.numPts) + " " + to_string(tData.numPts));
         MatchSiftData(sData, tData);
@@ -196,6 +200,7 @@ void matching_processing(string service, int service_order, frame_buffer curr_fr
     int client_port = curr_frame.client_port;
     char *frame_data = curr_frame.buffer;
 
+    reconstructed_sift_data.h_data = nullptr;
     char *sift_data = curr_frame.sift_buffer;
 
     vector<int> result;
@@ -230,8 +235,7 @@ void matching_processing(string service, int service_order, frame_buffer curr_fr
         results_frame.client_port.i = client_port;
         results_frame.previous_service.i = BOUNDARY;
 
-        // results_frame.results_buffer = new char[100 * results_frame.buffer_size.i];
-        results_frame.results_buffer = (unsigned char *)malloc(100 * results_frame.buffer_size.i);
+        results_frame.results_buffer = new unsigned char[100 * results_frame.buffer_size.i];
 
         int pointer = 0;
         memcpy(&(results_frame.results_buffer[pointer]), marker.markerID.b, 4);
@@ -263,4 +267,7 @@ void matching_processing(string service, int service_order, frame_buffer curr_fr
         results_frame.frame_no.i = frame_no;
         results_frame.buffer_size.i = 0;
     }
+
+    delete[] results_char;
+    FreeSiftData(reconstructed_sift_data);
 }

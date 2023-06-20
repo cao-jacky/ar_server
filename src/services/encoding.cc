@@ -74,7 +74,6 @@ tuple<int, char *> encoding(float *siftresg, int siftResult, vector<float> &enc_
 
     // transforming the vector of floats into a char*
     float *enc_vec_floats = &(enc_vec[0]);
-    // encoded_vector = new char[4 * SIZE];
     memset(encoded_vector, 0, 4 * SIZE);
     int buffer_count = 0;
     for (float x : enc_vec)
@@ -122,7 +121,8 @@ void encoding_processing(string service, int service_order, frame_buffer curr_fr
         data_index += 4;
     }
 
-    char *encoded_vec = new char[4 * 5248];
+    char *encoded_vec = (char *)malloc(4 * 5248);
+    memset(encoded_vec, 0, 4 * 5248);
     auto encoding_results = encoding(siftres, sift_result, test, false, &encoded_vec);
 
     charint encoded_size;
@@ -138,8 +138,10 @@ void encoding_processing(string service, int service_order, frame_buffer curr_fr
     results_frame.client_ip = client_ip;
     results_frame.client_port.i = client_port;
     results_frame.previous_service.i = service_order;
-    results_frame.buffer = new unsigned char[4 + encoding_buffer_size];
-    memset(results_frame.buffer, 0, strlen((char *)results_frame.buffer) + 1);
+    results_frame.buffer = (unsigned char *)malloc(4 + encoding_buffer_size);
+    memset(results_frame.buffer, 0, 4 + encoding_buffer_size);
+
+    // memset(results_frame.buffer, 0, strlen((char *)results_frame.buffer) + 1);
     memcpy(&(results_frame.buffer[0]), encoded_size.b, 4);
     memcpy(&(results_frame.buffer[4]), encoded_vector, encoding_buffer_size);
 
@@ -150,8 +152,9 @@ void encoding_processing(string service, int service_order, frame_buffer curr_fr
     print_log(service, client_id, to_string(frame_no), "Performed encoding on received sift data");
 
     delete[] siftres;
-    delete[] encoded_vec;
+    // delete[] encoded_vec;
 
-    free(frame_data);
+    // free(frame_data);
+    free(encoded_vec);
     free(sift_resg);
 }

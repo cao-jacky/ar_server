@@ -254,7 +254,6 @@ void sift_processing(string service, int service_order, frame_buffer curr_frame,
 
     // results_frame.buffer = new unsigned char[4 + sift_buffer_size];
     results_frame.buffer = (unsigned char *)malloc(4 + sift_buffer_size);
-    // memset(results_frame.buffer, 0, 4 + sift_buffer_size);
     memset(results_frame.buffer, 0, 4 + sift_buffer_size);
     memcpy(&(results_frame.buffer[0]), siftresult.b, 4);
     memcpy(&(results_frame.buffer[4]), sift_data_buffer, sift_buffer_size);
@@ -268,6 +267,5 @@ void sift_processing(string service, int service_order, frame_buffer curr_frame,
     results_frame.sift_buffer = raw_sift_data;
 
     FreeSiftData(tData);
-    free(frame_data);
     free(sift_data_buffer);
 }

@@ -247,13 +247,30 @@ class QueueImpl final : public QueueService::Service
         reply->set_data(buffer_pointer, to_send_buffer_size);
 
         // Comment this code if needed to test locally, else, use "reply->set_data"
-        // cout << next_service_grpc_str << endl;
+        // string next_service_grpc_str = "localhost:" + to_string(next_service_port);
         // QueueClient QueueService(
         //     grpc::CreateChannel(next_service_grpc_str, grpc::InsecureChannelCredentials()));
         // QueueService.NextFrame(results_frame.client_id, "1", "1", buffer, to_send_buffer_size);
 
         print_log(curr_service, results_frame.client_id, to_string(results_frame.frame_no.i), "Frame " + to_string(results_frame.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
 
+        free(curr_frame.buffer);
+
+        if (curr_service != "matching")
+        {
+            free(results_frame.buffer);
+        } else if (curr_service == "matching") {
+            delete[] results_frame.results_buffer;
+        }
+
+        if (sift_buffer_size > 0)
+        {
+            free(curr_frame.sift_buffer);
+        }
+        if (to_send_sift_buffer_size > 0 && curr_service == "sift")
+        {
+            free(results_frame.sift_buffer);
+        }
         return Status::OK;
     }
 };
