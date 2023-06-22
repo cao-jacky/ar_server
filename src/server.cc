@@ -256,10 +256,12 @@ class QueueImpl final : public QueueService::Service
 
         free(curr_frame.buffer);
 
-        if (curr_service != "matching")
+        if (curr_service != "matching" && curr_service != "primary")
         {
             free(results_frame.buffer);
-        } else if (curr_service == "matching") {
+        }
+        else if (curr_service == "matching")
+        {
             delete[] results_frame.results_buffer;
         }
 
