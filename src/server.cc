@@ -254,7 +254,10 @@ class QueueImpl final : public QueueService::Service
 
         print_log(curr_service, results_frame.client_id, to_string(results_frame.frame_no.i), "Frame " + to_string(results_frame.frame_no.i) + " offloaded to gRPC for transmission to the next service for later processing - the frame has a total payload size of " + to_string(to_send_buffer_size) + " which includes next service buffer size of " + to_string(to_send_data_buffer_size) + " Bytes and sift buffer size of " + to_string(to_send_sift_buffer_size) + " Bytes");
 
-        free(curr_frame.buffer);
+        if (buffer_size > 0)
+        {
+            free(curr_frame.buffer);
+        }
 
         if (curr_service != "matching" && curr_service != "primary")
         {
@@ -262,7 +265,10 @@ class QueueImpl final : public QueueService::Service
         }
         else if (curr_service == "matching")
         {
-            delete[] results_frame.results_buffer;
+            if (to_send_data_buffer_size > 0)
+            {
+                delete[] results_frame.results_buffer;
+            }
         }
 
         if (sift_buffer_size > 0)
